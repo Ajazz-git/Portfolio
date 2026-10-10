@@ -14,17 +14,22 @@ Then open http://localhost:8000. Opening `index.html` directly also works, but a
 
 | File | What it is |
 | --- | --- |
-| `index.html` | Home: terminal, site map, port panel |
-| `experience.html` | Overview of workplaces |
+| `index.html` | The whole site as one long page. Sections in order: Home (terminal, site map, port panel), Experience, Contact |
+| `experience.html`, `contact.html` | Small redirect pages so old links still work. They send visitors to the matching section of `index.html` |
 | `skolte.html`, `webcastle.html`, `hashroot.html`, `aabasoft.html` | One page per workplace |
-| `contact.html` | Contact details |
 | `styles.css` | All styling. Colours, fonts and spacing are CSS variables at the top. |
 | `fonts.css`, `fonts/` | The three font families as local `.woff2` files, with their licenses |
 | `theme.js` | Dark by default, light/dark switch. Keeps the choice across pages. Loaded first in every page so there is no flash. |
-| `app.js` | Theme button label, copy buttons, home page terminal commands |
+| `app.js` | Theme button label, copy buttons, smooth scrolling and active nav link, home page terminal commands |
 | `pilot.js` | The penguin pilot that flies around and inspects widgets |
 
 Every page repeats the same header and footer. When you change the navigation, change it in each page.
+
+## Adding a section
+
+1. In `index.html`, add `<section class="part" id="name">…</section>` in the right place inside `<main>`. Use `<h2 class="sec-title">` for its heading, not `<h1>`.
+2. Add `<a href="index.html#name">Name</a>` to the nav of every page, in the same order as the sections.
+3. Update the "Next" link at the bottom of the section before it.
 
 ## Look and feel
 

@@ -37,6 +37,67 @@
     });
   });
 
+  /* one long page: smooth scrolling between sections, active nav link */
+  var onHome = !!document.getElementById('home');
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var navLinks = document.querySelectorAll('.nav a');
+  function secOf(href) {
+    var m = /^index\.html#([\w-]+)/.exec(href || '');
+    return m ? m[1] : '';
+  }
+  function mark(id) {
+    Array.prototype.forEach.call(navLinks, function (l) {
+      if (secOf(l.getAttribute('href')) === id) l.setAttribute('aria-current', 'page');
+      else l.removeAttribute('aria-current');
+    });
+  }
+  function goTo(id, smooth) {
+    var el = document.getElementById(id);
+    if (!el) return false;
+    el.scrollIntoView({ behavior: smooth && !reduce ? 'smooth' : 'auto', block: 'start' });
+    mark(id);
+    return true;
+  }
+  document.addEventListener('click', function (e) {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!a) return;
+    var id = secOf(a.getAttribute('href'));
+    if (!id) return;
+    if (onHome) {
+      if (!goTo(id, true)) return;
+      e.preventDefault();
+      try { history.replaceState(null, '', '#' + id + '~' + window.siteTheme.get()); } catch (x) {}
+    } else {
+      try { sessionStorage.setItem('goto', id); } catch (x) {}
+    }
+  });
+  if (onHome) {
+    var want = (window.siteTheme ? window.siteTheme.parts(location.hash).sec : '');
+    try { if (!want) want = sessionStorage.getItem('goto') || ''; sessionStorage.removeItem('goto'); } catch (x) {}
+    if (want && document.getElementById(want)) {
+      goTo(want, false);
+      var y0 = window.pageYOffset;
+      window.addEventListener('load', function () {
+        if (Math.abs(window.pageYOffset - y0) < 4) goTo(want, false);
+      });
+    }
+    var parts = Array.prototype.slice.call(document.querySelectorAll('.part'));
+    var ticking = false;
+    function spy() {
+      ticking = false;
+      var cur = parts[0].id;
+      var line = window.innerHeight * 0.4;
+      parts.forEach(function (p) { if (p.getBoundingClientRect().top <= line) cur = p.id; });
+      if (window.innerHeight + window.pageYOffset >= document.documentElement.scrollHeight - 4) cur = parts[parts.length - 1].id;
+      mark(cur);
+    }
+    function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(spy); } }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    spy();
+  }
+
   /* terminal on the home page */
   var out = document.getElementById('out');
   var form = document.getElementById('form');
@@ -98,13 +159,13 @@
       return [
         'email     ajasm397@gmail.com',
         'linkedin  linkedin.com/in/ajas',
-        [{ text: 'Open the contact page', href: 'contact.html' }]
+        [{ text: 'Open the contact page', href: 'index.html#contact' }]
       ];
     },
     location: function () { return ['Kochi, Kerala, India']; },
     ls: function () {
       return [
-        [{ text: 'experience/', href: 'experience.html' }, '  ', { text: 'contact/', href: 'contact.html' }],
+        [{ text: 'experience/', href: 'index.html#experience' }, '  ', { text: 'contact/', href: 'index.html#contact' }],
         'about/  skills/  case-studies/  resume/  (in progress)'
       ];
     }

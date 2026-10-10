@@ -1,6 +1,7 @@
 /* Theme: dark by default, switchable. Runs before the page paints.
-   The choice is kept in the page address of internal links (works even when storage is blocked),
-   and in localStorage / sessionStorage. If the viewer sets its own data-theme, ours wins. */
+   The choice travels in the page address of internal links as "#theme" or "#section~theme"
+   (works even when storage is blocked), and is also kept in localStorage / sessionStorage.
+   If the viewer sets its own data-theme, ours wins. */
 (function () {
   var root = document.documentElement;
   var KEY = 'theme';
@@ -14,10 +15,19 @@
     try { localStorage.setItem(KEY, v); } catch (e) {}
     try { sessionStorage.setItem(KEY, v); } catch (e) {}
   }
+  /* "#experience~dark" -> {sec:'experience', theme:'dark'}; "#dark" -> {sec:'', theme:'dark'} */
+  function parts(hash) {
+    var h = (hash || '').replace(/^#/, '');
+    var i = h.lastIndexOf('~');
+    var sec = i >= 0 ? h.slice(0, i) : h;
+    var th = i >= 0 ? h.slice(i + 1) : '';
+    if (i < 0 && ok(h)) { sec = ''; th = h; }
+    return { sec: sec, theme: ok(th) ? th : '' };
+  }
 
-  var h = (location.hash || '').replace('#', '');
-  var current = ok(h) ? h : (read('localStorage') || read('sessionStorage') || 'dark');
-  if (ok(h)) save(current);
+  var p0 = parts(location.hash);
+  var current = p0.theme || read('localStorage') || read('sessionStorage') || 'dark';
+  if (p0.theme) save(current);
 
   function apply() {
     if (root.getAttribute('data-theme') !== current) root.setAttribute('data-theme', current);
@@ -32,7 +42,10 @@
 
   function tag(a) {
     var href = a.getAttribute('href') || '';
-    if (/^[\w-]+\.html(#.*)?$/.test(href)) a.setAttribute('href', href.split('#')[0] + '#' + current);
+    var m = /^([\w-]+\.html)(#.*)?$/.exec(href);
+    if (!m) return;
+    var sec = parts(m[2]).sec;
+    a.setAttribute('href', m[1] + '#' + (sec ? sec + '~' : '') + current);
   }
   function tagAll() {
     var list = document.querySelectorAll('a[href]');
@@ -46,6 +59,7 @@
 
   window.siteTheme = {
     get: function () { return current; },
+    parts: parts,
     set: function (v) {
       if (!ok(v)) return;
       current = v;
