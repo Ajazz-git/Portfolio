@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ajas Muhammed Portfolio</title>
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="styles.css"><script src="theme.js"></script>
+</head>
+<body>
+<div class="linkbar" aria-hidden="true"></div>
+<header class="top"><div class="wrap bar">
+<a class="brand" href="index.html"><span class="led" aria-hidden="true"></span>ajas@kochi</a>
+<nav class="nav" aria-label="Main">
+<a href="index.html" aria-current="page">Home</a><a href="experience.html">Experience</a><a href="contact.html">Contact</a>
+</nav>
+<button class="chip" id="theme" type="button" aria-label="Switch colour theme">light mode</button>
+</div></header>
+<main>
+<section class="wrap hero">
+<p class="eyebrow">IT specialist · Systems administrator · Kochi, India</p>
+<h1>Ajas Muhammed</h1>
+<p class="lede">I look after the networks, servers, devices and accounts that keep an office running, across Windows, Linux and macOS.</p>
+<div class="term" id="term">
+<div class="term-bar"><i></i><i></i><i></i><span>ajas@kochi: ~</span></div>
+<div class="term-body" id="out" aria-live="polite">
+<div class="line"><span class="ps">$ </span><span class="type t1">whoami</span></div>
+<div class="res r1">Ajas Muhammed, IT Specialist and Systems Administrator</div>
+<div class="line l2"><span class="ps">$ </span><span class="type t2">cat summary.txt</span></div>
+<div class="res r2">Working in IT since 2023. From the support desk to systems administration: networks, servers, endpoints, backups and monitoring.</div>
+<div class="res r3">Type help to see what else you can ask.</div>
+</div>
+<form class="prompt" id="form" autocomplete="off"><label for="cmd" class="ps">$</label><input id="cmd" type="text" spellcheck="false" autocapitalize="off" placeholder="type a command, try help"></form>
+</div>
+<div class="hint">
+<button class="chip" type="button" data-run="help">help</button>
+<button class="chip" type="button" data-run="skills">skills</button>
+<button class="chip" type="button" data-run="experience">experience</button>
+<button class="chip" type="button" data-run="contact">contact</button>
+</div>
+</section>
+<section class="wrap block" id="map">
+<p class="eyebrow">Site map</p>
+<h2>Move through the network</h2>
+<p class="lead">Each page is a node. Green links are live. The rest are still being wired up.</p>
+<svg class="map" viewBox="0 0 800 430" role="img" aria-label="Network map of the site. Experience and Contact are live. The other pages are in progress."><path class="cable live" d="M400 215 L150 75"/><path class="cable live" d="M400 215 L650 75"/><path class="cable off" d="M400 215 L95 215"/><path class="cable off" d="M400 215 L705 215"/><path class="cable off" d="M400 215 L150 355"/><path class="cable off" d="M400 215 L650 355"/><path class="cable off" d="M400 215 L400 50"/><path class="cable off" d="M400 215 L400 385"/><path class="flow" d="M400 215 L150 75"/><path class="flow" d="M400 215 L650 75"/><rect class="core" x="340" y="180" width="120" height="70" rx="14"/><text class="core-t" x="400" y="222">AJAS</text><text class="node sub" x="400" y="242" style="fill:var(--muted);font:13px var(--font-mono);text-anchor:middle;letter-spacing:.08em">CORE</text><a class="node live" href="experience.html" aria-label="Experience, live"><rect x="65" y="46" width="170" height="58" rx="10"/><circle class="dot" cx="81" cy="62" r="5"/><text x="150" y="78">Experience</text><text class="sub" x="150" y="98">link up</text></a><a class="node live" href="contact.html" aria-label="Contact, live"><rect x="565" y="46" width="170" height="58" rx="10"/><circle class="dot" cx="581" cy="62" r="5"/><text x="650" y="78">Contact</text><text class="sub" x="650" y="98">link up</text></a><g class="node off"><title>About is still being built</title><rect x="10" y="186" width="170" height="58" rx="10"/><circle class="dot" cx="26" cy="202" r="5"/><text x="95" y="218">About</text><text class="sub" x="95" y="238">in progress</text></g><g class="node off"><title>Skills is still being built</title><rect x="620" y="186" width="170" height="58" rx="10"/><circle class="dot" cx="636" cy="202" r="5"/><text x="705" y="218">Skills</text><text class="sub" x="705" y="238">in progress</text></g><g class="node off"><title>Case studies is still being built</title><rect x="65" y="326" width="170" height="58" rx="10"/><circle class="dot" cx="81" cy="342" r="5"/><text x="150" y="358">Case studies</text><text class="sub" x="150" y="378">in progress</text></g><g class="node off"><title>Resume is still being built</title><rect x="565" y="326" width="170" height="58" rx="10"/><circle class="dot" cx="581" cy="342" r="5"/><text x="650" y="358">Resume</text><text class="sub" x="650" y="378">in progress</text></g><g class="node off"><title>Network lab is still being built</title><rect x="315" y="21" width="170" height="58" rx="10"/><circle class="dot" cx="331" cy="37" r="5"/><text x="400" y="53">Network lab</text><text class="sub" x="400" y="73">in progress</text></g><g class="node off"><title>Troubleshoot is still being built</title><rect x="315" y="356" width="170" height="58" rx="10"/><circle class="dot" cx="331" cy="372" r="5"/><text x="400" y="388">Troubleshoot</text><text class="sub" x="400" y="408">in progress</text></g></svg>
+<div class="ports"><a class="port live" href="experience.html"><span class="jack" aria-hidden="true"></span><span>Experience</span><span class="st"><span class="led" aria-hidden="true"></span>link up</span></a><a class="port live" href="contact.html"><span class="jack" aria-hidden="true"></span><span>Contact</span><span class="st"><span class="led" aria-hidden="true"></span>link up</span></a><div class="port off"><span class="jack" aria-hidden="true"></span><span>About</span><span class="st"><span class="led off" aria-hidden="true"></span>in progress</span></div><div class="port off"><span class="jack" aria-hidden="true"></span><span>Skills</span><span class="st"><span class="led off" aria-hidden="true"></span>in progress</span></div><div class="port off"><span class="jack" aria-hidden="true"></span><span>Case studies</span><span class="st"><span class="led off" aria-hidden="true"></span>in progress</span></div><div class="port off"><span class="jack" aria-hidden="true"></span><span>Resume</span><span class="st"><span class="led off" aria-hidden="true"></span>in progress</span></div><div class="port off"><span class="jack" aria-hidden="true"></span><span>Network lab</span><span class="st"><span class="led off" aria-hidden="true"></span>in progress</span></div><div class="port off"><span class="jack" aria-hidden="true"></span><span>Troubleshoot</span><span class="st"><span class="led off" aria-hidden="true"></span>in progress</span></div></div>
+</section>
+</main>
+<footer class="wrap foot">
+<span><span class="led" aria-hidden="true"></span>link up · Kochi, Kerala, India</span>
+<span>Ajas Muhammed</span>
+<button class="chip" id="pilot-toggle" type="button" aria-pressed="true">penguin: on</button>
+</footer>
+<script src="app.js"></script><script src="pilot.js"></script>
+</body>
+</html>
