@@ -224,10 +224,13 @@ p { margin: 0; }
 @keyframes linkup { 0% { opacity: 1; transform: scaleX(0); transform-origin: left; } 70% { opacity: 1; transform: scaleX(1); } 100% { opacity: 0; transform: scaleX(1); } }
 
 /* penguin pilot */
-#pilot { position: fixed; left: 0; top: 0; width: 88px; height: 63px; z-index: 12; pointer-events: none; opacity: 0; transition: opacity 0.3s; will-change: transform; }
+#pilot { position: fixed; left: 0; top: 0; width: 70.4px; height: 50.4px; z-index: 12; pointer-events: none; opacity: 0; transition: opacity 0.3s; will-change: transform; }
 #pilot.on { opacity: 1; }
 #pilot .flip { width: 100%; height: 100%; transition: transform 0.25s ease; }
-#pilot .tilt { width: 100%; height: 100%; }
+#pilot .tilt { position: relative; width: 100%; height: 100%; }
+#pilot .tilt > svg, #pilot .pg { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+#pilot .pad { opacity: 0; transition: opacity 0.25s; }
+#pilot.out .pad { opacity: 1; }
 #pilot svg { width: 100%; height: 100%; overflow: visible; display: block; }
 #pilot .flame { transform-box: fill-box; transform-origin: 100% 50%; transform: scaleX(0.45); transition: transform 0.2s; }
 #pilot.fly .flame { transform: scaleX(1); }

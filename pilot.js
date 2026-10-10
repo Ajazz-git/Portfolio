@@ -1,5 +1,5 @@
 /* Packet, an original penguin pilot. Flies a small rocket around the page, parks beside a widget,
-   opens a laptop, plugs a cable into the widget, checks it, then flies off. */
+   hops off the rocket, opens a laptop, plugs a cable into the widget, checks it, hops back on and flies off. */
 (function () {
   var toggle = document.getElementById('pilot-toggle');
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -7,8 +7,9 @@
     return;
   }
 
-  var W = 88, K = W / 140, H = 100 * K;     /* sprite box, and its scale from the 140 x 100 drawing */
+  var W = 70.4, K = W / 140, H = 100 * K;     /* sprite box, and its scale from the 140 x 100 drawing */
   var PX = 122 * K, PY = 60 * K;            /* laptop port position inside the sprite */
+  var HOP = 40 * K;                         /* how far the penguin steps out in front of the rocket */
   var SEL = '.node, .port, .dev, .card, .term, .photos, .handled li';
   var SAYS = ['link up', 'no errors', 'all green', 'checks passed', 'looks good', 'config saved'];
   var NS = 'http://www.w3.org/2000/svg';
@@ -16,13 +17,17 @@
 
   function st(w) { return ' stroke="' + INK + '" stroke-width="' + (w || 2) + '" stroke-linejoin="round"'; }
 
-  var SPRITE = '<svg viewBox="0 0 140 100" focusable="false">'
+  var ROCKET = '<svg class="rkt" viewBox="0 0 140 100" focusable="false">'
     + '<g class="flame"><path d="M42 66 Q8 73 42 80 Z" fill="#ffb020"/><path d="M42 69 Q20 73 42 77 Z" fill="#fff3b8"/></g>'
     + '<path d="M46 62 L36 50 L58 62 Z" fill="#3dff8b"' + st() + '/>'
     + '<path d="M44 84 L32 97 L60 84 Z" fill="#3dff8b"' + st() + '/>'
     + '<rect x="40" y="62" width="58" height="22" rx="11" fill="#e6efe9"' + st() + '/>'
     + '<path d="M90 62 Q108 63 118 73 Q108 83 90 84 Z" fill="#3dff8b"' + st() + '/>'
     + '<circle cx="62" cy="73" r="5" fill="#8fdcff"' + st() + '/>'
+    + '</svg>';
+
+  var PENGUIN = '<svg viewBox="0 0 140 100" focusable="false">'
+    + '<ellipse class="pad" cx="70" cy="67" rx="26" ry="3.6" fill="#3dff8b" fill-opacity="0.35" stroke="#3dff8b" stroke-width="1.4"/>'
     + '<ellipse cx="46" cy="40" rx="6" ry="13" transform="rotate(18 46 40)" fill="#1a3043"' + st() + '/>'
     + '<ellipse cx="66" cy="36" rx="20" ry="26" fill="#254a63"' + st() + '/>'
     + '<ellipse cx="71" cy="41" rx="12.5" ry="17" fill="#f4f8f6"/>'
@@ -55,10 +60,11 @@
   var pilot = document.createElement('div');
   pilot.id = 'pilot';
   pilot.setAttribute('aria-hidden', 'true');
-  pilot.innerHTML = '<div class="flip"><div class="tilt">' + SPRITE + '</div></div>';
+  pilot.innerHTML = '<div class="flip"><div class="tilt">' + ROCKET + '<div class="pg">' + PENGUIN + '</div></div></div>';
   var flip = pilot.firstChild;
   var tilt = flip.firstChild;
   var portEl = pilot.querySelector('.lp');
+  var pg = pilot.querySelector('.pg');
 
   var layer = document.createElementNS(NS, 'svg');
   layer.id = 'cables';
@@ -131,14 +137,14 @@
 
   /* where the sprite and the cable end sit, for a given side of a widget */
   function geo(kind, f, R) {
-    var vw = window.innerWidth, vh = window.innerHeight, GAP = 54;
+    var vw = window.innerWidth, vh = window.innerHeight, GAP = 43;
     var vt = Math.max(R.top, 70), vb = Math.min(R.bottom, vh - 30), cy = (vt + vb) / 2;
     var ax = clamp(clamp(R.left + R.width / 2, R.left + 16, R.right - 16), 24, vw - 24);
     var g;
     if (kind === 'r') g = { px: R.right + GAP, py: cy, ax: R.right, ay: cy };
     else if (kind === 'l') g = { px: R.left - GAP, py: cy, ax: R.left, ay: cy };
-    else if (kind === 't') g = { px: ax + (f === 1 ? -40 : 40), py: R.top - 46, ax: ax, ay: R.top };
-    else g = { px: ax + (f === 1 ? -40 : 40), py: R.bottom + 40, ax: ax, ay: R.bottom };
+    else if (kind === 't') g = { px: ax + (f === 1 ? -32 : 32), py: R.top - 37, ax: ax, ay: R.top };
+    else g = { px: ax + (f === 1 ? -32 : 32), py: R.bottom + 32, ax: ax, ay: R.bottom };
     g.x = f === 1 ? g.px - PX : g.px - (W - PX);
     g.y = g.py - PY;
     return g;
@@ -147,7 +153,7 @@
   function fits(kind, f, R) {
     var g = geo(kind, f, R);
     var vw = window.innerWidth, vh = window.innerHeight;
-    if (g.x < 8 || g.x + W > vw - 8 || g.y < 58 || g.y + H > vh - 8) return false;
+    if (g.x - (f === -1 ? HOP : 0) < 8 || g.x + W + (f === 1 ? HOP : 0) > vw - 8 || g.y < 58 || g.y + H > vh - 8) return false;
     var m = 6;
     var apart = g.x + W < R.left - m || g.x > R.right + m || g.y + H < R.top - m || g.y > R.bottom + m;
     return apart;
@@ -212,8 +218,10 @@
       var w = p.el;
       var t0 = null, opened = false, scanning = false;
       var txt = SAYS[Math.floor(Math.random() * SAYS.length)];
+      var hx = 0;
       function finish(v) {
-        pilot.classList.remove('open');
+        pilot.classList.remove('open', 'out');
+        pg.style.transform = '';
         w.classList.remove('scanning');
         say.classList.remove('show');
         clearCable();
@@ -225,22 +233,32 @@
         var t = ts - t0;
         var g = geo(p.kind, p.face, w.getBoundingClientRect());
         place(g.x, g.y + Math.sin(ts / 260) * 2.5, 0);
-        if (t > 300 && t < 3450 && !opened) { opened = true; pilot.classList.add('open'); }
-        if (t >= 3450 && opened) { opened = false; pilot.classList.remove('open'); }
+        /* the penguin hops off the rocket, works, then hops back on */
+        var lift = 0;
+        if (t < 250) hx = 0;
+        else if (t < 750) { var a = (t - 250) / 500; hx = HOP * ease(a); lift = Math.sin(a * Math.PI) * 14; }
+        else if (t < 4100) hx = HOP;
+        else if (t < 4600) { var b = (t - 4100) / 500; hx = HOP * (1 - ease(b)); lift = Math.sin(b * Math.PI) * 14; }
+        else hx = 0;
+        pg.style.transform = 'translate(' + hx.toFixed(1) + 'px,' + (-lift).toFixed(1) + 'px)';
+        var out = t >= 700 && t < 4150;
+        if (out !== pilot.classList.contains('out')) pilot.classList.toggle('out', out);
+        if (t > 800 && t < 3750 && !opened) { opened = true; pilot.classList.add('open'); }
+        if (t >= 3750 && opened) { opened = false; pilot.classList.remove('open'); }
         var cp = 0;
-        if (t >= 850 && t < 1450) cp = (t - 850) / 600;
-        else if (t >= 1450 && t < 3000) cp = 1;
-        else if (t >= 3000 && t < 3450) cp = 1 - (t - 3000) / 450;
+        if (t >= 1150 && t < 1750) cp = (t - 1150) / 600;
+        else if (t >= 1750 && t < 3300) cp = 1;
+        else if (t >= 3300 && t < 3750) cp = 1 - (t - 3300) / 450;
         if (cp > 0) drawCable(cp, g); else clearCable();
-        var sc = t >= 1450 && t < 3000;
+        var sc = t >= 1750 && t < 3300;
         if (sc !== scanning) {
           scanning = sc;
           w.classList.toggle('scanning', sc);
           say.classList.toggle('show', sc);
           if (sc) say.textContent = txt;
         }
-        say.style.transform = 'translate3d(' + (pos.x + W / 2) + 'px,' + (pos.y - 6) + 'px,0) translate(-50%,-100%)';
-        if (t < 3950) { requestAnimationFrame(frame); return; }
+        say.style.transform = 'translate3d(' + (pos.x + W / 2 + hx * face) + 'px,' + (pos.y - 6 - lift) + 'px,0) translate(-50%,-100%)';
+        if (t < 4750) { requestAnimationFrame(frame); return; }
         finish(true);
       }
       requestAnimationFrame(frame);
@@ -287,7 +305,8 @@
   }
 
   function stopVisuals() {
-    pilot.classList.remove('on', 'open', 'fly');
+    pilot.classList.remove('on', 'open', 'out', 'fly');
+    pg.style.transform = '';
     say.classList.remove('show');
     clearCable();
     var s = document.querySelectorAll('.scanning');
