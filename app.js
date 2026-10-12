@@ -37,6 +37,29 @@
     });
   });
 
+  /* the philosophy quote: a button that breaks things, then fixes them */
+  var touch = document.getElementById('touch');
+  var oops = document.getElementById('oops');
+  var fig = document.getElementById('philosophy');
+  if (touch && oops && fig) {
+    var steps = [
+      { say: 'You touched it. It was working five seconds ago.', btn: 'try to fix it', broke: true },
+      { say: 'Restoring from backup... (there is a backup, right?)', btn: 'wait for it', broke: true },
+      { say: 'Restored. Lesson learned. Until next time.', btn: 'touch it', broke: false }
+    ];
+    var n = 0;
+    touch.addEventListener('click', function () {
+      var st = steps[n];
+      oops.textContent = st.say;
+      touch.textContent = st.btn;
+      fig.classList.toggle('broke', st.broke);
+      fig.classList.remove('shake');
+      void fig.offsetWidth;
+      if (n === 0) fig.classList.add('shake');
+      n = (n + 1) % steps.length;
+    });
+  }
+
   /* skills: show one level at a time */
   var lv = document.querySelectorAll('.levels [data-level]');
   Array.prototype.forEach.call(lv, function (b) {

@@ -287,3 +287,29 @@ p { margin: 0; }
   .nav { position: relative; gap: 2px; }
   .nav a { flex: none; font-size: 12px; padding: 6px 8px; }
 }
+
+/* about, longer version */
+.about-grid .prose { max-width: 62ch; font-size: 1.05rem; }
+.about-grid .prose .sig { font: 500 0.95rem var(--font-mono); color: var(--accent); }
+.about-grid .kv > div { grid-template-columns: 112px minmax(0, 1fr); }
+.about-grid .kv dt { text-transform: uppercase; letter-spacing: 0.1em; font-size: 12px; }
+.philosophy-wrap { padding-bottom: 24px; }
+.philosophy { position: relative; margin: 0; padding: 26px 28px; border: 1px dashed var(--accent); border-radius: 10px; background: linear-gradient(135deg, var(--accent-dim), var(--panel)); display: grid; gap: 12px; overflow: hidden; }
+.philosophy::before { content: "DO NOT TOUCH"; position: absolute; right: -40px; top: 30px; transform: rotate(35deg); background: var(--warn); color: #1a1000; font: 700 11px var(--font-mono); letter-spacing: 0.18em; padding: 3px 34px; opacity: 0.9; }
+.philosophy blockquote { margin: 0; font: 700 clamp(1.5rem, 4.6vw, 2.4rem)/1.15 var(--font-display); max-width: 20ch; }
+.philosophy mark { background: none; color: var(--accent); border-bottom: 3px wavy var(--warn); text-decoration: none; }
+.philosophy .note { margin: 0; font: 13px var(--font-mono); color: var(--muted); }
+.philosophy .act { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; min-height: 36px; }
+.philosophy .oops { font: 13px var(--font-mono); color: var(--warn); }
+.philosophy.broke blockquote { color: var(--warn); }
+.philosophy.broke mark { border-bottom-style: dotted; }
+@media (prefers-reduced-motion: no-preference) {
+  .philosophy mark { display: inline-block; transition: transform 0.2s; }
+  .philosophy:hover mark { animation: nudge 0.9s ease-in-out infinite; }
+  .philosophy.shake { animation: shake 0.45s; }
+  .philosophy.broke blockquote { animation: glitch 1.2s steps(2, jump-none) infinite; }
+}
+@keyframes nudge { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-2px) rotate(-1deg); } 75% { transform: translateX(2px) rotate(1deg); } }
+@keyframes shake { 0%, 100% { transform: none; } 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(3px); } }
+@keyframes glitch { 0% { transform: translateX(0); } 50% { transform: translateX(1px); text-shadow: 2px 0 var(--accent); } }
+@media (max-width: 760px) { .philosophy { padding: 22px 18px; } .philosophy::before { display: none; } }
