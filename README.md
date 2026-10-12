@@ -31,6 +31,10 @@ Every page repeats the same header and footer. When you change the navigation, c
 2. Add `<a href="index.html#name">Name</a>` to the nav of every page, in the same order as the sections.
 3. Update the "Next" link at the bottom of the section before it.
 
+## Editing the Skills section
+
+Each category is one `<article class="card cat" data-level="daily|working|learning">` in `index.html`. Its `<ul class="cat-skills">` holds the skill names; the skill map is built from that list, so edit the `<li>` items to change what a map shows (keep it to about six). A category belongs to exactly one level, which is what the all / daily / working / learning filter uses. The icons are inline SVG in each article. The code is in `app.js` (search for "skills explorer") and `styles.css` (search for "skills explorer").
+
 ## Look and feel
 
 - Dark by default, bright green accent, light theme through `data-theme="light"` on the root element.
