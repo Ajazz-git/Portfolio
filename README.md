@@ -21,6 +21,7 @@ Then open http://localhost:8000. Opening `index.html` directly also works, but a
 | `fonts.css`, `fonts/` | The three font families as local `.woff2` files, with their licenses |
 | `theme.js` | Dark by default, light/dark switch. Keeps the choice across pages. Loaded first in every page so there is no flash. |
 | `app.js` | Theme button label, copy buttons, smooth scrolling and active nav link, home page terminal commands |
+| `icons.js`, `icons-license.txt` | Lucide icons used in the Skills section, and their licence |
 | `pilot.js` | The penguin pilot that flies around and inspects widgets |
 
 Every page repeats the same header and footer. When you change the navigation, change it in each page.
@@ -33,7 +34,12 @@ Every page repeats the same header and footer. When you change the navigation, c
 
 ## Editing the Skills section
 
-Each category is one `<article class="card cat" data-level="daily|working|learning">` in `index.html`. Its `<ul class="cat-skills">` holds the skill names; the skill map is built from that list, so edit the `<li>` items to change what a map shows (keep it to about six). A category belongs to exactly one level, which is what the all / daily / working / learning filter uses. The icons are inline SVG in each article. The code is in `app.js` (search for "skills explorer") and `styles.css` (search for "skills explorer").
+The Skills section is seven cards (`<article class="card pcard">`) in `index.html`, in a 1 + 2 + 2 + 2 pyramid. Each card has a level (`data-level="daily|working|learning"`, shown as its status label) and a `<ul class="cat-skills">`; the skill network is built from that list. Every `<li>` names its icon in `data-icon`, and the icon itself is looked up in `icons.js`.
+
+- To rename or swap a skill, edit the `<li>`. Keep about six per card.
+- To use a different icon, find it at https://lucide.dev, copy the markup between the `<svg>` tags into `icons.js` under a new name, then use that name in `data-icon`.
+- Icons are from Lucide (ISC licence, see `icons-license.txt`). No brand logos are used.
+- The card movement and network code is in `app.js` (search for "skills: a pyramid") and the styles are in `styles.css` (search for "skills pyramid").
 
 ## Look and feel
 

@@ -123,53 +123,41 @@
 <section class="wrap pagehead">
 <p class="eyebrow">Skills</p>
 <h2 class="sec-title">What I work with</h2>
-<p class="lede">Grouped by how often I use them, rather than by product names. Pick a level, then hover or tap a category to open its skill map.</p>
+<p class="lede">Seven areas, marked by how often I use them. Hover or tap one to open its skill map.</p>
 </section>
 <section class="wrap block skills" id="explorer">
-<div class="levels" role="group" aria-label="Show skills by level">
-<button class="chip" type="button" data-level="all" aria-pressed="true">all</button>
-<button class="chip" type="button" data-level="daily" aria-pressed="false">daily</button>
-<button class="chip" type="button" data-level="working" aria-pressed="false">working</button>
-<button class="chip" type="button" data-level="learning" aria-pressed="false">learning</button>
-</div>
-<div class="explorer-grid">
-<div class="cat-list">
-<article class="card cat" data-level="daily" data-cat="systems">
-<button class="cat-btn" type="button" aria-expanded="false" aria-controls="stage"><span class="ico"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><rect x="2.5" y="5" width="18" height="13" rx="2"/><path d="M8 22.5h7M11.5 18v4.5"/><rect x="23" y="7" width="7" height="7" rx="1.2"/><rect x="23" y="16" width="7" height="7" rx="1.2"/><path d="M25.5 10.5h2M25.5 19.5h2"/></svg></span><span class="cat-t"><b>Systems &amp; Servers</b><small>Windows and Linux servers, accounts and access, backups.</small></span><span class="cat-r"><span class="lvl-tag"><span class="led" aria-hidden="true"></span>daily</span><span class="chev" aria-hidden="true"></span></span></button>
-<ul class="cat-skills"><li>Windows Administration</li><li>Linux Administration</li><li>Server Troubleshooting</li><li>User &amp; Access Management</li><li>Software Installation</li><li>Backup &amp; Recovery</li></ul>
+<div class="pyr">
+<article class="card pcard" data-n="1" data-cat="systems" data-level="daily">
+<button class="pc-btn" type="button" aria-expanded="false" aria-controls="net"><span class="ico" data-icon="server" aria-hidden="true"></span><span class="pc-t"><b>Systems &amp; Servers</b><small>Servers, accounts, backups</small><span class="lvl-tag"><span class="led" aria-hidden="true"></span>daily</span></span></button>
+<ul class="cat-skills"><li data-icon="app-window">Windows Administration</li><li data-icon="terminal">Linux Administration</li><li data-icon="server-cog">Server Troubleshooting</li><li data-icon="user-cog">User &amp; Access Management</li><li data-icon="package-check">Software Installation</li><li data-icon="archive-restore">Backup &amp; Recovery</li></ul>
 </article>
-<article class="card cat" data-level="daily" data-cat="network">
-<button class="cat-btn" type="button" aria-expanded="false" aria-controls="stage"><span class="ico"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><rect x="3" y="4.5" width="26" height="18" rx="2"/><path d="M3 10.5h26M3 16.5h26M16 4.5v6M9.5 10.5v6M22.5 10.5v6M16 16.5v6"/><path d="M7.4 27h17.2"/><circle cx="6" cy="27" r="1.4"/><circle cx="16" cy="27" r="1.4"/><circle cx="26" cy="27" r="1.4"/></svg></span><span class="cat-t"><b>Networking &amp; Firewalls</b><small>LAN and Wi-Fi, VLANs, VPN and firewall rules.</small></span><span class="cat-r"><span class="lvl-tag"><span class="led" aria-hidden="true"></span>daily</span><span class="chev" aria-hidden="true"></span></span></button>
-<ul class="cat-skills"><li>TCP/IP</li><li>DNS &amp; DHCP</li><li>VLANs</li><li>VPN / IPsec</li><li>Routing &amp; Switching</li><li>Firewall Management</li></ul>
+<article class="card pcard" data-n="2" data-cat="network" data-level="daily">
+<button class="pc-btn" type="button" aria-expanded="false" aria-controls="net"><span class="ico" data-icon="network" aria-hidden="true"></span><span class="pc-t"><b>Networking &amp; Firewalls</b><small>LAN, VLANs, VPN, firewalls</small><span class="lvl-tag"><span class="led" aria-hidden="true"></span>daily</span></span></button>
+<ul class="cat-skills"><li data-icon="globe">TCP/IP</li><li data-icon="waypoints">DNS &amp; DHCP</li><li data-icon="layers">VLANs</li><li data-icon="globe-lock">VPN / IPsec</li><li data-icon="router">Routing &amp; Switching</li><li data-icon="brick-wall-shield">Firewall Management</li></ul>
 </article>
-<article class="card cat" data-level="daily" data-cat="docs">
-<button class="cat-btn" type="button" aria-expanded="false" aria-controls="stage"><span class="ico"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M7 3h11l6 6v17a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M18 3v6h6M9 14h10M9 18h10M9 22h6"/></svg></span><span class="cat-t"><b>Documentation &amp; Support</b><small>Runbooks, handover notes and everyday user support.</small></span><span class="cat-r"><span class="lvl-tag"><span class="led" aria-hidden="true"></span>daily</span><span class="chev" aria-hidden="true"></span></span></button>
-<ul class="cat-skills"><li>Technical Documentation</li><li>Troubleshooting Notes</li><li>Knowledge-Base Articles</li><li>Incident Records</li><li>Handover Notes</li><li>User Support</li></ul>
+<article class="card pcard" data-n="3" data-cat="security" data-level="working">
+<button class="pc-btn" type="button" aria-expanded="false" aria-controls="net"><span class="ico" data-icon="shield" aria-hidden="true"></span><span class="pc-t"><b>Security &amp; Identity</b><small>Protection and alerts</small><span class="lvl-tag"><span class="led mid" aria-hidden="true"></span>working</span></span></button>
+<ul class="cat-skills"><li data-icon="sliders-horizontal">Security Configuration</li><li data-icon="shield-check">Endpoint Protection</li><li data-icon="key-round">Access Control</li><li data-icon="fingerprint">Multi-Factor Authentication</li><li data-icon="bell-ring">Alert Follow-up</li><li data-icon="bug">Security Troubleshooting</li></ul>
 </article>
-<article class="card cat" data-level="working" data-cat="security">
-<button class="cat-btn" type="button" aria-expanded="false" aria-controls="stage"><span class="ico"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M16 3 27 7v8c0 7-5 11.5-11 14C10 26.500 5 22 5 15V7Z"/><rect x="11.5" y="14" width="9" height="7.500" rx="1.600"/><path d="M13.500 14v-2.500a2.500 2.500 0 0 1 5 0V14"/></svg></span><span class="cat-t"><b>Security &amp; Identity</b><small>Sign-in protection, endpoint protection and alert follow-up.</small></span><span class="cat-r"><span class="lvl-tag"><span class="led mid" aria-hidden="true"></span>working</span><span class="chev" aria-hidden="true"></span></span></button>
-<ul class="cat-skills"><li>Directory Services</li><li>Cloud Identity</li><li>Multi-Factor Auth</li><li>Access Control</li><li>Endpoint Protection</li><li>Alert Follow-up</li></ul>
+<article class="card pcard" data-n="4" data-cat="docs" data-level="daily">
+<button class="pc-btn" type="button" aria-expanded="false" aria-controls="net"><span class="ico" data-icon="book-open-text" aria-hidden="true"></span><span class="pc-t"><b>Documentation &amp; Support</b><small>Runbooks and user support</small><span class="lvl-tag"><span class="led" aria-hidden="true"></span>daily</span></span></button>
+<ul class="cat-skills"><li data-icon="file-text">Technical Documentation</li><li data-icon="notebook-pen">Troubleshooting Notes</li><li data-icon="library">Knowledge-Base Articles</li><li data-icon="clipboard-list">Incident Records</li><li data-icon="handshake">Handover Documentation</li><li data-icon="headset">User Support</li></ul>
 </article>
-<article class="card cat" data-level="working" data-cat="endpoint">
-<button class="cat-btn" type="button" aria-expanded="false" aria-controls="stage"><span class="ico"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><rect x="3.5" y="5" width="17" height="12" rx="1.800"/><path d="M1.500 21h21M12 17v4"/><rect x="25" y="7" width="5" height="9" rx="1.200"/><rect x="24.500" y="20" width="6" height="6" rx="1.100"/><path d="M20.500 10.500H25M22.500 23h2"/></svg></span><span class="cat-t"><b>Endpoint &amp; IT Operations</b><small>Laptops, phones, updates, tickets and monitoring.</small></span><span class="cat-r"><span class="lvl-tag"><span class="led mid" aria-hidden="true"></span>working</span><span class="chev" aria-hidden="true"></span></span></button>
-<ul class="cat-skills"><li>Device Enrollment</li><li>Software Deployment</li><li>Patch Management</li><li>Remote Support</li><li>Asset &amp; Inventory</li><li>Monitoring &amp; Alerts</li></ul>
+<article class="card pcard" data-n="5" data-cat="endpoint" data-level="working">
+<button class="pc-btn" type="button" aria-expanded="false" aria-controls="net"><span class="ico" data-icon="laptop" aria-hidden="true"></span><span class="pc-t"><b>Endpoint &amp; IT Operations</b><small>Devices and monitoring</small><span class="lvl-tag"><span class="led mid" aria-hidden="true"></span>working</span></span></button>
+<ul class="cat-skills"><li data-icon="tablet-smartphone">Device Enrollment</li><li data-icon="refresh-cw">Software &amp; Patch Management</li><li data-icon="screen-share">Remote Support</li><li data-icon="boxes">Asset &amp; Inventory Management</li><li data-icon="activity">Monitoring &amp; Alerts</li><li data-icon="cctv">Phones, CCTV &amp; Attendance</li></ul>
 </article>
-<article class="card cat" data-level="working" data-cat="infra">
-<button class="cat-btn" type="button" aria-expanded="false" aria-controls="stage"><span class="ico"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><rect x="2.500" y="5" width="15" height="7" rx="1.500"/><rect x="2.500" y="14" width="15" height="7" rx="1.500"/><path d="M6 8.500h2M6 17.500h2"/><path d="M20 13q5-3.500 10 0v2.500q-5-1.800-10 0Z"/><rect x="21" y="19" width="8" height="8" rx="1.500"/><path d="M23.500 22h3M23.500 24.500h3M17.500 17.500H21"/></svg></span><span class="cat-t"><b>Infrastructure &amp; Telephony</b><small>Office calling, IP phones, cameras and attendance devices.</small></span><span class="cat-r"><span class="lvl-tag"><span class="led mid" aria-hidden="true"></span>working</span><span class="chev" aria-hidden="true"></span></span></button>
-<ul class="cat-skills"><li>SIP &amp; VoIP Basics</li><li>IP Phones</li><li>Office Calling</li><li>CCTV Systems</li><li>Attendance Devices</li><li>Network Connectivity</li></ul>
+<article class="card pcard" data-n="6" data-cat="identity" data-level="working">
+<button class="pc-btn" type="button" aria-expanded="false" aria-controls="net"><span class="ico" data-icon="id-card" aria-hidden="true"></span><span class="pc-t"><b>Identity &amp; Access</b><small>Accounts and permissions</small><span class="lvl-tag"><span class="led mid" aria-hidden="true"></span>working</span></span></button>
+<ul class="cat-skills"><li data-icon="book-user">Directory Services</li><li data-icon="user-round-key">Cloud Identity</li><li data-icon="mail">Email &amp; Collaboration Admin</li><li data-icon="users">User &amp; Group Management</li><li data-icon="log-in">Sign-in Policies</li><li data-icon="badge-check">Licences &amp; Permissions</li></ul>
 </article>
-<article class="card cat" data-level="learning" data-cat="cloud">
-<button class="cat-btn" type="button" aria-expanded="false" aria-controls="stage"><span class="ico"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M9 17.500a4.500 4.500 0 0 1-.4-8.980A6.500 6.500 0 0 1 21 7.500a5 5 0 0 1 1 10Z"/><path d="M11 17.500v4M16 17.500v6.500M21 17.500v4"/><circle cx="11" cy="23.500" r="1.800"/><circle cx="16" cy="27" r="1.800"/><circle cx="21" cy="23.500" r="1.800"/></svg></span><span class="cat-t"><b>Cloud &amp; Automation</b><small>Learning AWS, scripting and AI tools.</small></span><span class="cat-r"><span class="lvl-tag"><span class="led warn" aria-hidden="true"></span>learning</span><span class="chev" aria-hidden="true"></span></span></button>
-<ul class="cat-skills"><li>AWS Fundamentals</li><li>Cloud Compute</li><li>Cloud Storage</li><li>Cloud Networking</li><li>Scripting &amp; Automation</li><li>AI Tools</li></ul>
+<article class="card pcard" data-n="7" data-cat="cloud" data-level="learning">
+<button class="pc-btn" type="button" aria-expanded="false" aria-controls="net"><span class="ico" data-icon="cloud" aria-hidden="true"></span><span class="pc-t"><b>Cloud &amp; Automation</b><small>Learning AWS and scripting</small><span class="lvl-tag"><span class="led warn" aria-hidden="true"></span>learning</span></span></button>
+<ul class="cat-skills"><li data-icon="cloud-cog">AWS Fundamentals</li><li data-icon="cpu">Cloud Compute</li><li data-icon="hard-drive">Cloud Storage</li><li data-icon="share-2">Cloud Networking</li><li data-icon="square-terminal">Scripting &amp; Automation</li><li data-icon="sparkles">AI Tools</li></ul>
 </article>
-</div>
-<div class="stage-slot">
-<div class="stage empty" id="stage" hidden>
-<div class="stage-head"><div><p class="eyebrow stage-level"></p><h3 class="stage-title"></h3><p class="stage-desc"></p></div><button class="chip stage-close" type="button">close</button></div>
-<div class="mol-wrap" aria-hidden="true"><div class="mol"></div></div>
-<ul class="sr-only stage-list"></ul>
-<p class="stage-hint">Hover or click a category to open its skill map.</p>
-</div>
+<div class="net" id="net" role="region" aria-label="Skill map" hidden>
+<button class="chip net-close" type="button" aria-label="Close skill map">close</button>
+<div class="net-in"><svg class="net-lines" aria-hidden="true"></svg><div class="hub" aria-hidden="true"></div><div class="tip" aria-hidden="true"></div></div>
 </div>
 </div>
 </section>
@@ -201,6 +189,6 @@
 <span>Ajas Muhammed</span>
 <button class="chip" id="pilot-toggle" type="button" aria-pressed="true">penguin: on</button>
 </footer>
-<script src="app.js"></script><script src="pilot.js"></script>
+<script src="icons.js"></script><script src="app.js"></script><script src="pilot.js"></script>
 </body>
 </html>

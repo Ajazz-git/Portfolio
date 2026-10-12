@@ -60,229 +60,293 @@
     });
   }
 
-  /* skills explorer: level filter, category widgets and the skill map */
-  var ex = document.getElementById('explorer');
-  if (ex) (function () {
-    var NS = 'http://www.w3.org/2000/svg';
+  /* skills: a pyramid of seven cards; one opens into a small floating skill network */
+  var sk = document.getElementById('explorer');
+  if (sk) (function () {
+    var NSV = 'http://www.w3.org/2000/svg';
+    var ICONS = window.SKILL_ICONS || {};
     var rm = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
-    var mqNarrow = matchMedia('(max-width: 860px)');
+    var mqWide = matchMedia('(min-width: 980px)');
     var mqHover = matchMedia('(hover: hover) and (pointer: fine)');
-    var cats = Array.prototype.slice.call(ex.querySelectorAll('.cat'));
-    var chipsEl = ex.querySelectorAll('.levels [data-level]');
-    var grid = ex.querySelector('.explorer-grid');
-    var list = ex.querySelector('.cat-list');
-    var slot = ex.querySelector('.stage-slot');
-    var stage = document.getElementById('stage');
-    var wrap = stage.querySelector('.mol-wrap');
-    var mol = stage.querySelector('.mol');
-    var closeBtn = stage.querySelector('.stage-close');
-    ex.classList.add('js');
+    var pyr = sk.querySelector('.pyr');
+    var cards = Array.prototype.slice.call(pyr.querySelectorAll('.pcard'));
+    var net = document.getElementById('net');
+    var inner = net.querySelector('.net-in');
+    var svg = net.querySelector('.net-lines');
+    var hub = net.querySelector('.hub');
+    var tip = net.querySelector('.tip');
+    var closeBtn = net.querySelector('.net-close');
+    sk.classList.add('js');
 
-    var active = null, pinned = null, timer = 0, raf = 0, built = null;
-    var lines = [], nodes = [], orbit = null, svg = null, center = null;
+    var active = null, pinned = false, settleUntil = 0;
+    var hoverTimer = 0, closeTimer = 0, lastX = -1, lastY = -1, lastPT = 'mouse';
 
-    function isNarrow() { return mqNarrow.matches; }
-    function canHover() { return mqHover.matches && !isNarrow(); }
-    function shown() { return cats.filter(function (c) { return !c.hidden; }); }
-    function btnOf(c) { return c.querySelector('.cat-btn'); }
-    function skillsOf(c) {
-      return Array.prototype.map.call(c.querySelectorAll('.cat-skills li'), function (li) { return li.textContent; });
+    function wide() { return mqWide.matches; }
+    function hoverOK() { return mqHover.matches && wide(); }
+    function svgFor(name) {
+      return '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">' + (ICONS[name] || ICONS.cloud || '') + '</svg>';
+    }
+    function card(n) { return cards.filter(function (c) { return +c.getAttribute('data-n') === n; })[0]; }
+    function btnOf(c) { return c.querySelector('.pc-btn'); }
+
+    Array.prototype.forEach.call(pyr.querySelectorAll('.pcard .ico'), function (el) {
+      el.innerHTML = svgFor(el.getAttribute('data-icon'));
+    });
+
+    /* ---- the card layout: wide screens use three columns while open, smaller ones put the map under the card ---- */
+    function applyLayout() {
+      var open = !!active;
+      pyr.classList.toggle('open', open);
+      cards.forEach(function (c) {
+        c.style.gridColumn = ''; c.style.gridRow = '';
+        c.classList.toggle('is-active', c === active);
+        c.classList.toggle('is-pinned', c === active && pinned);
+        btnOf(c).setAttribute('aria-expanded', c === active ? 'true' : 'false');
+      });
+      net.style.gridColumn = ''; net.style.gridRow = '';
+      net.hidden = !open;
+      if (!open) return;
+      active.parentNode.insertBefore(net, active.nextSibling);
+      if (!wide()) return;
+      var n = +active.getAttribute('data-n');
+      var left = [2, 4, 6].filter(function (x) { return x !== n; });
+      var right = [3, 5, 7].filter(function (x) { return x !== n; });
+      if (n !== 1) { if (n % 2 === 0) left.unshift(1); else right.unshift(1); }
+      active.style.gridColumn = '2'; active.style.gridRow = '1';
+      net.style.gridColumn = '2'; net.style.gridRow = '2 / span 2';
+      left.forEach(function (k, i) { var c = card(k); c.style.gridColumn = '1'; c.style.gridRow = String(i + 1); });
+      right.forEach(function (k, i) { var c = card(k); c.style.gridColumn = '3'; c.style.gridRow = String(i + 1); });
     }
 
-    /* the map: a centre node, skill bubbles around it, lines in between */
+    /* move the cards with a short slide from where they were to where the new layout puts them */
+    function transition(change) {
+      var first = cards.map(function (c) { return c.getBoundingClientRect(); });
+      cards.forEach(function (c) { if (c._anim) { c._anim.cancel(); c._anim = null; } });
+      change();
+      if (rm) return;
+      cards.forEach(function (c, i) {
+        var r = c.getBoundingClientRect();
+        var dx = first[i].left - r.left, dy = first[i].top - r.top;
+        if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
+        c._anim = c.animate([{ transform: 'translate(' + dx + 'px,' + dy + 'px)' }, { transform: 'none' }],
+          { duration: 420, easing: 'cubic-bezier(0.22, 0.7, 0.2, 1)' });
+      });
+    }
+
+    /* ---- the network ---- */
+    var nodes = [], spokes = [], bonds = [], names = [], W = 0, H = 0;
+    var tipIdx = -1, tipW = 0, tipH = 0;
+    var raf = 0, t0 = 0, px = 0, py = 0, cx = 0, cy = 0;
+    var NR = 23;
+
     function build(c) {
-      var names = skillsOf(c);
-      mol.textContent = '';
-      lines = []; nodes = [];
-      svg = document.createElementNS(NS, 'svg');
-      svg.setAttribute('aria-hidden', 'true');
-      svg.setAttribute('class', 'links');
-      orbit = document.createElementNS(NS, 'ellipse');
-      svg.appendChild(orbit);
-      names.forEach(function () {
-        var ln = document.createElementNS(NS, 'line');
-        svg.appendChild(ln);
-        lines.push(ln);
+      stopLoop();
+      nodes = []; spokes = []; bonds = []; names = []; tipIdx = -1;
+      tip.classList.remove('show');
+      Array.prototype.forEach.call(inner.querySelectorAll('.nd'), function (n) { n.remove(); });
+      svg.textContent = '';
+      hub.innerHTML = svgFor(c.querySelector('.ico').getAttribute('data-icon'));
+      var lis = c.querySelectorAll('.cat-skills li');
+      var k = lis.length, i, ln;
+      for (i = 0; i < k; i++) { ln = document.createElementNS(NSV, 'line'); ln.setAttribute('class', 'bond'); svg.appendChild(ln); bonds.push(ln); }
+      for (i = 0; i < k; i++) { ln = document.createElementNS(NSV, 'line'); ln.setAttribute('class', 'spoke'); svg.appendChild(ln); spokes.push(ln); }
+      Array.prototype.forEach.call(lis, function (li, j) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'nd';
+        b.setAttribute('data-i', j);
+        b.setAttribute('aria-label', li.textContent);
+        b.innerHTML = svgFor(li.getAttribute('data-icon'));
+        inner.appendChild(b);
+        nodes.push(b);
+        names.push(li.textContent);
       });
-      mol.appendChild(svg);
-      center = document.createElement('div');
-      center.className = 'center';
-      var ico = c.querySelector('.ico svg');
-      if (ico) center.appendChild(ico.cloneNode(true));
-      mol.appendChild(center);
-      names.forEach(function (n, i) {
-        var nd = document.createElement('div');
-        nd.className = 'node';
-        nd.setAttribute('data-i', i);
-        var b = document.createElement('div');
-        b.className = 'bub';
-        b.textContent = n;
-        b.style.setProperty('--d', (6 + (i % 3) * 1.3).toFixed(1) + 's');
-        b.style.setProperty('--l', (-i * 1.1).toFixed(1) + 's');
-        b.style.setProperty('--i', i);
-        nd.style.setProperty('--z', i % 2 ? 9 : 6);
-        nd.appendChild(b);
-        mol.appendChild(nd);
-        nodes.push(nd);
-      });
-      built = c;
-      layout();
+      measure();
+      draw(0);
+      if (!rm) startLoop();
     }
 
-    function layout() {
-      if (!built || !nodes.length) return;
-      var W = mol.clientWidth, H = mol.clientHeight;
-      if (!W || !H) return;
-      var n = nodes.length;
-      var pill = nodes[0].firstChild.offsetWidth || 108;
-      var rx = Math.min(250, (W / 2 - 18 - pill / 2) / 0.866);
-      var ry = Math.min(150, H / 2 - 40);
-      var cx = W / 2, cy = H / 2;
-      svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
-      orbit.setAttribute('cx', cx); orbit.setAttribute('cy', cy);
-      orbit.setAttribute('rx', Math.max(10, rx * 0.93)); orbit.setAttribute('ry', Math.max(10, ry * 0.93));
-      center.style.left = cx + 'px'; center.style.top = cy + 'px';
+    function measure() {
+      W = inner.clientWidth; H = inner.clientHeight;
+      svg.setAttribute('viewBox', '0 0 ' + (W || 1) + ' ' + (H || 1));
+    }
+
+    /* every node sits on a tilted ring and drifts a little; lines are redrawn from the same numbers, so they stay attached */
+    function draw(t) {
+      if (!W || !H || !nodes.length) return;
+      var n = nodes.length, mx = NR * 1.12 + 16;
+      var rx = Math.min(185, W / 2 - mx), ry = Math.min(150, H / 2 - mx);
+      var ay = 0.1 * Math.sin(t * 0.35) + cx * 0.13, ax = 0.08 * Math.sin(t * 0.27 + 1) + cy * 0.1;
+      var cyaw = Math.cos(ay), syaw = Math.sin(ay), cpit = Math.cos(ax), spit = Math.sin(ax);
+      var hx = W / 2, hy = H / 2, pts = [];
       for (var i = 0; i < n; i++) {
-        var ang = (-90 + i * (360 / n)) * Math.PI / 180;
-        var x = cx + Math.cos(ang) * rx, y = cy + Math.sin(ang) * ry;
-        nodes[i].style.left = x.toFixed(1) + 'px';
-        nodes[i].style.top = y.toFixed(1) + 'px';
-        lines[i].setAttribute('x1', cx); lines[i].setAttribute('y1', cy);
-        lines[i].setAttribute('x2', x.toFixed(1)); lines[i].setAttribute('y2', y.toFixed(1));
+        var a = -Math.PI / 2 + i * 2 * Math.PI / n;
+        var x = Math.cos(a) * rx, y = Math.sin(a) * ry, z = (i % 2 ? 1 : -1) * 20;
+        var x1 = x * cyaw + z * syaw, z1 = -x * syaw + z * cyaw;
+        var y1 = y * cpit - z1 * spit, z2 = y * spit + z1 * cpit;
+        var s = 480 / (480 - z2);
+        var A = 4 + (i % 3) * 2;
+        var dx = A * Math.sin(t * (0.45 + (i % 4) * 0.09) + i * 1.7);
+        var dy = A * Math.cos(t * (0.38 + (i % 3) * 0.11) + i * 2.3);
+        var X = hx + x1 * s + dx, Y = hy + y1 * s + dy, sc = Math.max(0.92, Math.min(1.1, s));
+        pts.push([X, Y]);
+        nodes[i].style.transform = 'translate(' + (X - NR).toFixed(1) + 'px,' + (Y - NR).toFixed(1) + 'px) scale(' + sc.toFixed(3) + ')';
+        spokes[i].setAttribute('x1', hx); spokes[i].setAttribute('y1', hy);
+        spokes[i].setAttribute('x2', X.toFixed(1)); spokes[i].setAttribute('y2', Y.toFixed(1));
       }
+      for (var j = 0; j < n; j++) {
+        var p = pts[j], q = pts[(j + 1) % n];
+        bonds[j].setAttribute('x1', p[0].toFixed(1)); bonds[j].setAttribute('y1', p[1].toFixed(1));
+        bonds[j].setAttribute('x2', q[0].toFixed(1)); bonds[j].setAttribute('y2', q[1].toFixed(1));
+      }
+      if (tipIdx >= 0 && pts[tipIdx]) placeTip(pts[tipIdx]);
     }
 
-    /* put the stage beside the list on wide screens, or right under the open widget on narrow ones */
-    function place() {
-      if (isNarrow() && active) {
-        if (stage.previousElementSibling !== active) list.insertBefore(stage, active.nextSibling);
-      } else if (stage.parentNode !== slot) {
-        slot.appendChild(stage);
-      }
+    function placeTip(p) {
+      var left = Math.max(6, Math.min(W - tipW - 6, p[0] - tipW / 2));
+      var top = p[1] - NR - 10 - tipH;
+      if (top < 6) top = p[1] + NR + 10;
+      tip.style.transform = 'translate(' + left.toFixed(1) + 'px,' + top.toFixed(1) + 'px)';
     }
 
-    function render() {
-      cats.forEach(function (c) {
-        var on = c === active;
-        btnOf(c).setAttribute('aria-expanded', on ? 'true' : 'false');
-        c.classList.toggle('is-active', on);
-        c.classList.toggle('is-pinned', c === pinned);
-      });
-      place();
-      if (!active) {
-        built = null;
-        mol.textContent = '';
-        stage.classList.add('empty');
-        stage.hidden = isNarrow();
+    function showTip(i) {
+      if (i === tipIdx) return;
+      tipIdx = i;
+      nodes.forEach(function (n, j) { n.classList.toggle('on', j === i); });
+      spokes.forEach(function (l, j) { l.classList.toggle('on', j === i); });
+      if (i < 0) { tip.classList.remove('show'); return; }
+      tip.textContent = names[i];
+      tipW = tip.offsetWidth; tipH = tip.offsetHeight;
+      tip.classList.add('show');
+      draw((performance.now() - t0) / 1000);
+    }
+
+    function frame(now) {
+      raf = requestAnimationFrame(frame);
+      cx += (px - cx) * 0.06; cy += (py - cy) * 0.06;
+      draw((now - t0) / 1000);
+    }
+    function startLoop() { if (!raf && !rm) { t0 = performance.now(); raf = requestAnimationFrame(frame); } }
+    function stopLoop() { if (raf) { cancelAnimationFrame(raf); raf = 0; } }
+
+    inner.addEventListener('pointermove', function (e) {
+      if (rm || e.pointerType !== 'mouse') return;
+      var r = inner.getBoundingClientRect();
+      px = Math.max(-1, Math.min(1, (e.clientX - r.left) / r.width * 2 - 1));
+      py = Math.max(-1, Math.min(1, (e.clientY - r.top) / r.height * 2 - 1));
+    });
+    inner.addEventListener('pointerleave', function () { px = 0; py = 0; });
+    var downIdx = -1;
+    inner.addEventListener('pointerdown', function (e) {
+      lastPT = e.pointerType;
+      downIdx = tipIdx;
+    });
+    inner.addEventListener('pointerover', function (e) {
+      var nd = e.target.closest && e.target.closest('.nd');
+      if (nd && e.pointerType === 'mouse') showTip(+nd.getAttribute('data-i'));
+    });
+    inner.addEventListener('pointerout', function (e) {
+      var nd = e.target.closest && e.target.closest('.nd');
+      if (nd && e.pointerType === 'mouse' && document.activeElement !== nd) showTip(-1);
+    });
+    inner.addEventListener('focusin', function (e) {
+      var nd = e.target.closest && e.target.closest('.nd');
+      if (nd) showTip(+nd.getAttribute('data-i'));
+    });
+    inner.addEventListener('focusout', function (e) {
+      var nd = e.target.closest && e.target.closest('.nd');
+      if (nd) showTip(-1);
+    });
+    inner.addEventListener('click', function (e) {
+      var nd = e.target.closest && e.target.closest('.nd');
+      if (!nd) { showTip(-1); return; }
+      if (lastPT === 'touch' || lastPT === 'pen') {
+        var i = +nd.getAttribute('data-i');
+        showTip(downIdx === i ? -1 : i);
+      }
+    });
+
+    if (window.ResizeObserver) new ResizeObserver(function () { if (active) { measure(); draw((performance.now() - t0) / 1000); } }).observe(inner);
+    else window.addEventListener('resize', function () { if (active) { measure(); draw(0); } });
+
+    /* ---- opening and closing ---- */
+    function open(c, pin) {
+      clearTimeout(hoverTimer); clearTimeout(closeTimer);
+      if (active === c) {
+        if (pin && !pinned) { pinned = true; c.classList.add('is-pinned'); }
         return;
       }
-      var lvl = active.getAttribute('data-level');
-      stage.hidden = false;
-      stage.classList.remove('empty');
-      stage.querySelector('.stage-level').textContent = lvl;
-      stage.querySelector('.stage-title').textContent = active.querySelector('.cat-t b').textContent;
-      stage.querySelector('.stage-desc').textContent = active.querySelector('.cat-t small').textContent;
-      var sr = stage.querySelector('.stage-list');
-      sr.textContent = '';
-      skillsOf(active).forEach(function (s) { var li = document.createElement('li'); li.textContent = s; sr.appendChild(li); });
-      build(active);
-    }
-
-    function setActive(c, pin) {
-      active = c;
-      if (pin !== undefined) pinned = pin;
-      render();
-    }
-
-    function filter(level) {
-      Array.prototype.forEach.call(chipsEl, function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-level') === level ? 'true' : 'false'); });
-      cats.forEach(function (c) { c.hidden = !(level === 'all' || c.getAttribute('data-level') === level); });
-      if (pinned && pinned.hidden) pinned = null;
-      if (isNarrow()) active = null;
-      else if (!active || active.hidden) active = shown()[0] || null;
-      render();
-    }
-
-    Array.prototype.forEach.call(chipsEl, function (b) {
-      b.addEventListener('click', function () { filter(b.getAttribute('data-level')); });
-    });
-
-    cats.forEach(function (c) {
-      var b = btnOf(c);
-      b.addEventListener('click', function () {
-        if (!canHover()) {
-          setActive(active === c ? null : c, null);
-          if (active) requestAnimationFrame(function () {
-            stage.scrollIntoView({ block: 'nearest', behavior: rm ? 'auto' : 'smooth' });
-          });
-        } else {
-          clearTimeout(timer);
-          setActive(c, pinned === c ? null : c);
-        }
+      transition(function () { active = c; pinned = !!pin; applyLayout(); });
+      settleUntil = Date.now() + 700;
+      build(c);
+      if (!wide()) requestAnimationFrame(function () {
+        net.scrollIntoView({ block: 'nearest', behavior: rm ? 'auto' : 'smooth' });
       });
-      b.addEventListener('pointerenter', function (e) {
-        if (e.pointerType !== 'mouse' || !canHover() || active === c) return;
-        clearTimeout(timer);
-        timer = setTimeout(function () { setActive(c); }, 110);
-      });
-      b.addEventListener('pointerleave', function () { clearTimeout(timer); });
-    });
-
-    /* leaving the whole explorer returns to the pinned category, if there is one */
-    grid.addEventListener('pointerleave', function (e) {
-      if (e.pointerType !== 'mouse' || !canHover()) return;
-      clearTimeout(timer);
-      if (pinned && active !== pinned) setActive(pinned);
-    });
-
+    }
     function close(refocus) {
+      clearTimeout(hoverTimer); clearTimeout(closeTimer);
+      if (!active) return;
       var was = active;
-      clearTimeout(timer);
-      setActive(null, null);
-      if (refocus && was) btnOf(was).focus();
+      stopLoop(); showTip(-1);
+      transition(function () { active = null; pinned = false; applyLayout(); });
+      if (refocus) btnOf(was).focus();
     }
+
+    cards.forEach(function (c) {
+      btnOf(c).addEventListener('click', function () {
+        if (active === c) { if (pinned) close(false); else open(c, true); }
+        else open(c, true);
+      });
+    });
     closeBtn.addEventListener('click', function () { close(true); });
-    ex.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && active) { e.preventDefault(); close(true); }
+    sk.addEventListener('keydown', function (e) { if (e.key === 'Escape' && active) { e.preventDefault(); close(true); } });
+
+    /* ---- hover on desktop: open on a real mouse move, keep open while the pointer is over the card or its network ---- */
+    function inRegion(x, y) {
+      var a = active.getBoundingClientRect(), b = net.getBoundingClientRect(), p = 12;
+      var l = Math.min(a.left, b.left) - p, r = Math.max(a.right, b.right) + p;
+      var t = Math.min(a.top, b.top) - p, bt = Math.max(a.bottom, b.bottom) + p;
+      return x >= l && x <= r && y >= t && y <= bt;
+    }
+    function cardAt(x, y) {
+      var el = document.elementFromPoint(x, y);
+      return el && el.closest ? el.closest('.pcard') : null;
+    }
+    pyr.addEventListener('pointermove', function (e) {
+      if (e.pointerType !== 'mouse' || !hoverOK() || (!e.movementX && !e.movementY)) return;
+      lastX = e.clientX; lastY = e.clientY;
+      if (pinned) return;
+      var c = e.target.closest ? e.target.closest('.pcard') : null;
+      if (active && inRegion(lastX, lastY)) { clearTimeout(hoverTimer); clearTimeout(closeTimer); return; }
+      if (c && c !== active) {
+        clearTimeout(closeTimer);
+        if (active && Date.now() < settleUntil) return;
+        clearTimeout(hoverTimer);
+        hoverTimer = setTimeout(function () {
+          if (!pinned && cardAt(lastX, lastY) === c) open(c, false);
+        }, active ? 220 : 80);
+      } else if (active) {
+        clearTimeout(hoverTimer);
+        clearTimeout(closeTimer);
+        closeTimer = setTimeout(function () {
+          if (!pinned && active && !inRegion(lastX, lastY)) close(false);
+        }, 260);
+      } else {
+        clearTimeout(hoverTimer);
+      }
+    });
+    pyr.addEventListener('pointerleave', function (e) {
+      if (e.pointerType !== 'mouse' || !hoverOK()) return;
+      lastX = e.clientX; lastY = e.clientY;
+      clearTimeout(hoverTimer);
+      if (active && !pinned) {
+        clearTimeout(closeTimer);
+        closeTimer = setTimeout(function () { if (!pinned && active && !inRegion(lastX, lastY)) close(false); }, 260);
+      }
     });
 
-    /* hovering a bubble lights its line (one listener, not one per bubble) */
-    function light(e, on) {
-      var nd = e.target.closest ? e.target.closest('.node') : null;
-      if (nd && lines[nd.getAttribute('data-i')]) lines[nd.getAttribute('data-i')].classList.toggle('on', on);
-    }
-    mol.addEventListener('pointerover', function (e) { light(e, true); });
-    mol.addEventListener('pointerout', function (e) { light(e, false); });
-
-    /* a light parallax that follows the mouse, desktop only */
-    if (!rm) {
-      var px = 0, py = 0;
-      stage.addEventListener('pointermove', function (e) {
-        if (e.pointerType !== 'mouse' || !built) return;
-        var r = wrap.getBoundingClientRect();
-        px = Math.max(-1, Math.min(1, (e.clientX - r.left) / r.width * 2 - 1));
-        py = Math.max(-1, Math.min(1, (e.clientY - r.top) / r.height * 2 - 1));
-        if (!raf) raf = requestAnimationFrame(function () {
-          raf = 0;
-          mol.style.setProperty('--px', px.toFixed(2));
-          mol.style.setProperty('--py', py.toFixed(2));
-        });
-      });
-      stage.addEventListener('pointerleave', function () {
-        if (raf) { cancelAnimationFrame(raf); raf = 0; }
-        mol.style.setProperty('--px', '0');
-        mol.style.setProperty('--py', '0');
-      });
-    }
-
-    /* keep the map inside its panel when the panel changes size */
-    if (window.ResizeObserver) new ResizeObserver(function () { layout(); }).observe(mol);
-    else window.addEventListener('resize', layout);
-
-    var onMq = function () { filter(ex.querySelector('.levels [aria-pressed="true"]').getAttribute('data-level')); };
-    if (mqNarrow.addEventListener) mqNarrow.addEventListener('change', onMq); else mqNarrow.addListener(onMq);
-
-    filter('all');
+    var onMq = function () { if (active) { transition(applyLayout); measure(); draw(0); } };
+    if (mqWide.addEventListener) mqWide.addEventListener('change', onMq); else mqWide.addListener(onMq);
   })();
 
   /* one long page: smooth scrolling between sections, active nav link */
