@@ -37,6 +37,18 @@
     });
   });
 
+  /* skills: show one level at a time */
+  var lv = document.querySelectorAll('.levels [data-level]');
+  Array.prototype.forEach.call(lv, function (b) {
+    b.addEventListener('click', function () {
+      var want = b.getAttribute('data-level');
+      Array.prototype.forEach.call(lv, function (o) { o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); });
+      Array.prototype.forEach.call(document.querySelectorAll('.skill-group'), function (g) {
+        g.hidden = !(want === 'all' || g.getAttribute('data-level') === want);
+      });
+    });
+  });
+
   /* one long page: smooth scrolling between sections, active nav link */
   var onHome = !!document.getElementById('home');
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -50,7 +62,18 @@
       if (secOf(l.getAttribute('href')) === id) l.setAttribute('aria-current', 'page');
       else l.removeAttribute('aria-current');
     });
+    var on = document.querySelector('.nav a[aria-current]');
+    var nv = on && on.parentNode;
+    if (nv && nv.scrollWidth > nv.clientWidth + 1) nv.scrollLeft = on.offsetLeft - (nv.clientWidth - on.offsetWidth) / 2;
   }
+  /* keep the section offset equal to the real height of the sticky header */
+  function sizeHeader() {
+    var h = document.querySelector('.top');
+    if (h) document.documentElement.style.setProperty('--hdr', h.offsetHeight + 'px');
+  }
+  sizeHeader();
+  window.addEventListener('resize', sizeHeader);
+  window.addEventListener('load', sizeHeader);
   function goTo(id, smooth) {
     var el = document.getElementById(id);
     if (!el) return false;
@@ -165,8 +188,8 @@
     location: function () { return ['Kochi, Kerala, India']; },
     ls: function () {
       return [
-        [{ text: 'experience/', href: 'index.html#experience' }, '  ', { text: 'contact/', href: 'index.html#contact' }],
-        'about/  skills/  case-studies/  resume/  (in progress)'
+        [{ text: 'about/', href: 'index.html#about' }, '  ', { text: 'experience/', href: 'index.html#experience' }, '  ', { text: 'skills/', href: 'index.html#skills' }, '  ', { text: 'contact/', href: 'index.html#contact' }],
+        'case-studies/  resume/  (in progress)'
       ];
     }
   };
