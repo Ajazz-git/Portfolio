@@ -444,3 +444,5 @@ html.modal-open { overflow: hidden; }
   .js-reveal .story.in { opacity: 1; transform: none; }
 }
 @media (prefers-reduced-motion: reduce) { .story-b, .story .chev { transition: none; } }
+.story .more { font: 12px var(--font-mono); color: var(--accent); justify-self: start; }
+.stories { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
