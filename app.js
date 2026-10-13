@@ -37,26 +37,30 @@
     });
   });
 
-  /* the philosophy quote: a button that breaks things, then fixes them */
-  var touch = document.getElementById('touch');
+  /* the philosophy card: touching the card breaks things, then fixes them */
   var oops = document.getElementById('oops');
+  var hint = document.getElementById('hint');
   var fig = document.getElementById('philosophy');
-  if (touch && oops && fig) {
+  if (oops && fig) {
     var steps = [
-      { say: 'You touched it. It was working five seconds ago.', btn: 'try to fix it', broke: true },
-      { say: 'Restoring from backup... (there is a backup, right?)', btn: 'wait for it', broke: true },
-      { say: 'Restored. Lesson learned. Until next time.', btn: 'touch it', broke: false }
+      { say: 'You touched it. It was working five seconds ago.', broke: true },
+      { say: 'Restoring from backup... (there is a backup, right?)', broke: true },
+      { say: 'Restored. Lesson learned. Until next time.', broke: false }
     ];
     var n = 0;
-    touch.addEventListener('click', function () {
+    var poke = function () {
       var st = steps[n];
       oops.textContent = st.say;
-      touch.textContent = st.btn;
+      if (hint) hint.hidden = true;
       fig.classList.toggle('broke', st.broke);
       fig.classList.remove('shake');
       void fig.offsetWidth;
       if (n === 0) fig.classList.add('shake');
       n = (n + 1) % steps.length;
+    };
+    fig.addEventListener('click', poke);
+    fig.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); poke(); }
     });
   }
 
