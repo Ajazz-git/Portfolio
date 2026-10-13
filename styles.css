@@ -330,7 +330,7 @@ p { margin: 0; }
 .pyr:not(.open) .pcard[data-n="1"] { grid-column: 1 / -1; justify-self: center; width: calc((100% - var(--g)) / 2); }
 .pyr.open .pcard.is-active { grid-column: 1 / -1; justify-self: center; width: calc((100% - var(--g)) / 2); order: -2; }
 .pcard { min-height: var(--ch); }
-.net { grid-column: 1 / -1; order: -1; position: relative; height: 340px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); overflow: hidden; }
+.net { grid-column: 1 / -1; order: -1; position: relative; height: var(--nh, 340px); border: 1px solid var(--line); border-radius: 10px; background: var(--panel); overflow: hidden; }
 .net[hidden] { display: none; }
 .net-in { position: absolute; inset: 0; }
 .net-close { position: absolute; top: 10px; right: 10px; z-index: 5; }
@@ -353,7 +353,7 @@ p { margin: 0; }
   .pyr { grid-template-columns: minmax(0, 1fr); }
   .pyr:not(.open) .pcard[data-n="1"], .pyr.open .pcard.is-active { width: auto; justify-self: stretch; }
   .pyr.open .pcard.is-active, .net { order: 0; }
-  .net { height: 330px; }
+  .net { height: var(--nh, 330px); }
 }
 @media (min-width: 980px) {
   .pyr { --ph: calc(4 * var(--ch) + 3 * var(--g)); grid-template-columns: repeat(2, var(--cw)); grid-template-rows: repeat(4, var(--ch)); justify-content: center; height: var(--ph); }

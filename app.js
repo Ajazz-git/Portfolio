@@ -135,9 +135,11 @@
 
     /* ---- the network ---- */
     var nodes = [], spokes = [], bonds = [], names = [], W = 0, H = 0;
-    var tipIdx = -1, tipW = 0, tipH = 0;
+    var tipIdx = -1, tipW = 0, tipH = 0, tipSide = 'up';
     var raf = 0, t0 = 0, px = 0, py = 0, cx = 0, cy = 0;
-    var NR = 23;
+    var NR = 23, HUBR = 34, KMIN = 0.8, PULSE = 0.05;
+    /* layout results, worked out once per size or count change and only read inside the animation loop */
+    var P = [], link = [], ringOf = [], ringNext = [], K = 1, AMP = 0, baseH = 0, curH = 0;
 
     function build(c) {
       stopLoop();
@@ -161,52 +163,176 @@
         nodes.push(b);
         names.push(li.textContent);
       });
+      /* a fixed motion profile per node (period, direction, phase), so nothing is random between frames */
+      P = nodes.map(function (_, i) {
+        return {
+          fx: 0.30 + ((i * 7) % 5) * 0.07, fy: 0.26 + ((i * 3) % 4) * 0.08,
+          px: i * 1.7, py: i * 2.3,
+          fa: 0.7 + ((i * 5) % 4) * 0.1,
+          fp: 2 * Math.PI / (5 + ((i * 3) % 5) * 1.1), pp: i * 2.1
+        };
+      });
+      baseH = 0; net.style.removeProperty('--nh');
       measure();
       draw(0);
       if (!rm) startLoop();
     }
 
-    function measure() {
-      W = inner.clientWidth; H = inner.clientHeight;
-      svg.setAttribute('viewBox', '0 0 ' + (W || 1) + ' ' + (H || 1));
+    /* points spread evenly by distance along an ellipse (equal angles would crowd the flat ends) */
+    function ringPoints(m, rx, ry, phase) {
+      var N = 240, acc = [0], i, a, x0 = 0, y0 = 0, out = [];
+      for (i = 0; i <= N; i++) {
+        a = i / N * 2 * Math.PI;
+        var x = Math.cos(a) * rx, y = Math.sin(a) * ry;
+        if (i) acc.push(acc[i - 1] + Math.hypot(x - x0, y - y0));
+        x0 = x; y0 = y;
+      }
+      var total = acc[N], j = 0;
+      for (i = 0; i < m; i++) {
+        var d = ((i / m + phase) % 1) * total;
+        while (j < N && acc[j + 1] < d) j++;
+        if (d < acc[j]) j = 0, (function () { while (j < N && acc[j + 1] < d) j++; })();
+        var f = (d - acc[j]) / ((acc[j + 1] - acc[j]) || 1);
+        a = (j + f) / N * 2 * Math.PI - Math.PI / 2;
+        out.push([Math.cos(a) * rx, Math.sin(a) * ry]);
+      }
+      return out;
     }
 
-    /* every node sits on a tilted ring and drifts a little; lines are redrawn from the same numbers, so they stay attached */
-    function draw(t) {
-      if (!W || !H || !nodes.length) return;
-      var n = nodes.length, mx = NR * 1.12 + 16;
-      var rx = Math.min(185, W / 2 - mx), ry = Math.min(150, H / 2 - mx);
-      var ay = 0.1 * Math.sin(t * 0.35) + cx * 0.13, ax = 0.08 * Math.sin(t * 0.27 + 1) + cy * 0.1;
-      var cyaw = Math.cos(ay), syaw = Math.sin(ay), cpit = Math.cos(ax), spit = Math.sin(ax);
-      var hx = W / 2, hy = H / 2, pts = [];
-      for (var i = 0; i < n; i++) {
-        var a = -Math.PI / 2 + i * 2 * Math.PI / n;
-        var x = Math.cos(a) * rx, y = Math.sin(a) * ry, z = (i % 2 ? 1 : -1) * 20;
-        var x1 = x * cyaw + z * syaw, z1 = -x * syaw + z * cyaw;
-        var y1 = y * cpit - z1 * spit, z2 = y * spit + z1 * cpit;
-        var s = 480 / (480 - z2);
-        var A = 4 + (i % 3) * 2;
-        var dx = A * Math.sin(t * (0.45 + (i % 4) * 0.09) + i * 1.7);
-        var dy = A * Math.cos(t * (0.38 + (i % 3) * 0.11) + i * 2.3);
-        var X = hx + x1 * s + dx, Y = hy + y1 * s + dy, sc = Math.max(0.92, Math.min(1.1, s));
-        pts.push([X, Y]);
-        nodes[i].style.transform = 'translate(' + (X - NR).toFixed(1) + 'px,' + (Y - NR).toFixed(1) + 'px) scale(' + sc.toFixed(3) + ')';
-        spokes[i].setAttribute('x1', hx); spokes[i].setAttribute('y1', hy);
-        spokes[i].setAttribute('x2', X.toFixed(1)); spokes[i].setAttribute('y2', Y.toFixed(1));
+    function minGap(pts) {
+      var m = Infinity, i, j;
+      for (i = 0; i < pts.length; i++) {
+        m = Math.min(m, Math.hypot(pts[i][0], pts[i][1]) - HUBR);
+        for (j = i + 1; j < pts.length; j++) m = Math.min(m, Math.hypot(pts[i][0] - pts[j][0], pts[i][1] - pts[j][1]));
       }
-      for (var j = 0; j < n; j++) {
-        var p = pts[j], q = pts[(j + 1) % n];
-        bonds[j].setAttribute('x1', p[0].toFixed(1)); bonds[j].setAttribute('y1', p[1].toFixed(1));
-        bonds[j].setAttribute('x2', q[0].toFixed(1)); bonds[j].setAttribute('y2', q[1].toFixed(1));
+      return m;
+    }
+
+    /* choose rings, node size and drift range for this count and panel size; true when everything fits at a good size */
+    function layout() {
+      var n = nodes.length, two = n > 8, best = null, ok = false;
+      for (var k = 1; k >= KMIN - 0.001 && !ok; k -= 0.05) {
+        var r = NR * k * (1 + PULSE);
+        var mg = r + 10, rx = W / 2 - mg, ry = H / 2 - mg;
+        if (rx < 20 || ry < 20) continue;
+        var cands = [];
+        if (!two) {
+          cands.push({ pts: ringPoints(n, Math.min(185, rx), Math.min(150, ry), 0), ni: 0 });
+        } else {
+          var ni = Math.max(3, Math.round(n * 0.42)), no = n - ni;
+          for (var q = 0.42; q <= 0.66; q += 0.03) {
+            var irx = rx * q, iry = ry * q;
+            if (Math.min(irx, iry) < HUBR + r + 6) continue;
+            cands.push({ pts: ringPoints(ni, irx, iry, 0).concat(ringPoints(no, rx, ry, 0.5 / no)), ni: ni });
+          }
+        }
+        var kBest = null;
+        cands.forEach(function (c) { c.gap = minGap(c.pts) - 2 * r; c.k = k; if (!kBest || c.gap > kBest.gap) kBest = c; });
+        if (!kBest) continue;
+        if (!best || kBest.gap >= 12 || kBest.k === KMIN || kBest.gap > best.gap) best = kBest;
+        /* need real spare room for drift: about 4px each way plus a small margin */
+        if (kBest.gap >= 12) ok = true;
+      }
+      if (!best) return true;
+      K = best.k;
+      AMP = rm ? 0 : Math.max(0, Math.min(6, (best.gap - 5) / 3.1));
+      /* inner nodes connect to the hub; outer nodes connect to the nearest inner node, so no line runs through another node */
+      var ni2 = best.ni, i, j;
+      for (i = 0; i < n; i++) {
+        P[i].bx = best.pts[i][0]; P[i].by = best.pts[i][1];
+        var outer = ni2 && i >= ni2;
+        ringOf[i] = outer ? 1 : 0;
+        link[i] = -1;
+        if (outer) {
+          var bd = Infinity;
+          for (j = 0; j < ni2; j++) {
+            var d = Math.hypot(best.pts[i][0] - best.pts[j][0], best.pts[i][1] - best.pts[j][1]);
+            if (d < bd) { bd = d; link[i] = j; }
+          }
+        }
+        var lo = outer ? ni2 : 0, hi = outer ? n : (ni2 || n);
+        ringNext[i] = hi - lo > 2 ? (i + 1 < hi ? i + 1 : lo) : -1;
+      }
+      return best.gap >= 12;
+    }
+
+    function measure() {
+      W = inner.clientWidth; H = inner.clientHeight;
+      if (!W || !H || !nodes.length) return;
+      if (!baseH) baseH = curH = H;
+      var fit = layout();
+      /* on narrow layouts the panel may grow a little (never past 460px) when the count needs it; wide layouts keep their set height */
+      while (!fit && !wide() && curH < 460) {
+        curH += 30; net.style.setProperty('--nh', curH + 'px');
+        W = inner.clientWidth; H = inner.clientHeight;
+        fit = layout();
+      }
+      svg.setAttribute('viewBox', '0 0 ' + (W || 1) + ' ' + (H || 1));
+      pickTip();
+    }
+
+    /* every node floats on its own slow loop around its place, breathes a little, and the lines are redrawn from the same numbers */
+    function draw(t) {
+      if (!W || !H || !nodes.length || !P.length || P[0].bx === undefined) return;
+      var n = nodes.length, hx = W / 2, hy = H / 2, i;
+      var mo = rm ? 0 : 1, kx = cx * 4, ky = cy * 4;
+      if (!draw.pts || draw.pts.length !== n) draw.pts = [];
+      var pts = draw.pts;
+      for (i = 0; i < n; i++) {
+        var p = P[i], depth = ringOf[i] ? 0.6 : 1;
+        var X = hx + p.bx + mo * (AMP * p.fa * Math.sin(t * p.fx + p.px) + kx * depth);
+        var Y = hy + p.by + mo * (AMP * p.fa * Math.cos(t * p.fy + p.py) + ky * depth);
+        var sc = K * (1 + mo * PULSE * (0.5 + 0.5 * Math.sin(t * p.fp + p.pp)));
+        pts[i] = [X, Y];
+        nodes[i].style.transform = 'translate(' + (X - NR).toFixed(1) + 'px,' + (Y - NR).toFixed(1) + 'px) scale(' + sc.toFixed(3) + ')';
+      }
+      for (i = 0; i < n; i++) {
+        var from = link[i] >= 0 ? pts[link[i]] : null, s = spokes[i];
+        s.setAttribute('x1', (from ? from[0] : hx).toFixed(1)); s.setAttribute('y1', (from ? from[1] : hy).toFixed(1));
+        s.setAttribute('x2', pts[i][0].toFixed(1)); s.setAttribute('y2', pts[i][1].toFixed(1));
+        var q = ringNext[i] >= 0 ? pts[ringNext[i]] : null, b = bonds[i];
+        if (q) {
+          b.setAttribute('x1', pts[i][0].toFixed(1)); b.setAttribute('y1', pts[i][1].toFixed(1));
+          b.setAttribute('x2', q[0].toFixed(1)); b.setAttribute('y2', q[1].toFixed(1));
+        }
       }
       if (tipIdx >= 0 && pts[tipIdx]) placeTip(pts[tipIdx]);
     }
 
+    /* the label goes on whichever side of its node covers the fewest other nodes and stays inside the panel */
+    function tipBox(p, side) {
+      var g = NR * K + 8, x, y;
+      if (side === 'up') { x = p[0] - tipW / 2; y = p[1] - g - tipH; }
+      else if (side === 'down') { x = p[0] - tipW / 2; y = p[1] + g; }
+      else if (side === 'right') { x = p[0] + g; y = p[1] - tipH / 2; }
+      else if (side === 'left') { x = p[0] - g - tipW; y = p[1] - tipH / 2; }
+      else { var h = NR * K * 0.5; x = side.charAt(1) === 'l' ? p[0] - tipW + h : p[0] - h; y = side.charAt(0) === 'u' ? p[1] - g - tipH : p[1] + g; }
+      return [Math.max(6, Math.min(W - tipW - 6, x)), Math.max(6, Math.min(H - tipH - 6, y))];
+    }
+    function pickTip() {
+      if (tipIdx < 0 || !P[tipIdx] || P[tipIdx].bx === undefined) return;
+      var c = [W / 2 + P[tipIdx].bx, H / 2 + P[tipIdx].by], bestS = 'up', bestV = Infinity;
+      ['up', 'down', 'right', 'left', 'ul', 'ur', 'dl', 'dr'].forEach(function (s) {
+        var b = tipBox(c, s), v = 0, raw;
+        for (var j = 0; j < nodes.length; j++) {
+          if (j === tipIdx) continue;
+          var o = [W / 2 + P[j].bx, H / 2 + P[j].by], rr = NR * K * 1.1 + 2;
+          var ox = Math.max(0, Math.min(b[0] + tipW, o[0] + rr) - Math.max(b[0], o[0] - rr));
+          var oy = Math.max(0, Math.min(b[1] + tipH, o[1] + rr) - Math.max(b[1], o[1] - rr));
+          v += ox * oy;
+        }
+        /* the clamped box may have slid onto its own node: count that too */
+        var sx = Math.max(0, Math.min(b[0] + tipW, c[0] + NR * K) - Math.max(b[0], c[0] - NR * K));
+        var sy = Math.max(0, Math.min(b[1] + tipH, c[1] + NR * K) - Math.max(b[1], c[1] - NR * K));
+        v += sx * sy * 4;
+        if (v < bestV - 0.5) { bestV = v; bestS = s; }
+      });
+      tipSide = bestS;
+    }
+
     function placeTip(p) {
-      var left = Math.max(6, Math.min(W - tipW - 6, p[0] - tipW / 2));
-      var top = p[1] - NR - 10 - tipH;
-      if (top < 6) top = p[1] + NR + 10;
-      tip.style.transform = 'translate(' + left.toFixed(1) + 'px,' + top.toFixed(1) + 'px)';
+      var b = tipBox(p, tipSide);
+      tip.style.transform = 'translate(' + b[0].toFixed(1) + 'px,' + b[1].toFixed(1) + 'px)';
     }
 
     function showTip(i) {
@@ -217,6 +343,7 @@
       if (i < 0) { tip.classList.remove('show'); return; }
       tip.textContent = names[i];
       tipW = tip.offsetWidth; tipH = tip.offsetHeight;
+      pickTip();
       tip.classList.add('show');
       draw((performance.now() - t0) / 1000);
     }

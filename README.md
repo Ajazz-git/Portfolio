@@ -34,7 +34,7 @@ Every page repeats the same header and footer. When you change the navigation, c
 
 ## Editing the Skills section
 
-The Skills section is seven cards (`<article class="card pcard">`) in `index.html`, in a 1 + 2 + 2 + 2 pyramid. Each card has a level (`data-level="daily|working|learning"`, shown as its status label) and a `<ul class="cat-skills">`; the skill network is built from that list. Every `<li>` names its icon in `data-icon`, and the icon itself is looked up in `icons.js`.
+The Skills section is seven cards (`<article class="card pcard">`) in `index.html`, in a 1 + 2 + 2 + 2 pyramid. Each card has a level (`data-level="daily|working|learning"`, shown as its status label) and a `<ul class="cat-skills">`; the skill network is built from that list. Every `<li>` names its icon in `data-icon`, and the icon itself is looked up in `icons.js`. A category can have any number of skills: the network picks one ring (up to 8 skills) or two rings (more), shrinks the nodes slightly if needed, and on narrow screens grows its panel a little. Only list skills you can back up.
 
 - To rename or swap a skill, edit the `<li>`. Keep about six per card.
 - To use a different icon, find it at https://lucide.dev, copy the markup between the `<svg>` tags into `icons.js` under a new name, then use that name in `data-icon`.
