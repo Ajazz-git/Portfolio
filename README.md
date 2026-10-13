@@ -14,7 +14,7 @@ Then open http://localhost:8000. Opening `index.html` directly also works, but a
 
 | File | What it is |
 | --- | --- |
-| `index.html` | The whole site as one long page. Sections in order: Home (terminal, site map, port panel), Experience, Contact |
+| `index.html` | The whole site as one long page. Sections in order: Home (terminal, site map, port panel), About, Experience, Skills, Resume, Contact |
 | `experience.html`, `contact.html` | Small redirect pages so old links still work. They send visitors to the matching section of `index.html` |
 | `skolte.html`, `webcastle.html`, `hashroot.html`, `aabasoft.html` | One page per workplace |
 | `styles.css` | All styling. Colours, fonts and spacing are CSS variables at the top. |
@@ -60,3 +60,12 @@ About, Skills (switch-panel), Case studies, Troubleshooting walkthrough, Network
 ## Hosting
 
 Any static host works. For GitHub Pages: repository Settings, Pages, deploy from the `main` branch root.
+
+## Adding the resume PDF
+
+The Resume section starts in a "coming soon" state, with both buttons disabled. To switch it on:
+
+1. Put the PDF in the project, for example `resume/Ajas-Muhammed-Resume.pdf`.
+2. In `index.html`, find `<section class="part" id="resume" data-resume="" …>` and set the path: `data-resume="resume/Ajas-Muhammed-Resume.pdf"`.
+
+That is the only place the path is written. The page checks that the file exists before enabling anything, so a wrong path leaves the buttons in the coming-soon state instead of producing a broken link. Preview opens it in an in-page dialog (browsers that cannot show PDFs inline get "open in a new tab" and "download" links instead). Download saves it as the name in `data-resume-name`. To replace the resume later, overwrite the file.

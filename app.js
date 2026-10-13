@@ -476,6 +476,68 @@
     if (mqWide.addEventListener) mqWide.addEventListener('change', onMq); else mqWide.addListener(onMq);
   })();
 
+  /* resume: the file path lives in data-resume on #resume. Empty means "not added yet", so both buttons stay in their coming-soon state */
+  (function () {
+    var sec = document.getElementById('resume');
+    if (!sec) return;
+    var prev = document.getElementById('res-preview'), dl = document.getElementById('res-download');
+    var dlg = document.getElementById('res-dialog'), view = document.getElementById('res-view');
+    var openA = document.getElementById('res-open'), dl2 = document.getElementById('res-dl2'), closeB = document.getElementById('res-close');
+    var note = document.getElementById('res-note'), led = document.getElementById('res-led'), st = document.getElementById('res-status');
+    var stamp = document.getElementById('res-stamp'), doc = document.getElementById('res-doc');
+    var url = (sec.getAttribute('data-resume') || '').trim();
+    var name = sec.getAttribute('data-resume-name') || 'Resume.pdf';
+    var ready = false, lastFocus = null;
+
+    function setReady() {
+      ready = true;
+      [prev, dl].forEach(function (b) { b.removeAttribute('aria-disabled'); });
+      dl.setAttribute('href', url); dl.setAttribute('download', name); dl.removeAttribute('role'); dl.removeAttribute('tabindex');
+      openA.setAttribute('href', url); dl2.setAttribute('href', url); dl2.setAttribute('download', name);
+      led.classList.remove('off'); st.textContent = 'ready';
+      stamp.textContent = 'ready'; doc.classList.add('ready');
+      note.textContent = 'Preview opens it here. Download saves it as ' + name + '.';
+    }
+    /* switch on only when a path is set and the file is really there (a missing file answers 404; an unreachable check, such as opening from disk, is trusted) */
+    if (url) {
+      if (window.fetch) {
+        fetch(url, { method: 'HEAD' }).then(function (r) { if (r.ok) setReady(); }, setReady);
+      } else setReady();
+    }
+
+    function openPreview() {
+      if (!ready) return;
+      if (!dlg || typeof dlg.showModal !== 'function') { window.open(url, '_blank', 'noopener'); return; }
+      lastFocus = document.activeElement;
+      view.textContent = '';
+      if (navigator.pdfViewerEnabled === false) {
+        var fb = document.createElement('div'); fb.className = 'res-fallback';
+        fb.innerHTML = '<p>This browser cannot show a PDF inside the page.</p><p>Open it in a new tab or download it instead.</p>';
+        view.appendChild(fb);
+      } else {
+        var fr = document.createElement('iframe');
+        fr.title = 'Resume preview'; fr.src = url;
+        view.appendChild(fr);
+      }
+      document.documentElement.classList.add('modal-open');
+      dlg.showModal();
+      closeB.focus();
+    }
+    prev.addEventListener('click', function (e) { e.preventDefault(); openPreview(); });
+    dl.addEventListener('click', function (e) { if (!ready) e.preventDefault(); });
+    dl.addEventListener('keydown', function (e) { if (!ready && (e.key === 'Enter' || e.key === ' ')) e.preventDefault(); });
+    if (dlg) {
+      closeB.addEventListener('click', function () { dlg.close(); });
+      /* a click on the dimmed backdrop (the dialog element itself) closes it */
+      dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+      dlg.addEventListener('close', function () {
+        view.textContent = '';
+        document.documentElement.classList.remove('modal-open');
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+      });
+    }
+  })();
+
   /* one long page: smooth scrolling between sections, active nav link */
   var onHome = !!document.getElementById('home');
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -583,6 +645,7 @@
         '  whoami       who I am',
         '  skills       what I work with, and how well',
         '  experience   where I have worked',
+        '  resume       my resume',
         '  contact      how to reach me',
         '  location     where I am based',
         '  ls           list the pages',
@@ -612,11 +675,17 @@
         [{ text: 'Open the contact page', href: 'index.html#contact' }]
       ];
     },
+    resume: function () {
+      return [
+        'Ajas-Muhammed-Resume.pdf',
+        [{ text: 'Open the resume section', href: 'index.html#resume' }]
+      ];
+    },
     location: function () { return ['Kochi, Kerala, India']; },
     ls: function () {
       return [
-        [{ text: 'about/', href: 'index.html#about' }, '  ', { text: 'experience/', href: 'index.html#experience' }, '  ', { text: 'skills/', href: 'index.html#skills' }, '  ', { text: 'contact/', href: 'index.html#contact' }],
-        'case-studies/  resume/  (in progress)'
+        [{ text: 'about/', href: 'index.html#about' }, '  ', { text: 'experience/', href: 'index.html#experience' }, '  ', { text: 'skills/', href: 'index.html#skills' }, '  ', { text: 'resume/', href: 'index.html#resume' }, '  ', { text: 'contact/', href: 'index.html#contact' }],
+        'case-studies/  (in progress)'
       ];
     }
   };
