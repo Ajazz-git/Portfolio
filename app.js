@@ -476,6 +476,31 @@
     if (mqWide.addEventListener) mqWide.addEventListener('change', onMq); else mqWide.addListener(onMq);
   })();
 
+  /* company page stories: click toggles a card, scrolling reveals them one after another */
+  (function () {
+    var cs = document.querySelectorAll('[data-story]');
+    if (!cs.length) return;
+    Array.prototype.forEach.call(cs, function (c) {
+      var b = c.querySelector('.story-h');
+      b.addEventListener('click', function () {
+        var on = !c.classList.contains('open');
+        c.classList.toggle('open', on);
+        b.setAttribute('aria-expanded', on ? 'true' : 'false');
+      });
+    });
+    var calm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (calm || !('IntersectionObserver' in window)) return;
+    document.documentElement.classList.add('js-reveal');
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      });
+    }, { threshold: 0.2 });
+    Array.prototype.forEach.call(cs, function (c, i) { c.style.setProperty('--d', (i * 0.12) + 's'); io.observe(c); });
+  })();
+
   /* resume: the file path lives in data-resume on #resume. Empty means "not added yet", so both buttons stay in their coming-soon state */
   (function () {
     var sec = document.getElementById('resume');
