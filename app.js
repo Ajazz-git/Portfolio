@@ -624,7 +624,7 @@
         d.appendChild(document.createTextNode(p));
       } else if (p.href) {
         var a = document.createElement('a');
-        a.href = p.href;
+        a.href = p.href; if (/^https?:/.test(p.href)) { a.target = '_blank'; a.rel = 'noopener'; }
         a.textContent = p.text;
         d.appendChild(a);
       } else {
@@ -671,7 +671,8 @@
     contact: function () {
       return [
         'email     ajasm397@gmail.com',
-        'linkedin  linkedin.com/in/ajas',
+        [ 'linkedin   ', { text: 'LinkedIn', href: 'https://www.linkedin.com/in/ajas-muhammed-pa-1413881bb' } ],
+        [ 'instagram  ', { text: 'Instagram', href: 'https://www.instagram.com/_ajs.z_/' } ],
         [{ text: 'Open the contact page', href: 'index.html#contact' }]
       ];
     },

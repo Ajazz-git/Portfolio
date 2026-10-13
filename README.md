@@ -50,12 +50,12 @@ The Skills section is seven cards (`<article class="card pcard">`) in `index.htm
 ## Content rules
 
 - Keep employer details general. Describe responsibilities, not internal tools or setups.
-- Contact details on the site are limited to email, LinkedIn and the website.
+- Contact details on the site are limited to email, LinkedIn and Instagram (shown as link text only).
 - Do not claim certifications that have not been earned.
 
 ## Still to build
 
-About, Skills (switch-panel), Case studies, Troubleshooting walkthrough, Network lab diagram, Documentation samples, Learning and roadmap, Resume. Photos for the workplace pages and an Instagram link in the footer are waiting for material.
+About, Skills (switch-panel), Case studies, Troubleshooting walkthrough, Network lab diagram, Documentation samples, Learning and roadmap, Resume. Photos for the workplace pages are waiting for material.
 
 ## Hosting
 
