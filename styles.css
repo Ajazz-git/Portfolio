@@ -431,14 +431,16 @@ html.modal-open { overflow: hidden; }
 .story.open .story-in{ padding-bottom: 20px; }
 .story.open .chev{ transform: rotate(-135deg); }
 @media (hover: hover) and (pointer: fine) {
-  .story:hover { border-color: var(--accent); background: linear-gradient(180deg, var(--accent-dim), var(--panel)); }
-  .story:hover .story-b { grid-template-rows: 1fr; }
-  .story:hover .story-in { padding-bottom: 20px; }
-  .story:hover .chev { transform: rotate(-135deg); }
+  .story:hover { border-color: var(--accent); }
+  .stories:not(.click-only) .story:hover { background: linear-gradient(180deg, var(--accent-dim), var(--panel)); }
+  .stories:not(.click-only) .story:hover .story-b { grid-template-rows: 1fr; }
+  .stories:not(.click-only) .story:hover .story-in { padding-bottom: 20px; }
+  .stories:not(.click-only) .story:hover .chev { transform: rotate(-135deg); }
 }
+
 .story-in { visibility: hidden; transition: visibility 0.3s; }
 .story.open .story-in{ visibility: visible; }
-@media (hover: hover) and (pointer: fine) { .story:hover .story-in { visibility: visible; } }
+@media (hover: hover) and (pointer: fine) { .stories:not(.click-only) .story:hover .story-in { visibility: visible; } }
 @media (prefers-reduced-motion: no-preference) {
   .js-reveal .story { opacity: 0; transform: translateY(18px); transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.2s, background 0.2s; transition-delay: var(--d, 0s), var(--d, 0s), 0s, 0s; }
   .js-reveal .story.in { opacity: 1; transform: none; }
