@@ -223,38 +223,85 @@ p { margin: 0; }
 @keyframes rise { from { opacity: 0; transform: translateY(4px); } }
 @keyframes linkup { 0% { opacity: 1; transform: scaleX(0); transform-origin: left; } 70% { opacity: 1; transform: scaleX(1); } 100% { opacity: 0; transform: scaleX(1); } }
 
-/* penguin pilot */
-#pilot { position: fixed; left: 0; top: 0; width: 70.4px; height: 50.4px; z-index: 12; pointer-events: none; opacity: 0; transition: opacity 0.3s; will-change: transform; }
+/* Packet, the penguin pilot: a small 3D scene of layered SVG parts */
+#pilot { position: fixed; left: 0; top: 0; width: 76px; height: 54.3px; z-index: 12; pointer-events: none; opacity: 0; transition: opacity 0.3s; will-change: transform; }
 #pilot.on { opacity: 1; }
-#pilot .flip { width: 100%; height: 100%; transition: transform 0.25s ease; }
-#pilot .tilt { position: relative; width: 100%; height: 100%; }
-#pilot .tilt > svg, #pilot .pg { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+#pilot .defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+#pilot .scene { position: absolute; inset: 0; perspective: 380px; perspective-origin: 50% 40%; }
+#pilot .rig, #pilot .flip, #pilot .pg, #pilot .rk { position: absolute; inset: 0; transform-style: preserve-3d; }
+#pilot .lyr { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; display: block; filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.35)); }
+#pilot .rktb { transform: translateZ(-16px); filter: brightness(0.4); }
+#pilot .rkt { transform: translateZ(-9px); }
+#pilot .pback { transform: translateZ(-9px); }
+#pilot .sl { filter: none; }
+#pilot .pbody { transform: translateZ(4px); }
+#pilot .pg { transform-origin: 54% 66%; }
+#pilot .phead { position: absolute; inset: 0; transform-style: preserve-3d; transform-origin: 48% 38%; }
+#pilot .phead .sl { }
+#pilot .pheadf { transform: translateZ(8px); }
+#pilot .pflip { transform: translateZ(12px); transform-origin: 59% 36%; }
+#pilot .pfar { transform: translateZ(-18px); transform-origin: 59% 36%; }
+#pilot .spec { transition: none; }
+#pilot .ft { transform-box: fill-box; }
+#pilot .plap { transform: translateZ(14px); }
+#pilot .hit { position: absolute; left: -4px; right: -4px; top: -10px; bottom: -6px; z-index: 2; pointer-events: auto; cursor: pointer; border-radius: 12px; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 #pilot .pad { opacity: 0; transition: opacity 0.25s; }
 #pilot.out .pad { opacity: 1; }
-#pilot svg { width: 100%; height: 100%; overflow: visible; display: block; }
-#pilot .flame { transform-box: fill-box; transform-origin: 100% 50%; transform: scaleX(0.45); transition: transform 0.2s; }
+#pilot .flame { transform-box: fill-box; transform-origin: 100% 50%; transform: scaleX(0.4); transition: transform 0.2s; }
 #pilot.fly .flame { transform: scaleX(1); }
 #pilot .scarf { transform-box: fill-box; transform-origin: 100% 50%; }
 #pilot .lap { transform-box: fill-box; transform-origin: 0% 100%; transform: scale(0); transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1); }
 #pilot.open .lap { transform: scale(1); }
 #pilot .lid { transform-box: fill-box; transform-origin: 50% 100%; transform: scaleY(0.2); transition: transform 0.3s 0.2s; }
 #pilot.open .lid { transform: scaleY(1); }
+/* the visor is a screen: his expression is drawn on it */
+#pilot .eyes .blinker > g { display: none; }
+#pilot[data-mood="normal"] .eyes [data-m="normal"], #pilot[data-mood="happy"] .eyes [data-m="happy"], #pilot[data-mood="angry"] .eyes [data-m="angry"],
+#pilot[data-mood="annoyed"] .eyes [data-m="annoyed"], #pilot[data-mood="wink"] .eyes [data-m="wink"], #pilot[data-mood="focus"] .eyes [data-m="focus"],
+#pilot[data-mood="dead"] .eyes [data-m="dead"],
+#pilot[data-mood="surprised"] .eyes [data-m="surprised"], #pilot[data-mood="curious"] .eyes [data-m="curious"], #pilot[data-mood="smug"] .eyes [data-m="smug"],
+#pilot[data-mood="sleepy"] .eyes [data-m="sleepy"], #pilot[data-mood="sad"] .eyes [data-m="sad"], #pilot[data-mood="love"] .eyes [data-m="love"], #pilot[data-mood="dizzy"] .eyes [data-m="dizzy"] { display: inline; }
+#pilot[data-mood="angry"] .lens, #pilot[data-mood="dead"] .lens { stroke: #ff5d4a; }
 #cables { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 11; pointer-events: none; }
 #cable { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; }
 #plug { fill: var(--accent); stroke: var(--bg); stroke-width: 2; opacity: 0; }
-.say { position: fixed; left: 0; top: 0; z-index: 13; pointer-events: none; font: 12px var(--font-mono); background: var(--panel); color: var(--accent); border: 1px solid var(--accent); border-radius: 6px; padding: 3px 10px; white-space: nowrap; opacity: 0; transition: opacity 0.2s; }
+#fxl { position: fixed; inset: 0; z-index: 11; pointer-events: none; perspective: 700px; overflow: hidden; }
+.pf { position: absolute; width: 9px; height: 9px; border-radius: 50%; will-change: transform, opacity; }
+.pf.plasma { background: radial-gradient(circle, #fff6c8 0%, #ffb020 45%, rgba(255, 93, 42, 0) 72%); }
+.pf.steam { width: 12px; height: 12px; background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(214, 230, 224, 0.55) 55%, rgba(214, 230, 224, 0) 72%); }
+/* retro CRT speech bubble, typed one key at a time */
+.say { position: fixed; left: 0; top: 0; z-index: 13; pointer-events: none; font: 12px/1.25 var(--font-mono); background: #04120a repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.3) 0 1px, transparent 1px 3px); color: #6dffa5; text-shadow: 0 0 6px rgba(109, 255, 165, 0.7); border: 1px solid var(--accent); border-radius: 6px; padding: 5px 10px; white-space: nowrap; opacity: 0; transition: opacity 0.2s; box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 35%, transparent), inset 0 0 14px rgba(61, 255, 139, 0.12); min-height: 1.25em; }
 .say.show { opacity: 1; }
+.say::after { content: ""; display: inline-block; width: 6px; height: 11px; margin-left: 3px; vertical-align: -1px; background: #6dffa5; animation: caret 0.8s steps(1) infinite; }
+/* the floating mini terminal and the blackout for the prank */
+.crt { position: fixed; left: 0; top: 0; z-index: 14; width: 230px; pointer-events: none; background: #030d07; color: #6dffa5; border: 1px solid var(--accent); border-radius: 8px; font: 11px/1.45 var(--font-mono); opacity: 0; transition: opacity 0.25s; box-shadow: 0 0 22px color-mix(in srgb, var(--accent) 40%, transparent); overflow: hidden; }
+.crt.show { opacity: 1; }
+.crt-bar { display: flex; align-items: center; gap: 5px; padding: 4px 8px; border-bottom: 1px solid #14402a; color: #5fbf85; }
+.crt-bar i { width: 7px; height: 7px; border-radius: 50%; background: #14402a; display: inline-block; }
+.crt-body { margin: 0; padding: 8px 10px; min-height: 64px; white-space: pre-wrap; font: inherit; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.3) 0 1px, transparent 1px 3px); text-shadow: 0 0 5px rgba(109, 255, 165, 0.6); }
+.crt-body .bad { color: #ff5d4a; text-shadow: 0 0 6px rgba(255, 93, 74, 0.7); }
+.blackout { position: fixed; inset: 0; z-index: 9999; background: #000 repeating-linear-gradient(0deg, rgba(61, 255, 139, 0.06) 0 1px, transparent 1px 3px); opacity: 0; transition: opacity 0.12s; cursor: pointer; }
+.blackout.show { opacity: 1; }
+.blackout .cur { position: absolute; left: 6vw; top: 12vh; font: 28px var(--font-mono); color: #6dffa5; text-shadow: 0 0 10px rgba(109, 255, 165, 0.8); animation: caret 1s steps(1) infinite; }
 .scanning { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 10px; }
 .node.scanning { outline: none; }
 .node.scanning rect { stroke: var(--accent); fill: var(--accent-dim); filter: drop-shadow(0 0 8px var(--accent)); }
 @media (prefers-reduced-motion: no-preference) {
-  #pilot.fly .flame { animation: flame 0.12s steps(2, jump-none) infinite alternate; }
+  #pilot.fly .flame.f1 { animation: flame 0.12s steps(2, jump-none) infinite alternate; }
+  #pilot.fly .flame.f2 { animation: flame 0.15s steps(2, jump-none) infinite alternate-reverse; }
   #pilot.fly .scarf { animation: flap 0.18s ease-in-out infinite alternate; }
   #pilot.open .scr { animation: scr 0.6s steps(2, jump-none) infinite; }
+  #pilot .eyes .blinker { transform-box: fill-box; transform-origin: 50% 55%; animation: blink 4.8s infinite; }
+  #pilot[data-mood="dizzy"] .eyes [data-m="dizzy"] { transform-box: fill-box; transform-origin: 50% 50%; animation: spin 0.8s linear infinite; }
+  #pilot.talk .beakLow { transform-box: fill-box; transform-origin: 0% 0%; animation: beak 0.16s ease-in-out infinite alternate; }
 }
 @keyframes flame { from { transform: scaleX(0.85); } to { transform: scaleX(1.25); } }
 @keyframes flap { from { transform: rotate(-8deg); } to { transform: rotate(10deg); } }
 @keyframes scr { 50% { fill: #8fdcff; } }
+@keyframes blink { 0%, 93%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.1); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes beak { from { transform: rotate(0); } to { transform: rotate(16deg); } }
+@keyframes caret { 50% { opacity: 0; } }
 
 /* one long page */
 .part { scroll-margin-top: var(--hdr, 56px); }
@@ -273,8 +320,9 @@ p { margin: 0; }
 /* phones: brand and theme switch on the first row, nav links on a second row that scrolls sideways if needed */
 @media (max-width: 680px) {
   .brand { order: 1; }
-  #theme { order: 2; margin-left: auto; }
-  .nav { order: 3; flex-basis: 100%; flex-wrap: nowrap; margin-left: 0; overflow-x: auto; scrollbar-width: none; }
+  #pilot-toggle-top { order: 2; margin-left: auto; }
+  #theme { order: 3; }
+  .nav { order: 4; flex-basis: 100%; flex-wrap: nowrap; margin-left: 0; overflow-x: auto; scrollbar-width: none; }
   .nav::-webkit-scrollbar { display: none; }
   .nav { position: relative; gap: 2px; }
   .nav a { flex: none; font-size: 12px; padding: 6px 8px; }
@@ -453,3 +501,7 @@ html.modal-open { overflow: hidden; }
 .philosophy { cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none; }
 .philosophy:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .philosophy .hint { font: 13px var(--font-mono); color: var(--accent); }
+
+/* Packet's shadow on the page */
+#pshadow { position: fixed; left: 0; top: 0; width: 62px; height: 12px; margin-left: 4px; border-radius: 50%; background: radial-gradient(ellipse, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0) 70%); z-index: 10; pointer-events: none; opacity: 0; will-change: transform, opacity; }
+:root[data-theme="light"] #pshadow { background: radial-gradient(ellipse, rgba(12, 26, 19, 0.5) 0%, rgba(12, 26, 19, 0) 70%); }
