@@ -160,8 +160,8 @@
   pilot.setAttribute('data-mood', 'normal');
   pilot.innerHTML = DEFS
     + '<div class="scene"><div class="rig"><div class="flip">'
-    + '<div class="rk">' + ROCKET.replace('lyr rkt', 'lyr rktb') + RKTSL + ROCKET + '</div>'
-    + '<div class="pg">' + FFAR + BACK + BODYSL + BODY + '<div class="phead">' + HEADSL + HEAD + '</div>' + FLIP + LAP + '</div>'
+    + '<div class="rk">' + ROCKET + '</div>'
+    + '<div class="pg">' + BACK + BODY + '<div class="phead">' + HEAD + '</div>' + FLIP + LAP + '</div>'
     + '</div></div></div><div class="hit"></div>';
   var rig = pilot.querySelector('.rig');
   var flip = pilot.querySelector('.flip');
@@ -302,12 +302,12 @@
     flip.style.transform = 'rotateY(' + turn.toFixed(1) + 'deg)';
     pg.style.transform = 'translate3d(' + S.hx.toFixed(1) + 'px,' + S.hy.toFixed(1) + 'px,' + S.hz.toFixed(1) + 'px) rotateY(' + S.hry.toFixed(1) + 'deg) scale3d(' + sx.toFixed(3) + ',' + sy.toFixed(3) + ',1)';
     var hyaw = look.x * 24 + S.head, hpit = -look.y * 14;
-    head.style.transform = 'translateZ(2px) rotateY(' + hyaw.toFixed(1) + 'deg) rotateX(' + hpit.toFixed(1) + 'deg) rotateZ(' + (look.x * -3 + Math.sin(t * 1.4) * 0.8).toFixed(1) + 'deg)';
+    head.style.transform = 'rotateY(' + hyaw.toFixed(1) + 'deg) rotateX(' + hpit.toFixed(1) + 'deg) rotateZ(' + (look.x * -3 + Math.sin(t * 1.4) * 0.8).toFixed(1) + 'deg)';
     eyes.style.transform = 'translate(' + (look.x * 1.6).toFixed(2) + 'px,' + (look.y * 1.1).toFixed(2) + 'px)';
     var flap = flying ? -speedNow * 1.8 : 0;
     var fa = S.wave + Math.sin(t * 1.6) * 3 + S.tap * Math.sin(t * 38) * 4;
-    fl.style.transform = 'translateZ(12px) rotate(' + (fa + flap).toFixed(1) + 'deg)';
-    farFl.style.transform = 'translateZ(-18px) rotate(' + (-fa * 0.6 + flap * 0.8 + Math.sin(t * 1.5 + 1) * 3).toFixed(1) + 'deg)';
+    fl.style.transform = 'rotate(' + (fa + flap).toFixed(1) + 'deg)';
+    if (farFl) farFl.style.transform = 'rotate(' + (-fa * 0.6 + flap * 0.8 + Math.sin(t * 1.5 + 1) * 3).toFixed(1) + 'deg)';
     /* a light source fixed at the top left: highlights slide across his body as he turns, a rim light flicks on at the edge */
     var tot = yaw + look.x * 10;
     for (i = 0; i < specs.length; i++) specs[i].style.transform = 'translate(' + (-tot * 0.28).toFixed(2) + 'px,' + (-(pitch + look.y * 8) * 0.22).toFixed(2) + 'px)';
@@ -681,6 +681,8 @@
   async function takeover(my) {
     busy = true;
     setMood('angry');
+    await typeSay(my, "that's it, I'm taking it all down, you bugger! 😤", 1400, 30);
+    if (my !== gen || !on) return;
     /* step off the board, open the laptop */
     pilot.classList.add('out');
     await tween(my, 520, function (p) { var e = ease(p); S.hx = HOP * e; S.hy = -Math.sin(p * Math.PI) * 15; S.hz = 22 * e; S.hry = 10 * e; });
