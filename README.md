@@ -24,6 +24,8 @@ Then open http://localhost:8000. Opening `index.html` directly also works, but a
 | `icons.js`, `icons-license.txt` | Lucide icons used in the Skills section, and their licence |
 | `pilot.js` | The penguin pilot that flies around and inspects widgets |
 
+The "Fix it" section (`#fixit`) is a small choose-your-own-outage game; its scenarios live in the `S` array in the fix-it block at the end of `app.js`.
+
 Every page repeats the same header and footer. When you change the navigation, change it in each page.
 
 ## Adding a section

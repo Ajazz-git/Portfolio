@@ -759,3 +759,51 @@
     b.addEventListener('click', function () { run(b.getAttribute('data-run')); });
   });
 })();
+
+/* fix-it: a tiny choose-your-own-outage game */
+(function () {
+  var root = document.getElementById('fx'); if (!root) return;
+  var S = [
+    { alert: '📵 Everyone: "Is the internet down?" (Yes. Everyone.)', steps: [
+      { q: 'Where do you look first?', o: [['Reboot everything', 0, 'Bold. It also turns an outage into a mystery. Look first, reboot later.'], ['Check if it hits everyone, on Wi-Fi and wired', 1, 'Everyone, both. That points past the office walls.']] },
+      { q: 'Can you reach the office router?', o: [['Blame the Wi-Fi password', 0, 'Nobody changed it. Nobody ever changes it.'], ['Yes, so check the line and the public IP', 1, 'Router is fine. The line is down: this is the ISP side.']] },
+      { q: 'The line is down. Fastest way to get people working?', o: [['Wait for the ISP to call back', 0, 'Meanwhile 200+ people find out how long a minute is.'], ['Fail over to the secondary connection', 1, 'Back online. Restore first, root-cause second.']] }
+    ], end: 'Then I raise it with the ISP and the router vendor, log it, and make sure it does not happen twice.' },
+    { alert: '📁 "The shared drive is gone. I had a meeting on it."', steps: [
+      { q: 'First question?', o: [['Restart the file server. It is Friday 5pm anyway.', 0, 'Bold. Also how one broken laptop becomes an outage.'], ['One user or everyone?', 1, 'Just a few. So the server is probably fine.']] },
+      { q: 'By name it fails, by IP address it opens.', o: [['Rebuild the share from scratch', 0, 'Scorched earth. The server was fine.'], ['That is name resolution. Fix DNS.', 1, 'Names work again. Most "missing drives" are a missing name.']] },
+      { q: 'One remote user still cannot connect.', o: [['Ask them to turn it off and on', 0, 'A classic. Not today.'], ['Check their VPN and the firewall rule for their network', 1, 'Found it. One rule, and the drive is back.']] }
+    ], end: 'Then I confirm with the user and write it down, so the next person fixes it in two minutes.' }
+  ];
+  var tabs = root.querySelectorAll('.fx-tabs button'), alertEl = root.querySelector('.fx-alert'), qEl = root.querySelector('.fx-q'),
+      opts = root.querySelector('.fx-opts'), fb = root.querySelector('.fx-fb'), bar = root.querySelector('.fx-bar i');
+  var sc = 0, st = 0;
+  function show() {
+    var s = S[sc]; alertEl.textContent = s.alert; fb.textContent = ''; opts.textContent = '';
+    bar.style.width = (st / s.steps.length * 100) + '%';
+    if (st >= s.steps.length) {
+      qEl.textContent = 'Service restored ✔';
+      fb.textContent = s.end;
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = 'Play again'; b.onclick = function () { st = 0; show(); }; opts.appendChild(b);
+      return;
+    }
+    var step = s.steps[st]; qEl.textContent = step.q;
+    step.o.slice().sort(function () { return Math.random() - 0.5; }).forEach(function (o) {
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = o[0];
+      b.onclick = function () {
+        fb.textContent = o[2];
+        if (o[1]) { b.classList.add('good'); st++; setTimeout(show, 1500); opts.querySelectorAll('button').forEach(function (x) { x.disabled = true; }); }
+        else { b.classList.remove('bad'); void b.offsetWidth; b.classList.add('bad'); }
+      };
+      opts.appendChild(b);
+    });
+  }
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      sc = +t.dataset.s; st = 0;
+      tabs.forEach(function (x) { var on = x === t; x.classList.toggle('on', on); x.setAttribute('aria-selected', on); });
+      show();
+    });
+  });
+  show();
+})();

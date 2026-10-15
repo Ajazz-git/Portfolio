@@ -505,3 +505,21 @@ html.modal-open { overflow: hidden; }
 /* Packet's shadow on the page */
 #pshadow { position: fixed; left: 0; top: 0; width: 62px; height: 12px; margin-left: 4px; border-radius: 50%; background: radial-gradient(ellipse, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0) 70%); z-index: 10; pointer-events: none; opacity: 0; will-change: transform, opacity; }
 :root[data-theme="light"] #pshadow { background: radial-gradient(ellipse, rgba(12, 26, 19, 0.5) 0%, rgba(12, 26, 19, 0) 70%); }
+
+/* fix-it game */
+.fx { display: grid; gap: 16px; max-width: 760px; }
+.fx-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.fx-tabs .chip.on { border-color: var(--accent); color: var(--accent); }
+.fx-card { border: 1px solid var(--line); border-radius: 12px; background: linear-gradient(160deg, var(--panel2), var(--panel)); padding: 22px; display: grid; gap: 14px; }
+.fx-alert { font: 600 12px var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.fx-q { font: 700 1.25rem/1.3 var(--font-display); }
+.fx-opts { display: grid; gap: 10px; }
+.fx-opts button { text-align: left; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: inherit; font: inherit; cursor: pointer; transition: border-color 0.2s, transform 0.2s; }
+.fx-opts button:hover, .fx-opts button:focus-visible { border-color: var(--accent); transform: translateX(3px); }
+.fx-opts button.bad { border-color: #e5484d; animation: fxshake 0.35s; }
+.fx-opts button.good { border-color: var(--accent); background: var(--accent-dim); }
+.fx-fb { min-height: 1.5em; color: var(--muted); }
+.fx-bar { height: 4px; border-radius: 2px; background: var(--line); overflow: hidden; }
+.fx-bar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width 0.4s; }
+@keyframes fxshake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+@media (prefers-reduced-motion: reduce) { .fx-opts button.bad { animation: none; } }
