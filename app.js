@@ -853,7 +853,7 @@
   show();
 })();
 
-/* network lab: tap a box to read about it; cut the main line to watch traffic fail over */
+/* network lab: hover or tap a box to read about it and light up its links; cut the main line to watch traffic fail over */
 (function () {
   var box = document.getElementById('lab-box'); if (!box) return;
   var D = {
@@ -867,23 +867,39 @@
     srv: ['Servers and storage', 'Files, accounts and backups, sitting behind the firewall where only the right people and devices can reach them.'],
     br: ['Branch office', 'A second site joined over an encrypted tunnel, so it works like part of the same network. Setting one up from scratch is one of my favourite jobs.']
   };
-  var nodes = box.querySelectorAll('.nd'), t = document.getElementById('lab-t'), d = document.getElementById('lab-d');
-  function pick(n) {
-    nodes.forEach(function (x) { x.classList.toggle('sel', x === n); });
+  var nodes = box.querySelectorAll('.nd'), t = document.getElementById('lab-t'), d = document.getElementById('lab-d'), pinned = null, cutOn = false;
+  function clearHl() { box.classList.remove('hov'); box.querySelectorAll('.ln.hl').forEach(function (l) { l.classList.remove('hl'); }); }
+  function show(n) {
     var v = D[n.dataset.k]; t.textContent = v[0]; d.textContent = v[1];
+    clearHl(); box.classList.add('hov');
+    n.dataset.l.split(' ').forEach(function (id) { var l = document.getElementById(id); if (l) l.classList.add('hl'); });
+  }
+  function rest() {
+    clearHl();
+    if (pinned) show(pinned);
+    else if (cutOn) { t.textContent = 'Failover'; d.textContent = 'Main line cut. Traffic now flows through the backup. Everyone keeps working while the fault gets chased with the ISP.'; }
+    else { t.textContent = 'Start anywhere'; d.textContent = 'Hover or tap a box to see what it does and why it is there.'; }
   }
   nodes.forEach(function (n) {
-    n.addEventListener('click', function () { pick(n); });
-    n.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(n); } });
+    n.addEventListener('mouseenter', function () { show(n); });
+    n.addEventListener('mouseleave', rest);
+    n.addEventListener('focus', function () { show(n); });
+    n.addEventListener('blur', rest);
+    function pick() { pinned = pinned === n ? null : n; nodes.forEach(function (x) { x.classList.toggle('sel', x === pinned); }); show(n); }
+    n.addEventListener('click', pick);
+    n.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } });
   });
   var cut = document.getElementById('lab-cut'), st = document.getElementById('lab-state');
   cut.addEventListener('click', function () {
-    var on = cut.getAttribute('aria-pressed') !== 'true';
-    cut.setAttribute('aria-pressed', on); cut.textContent = on ? 'restore main ISP line' : 'cut main ISP line';
-    box.dataset.cut = on ? '1' : '0';
-    document.getElementById('isp1').classList.toggle('down', on);
-    ['lp1', 'la'].forEach(function (id) { document.getElementById(id).classList.toggle('down', on); });
-    st.textContent = on ? 'main line down: running on backup' : 'all links up';
-    if (on) { t.textContent = 'Failover'; d.textContent = 'Main line cut. Traffic is now flowing through the backup. Everyone keeps working while the fault gets chased with the ISP.'; }
+    cutOn = cut.getAttribute('aria-pressed') !== 'true';
+    cut.setAttribute('aria-pressed', cutOn); cut.textContent = cutOn ? 'restore main ISP line' : 'cut main ISP line';
+    box.dataset.cut = cutOn ? '1' : '0';
+    document.getElementById('n-isp1').classList.toggle('down', cutOn);
+    ['l1', 'l3'].forEach(function (id) { document.getElementById(id).classList.toggle('down', cutOn); });
+    st.lastChild.textContent = cutOn ? 'main line down: running on backup' : 'all links up';
+    rest();
   });
+  var sc = box.querySelector('.lab-scroll');
+  function center() { sc.scrollLeft = (sc.scrollWidth - sc.clientWidth) / 2; }
+  center(); window.addEventListener('load', center);
 })();
