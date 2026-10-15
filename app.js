@@ -802,6 +802,11 @@
   ];
   S.push.apply(S, S.splice(0, 5));
   S.push(
+    { tab: 'Wi-Fi password', alert: '📶 "What\'s the Wi-Fi password? Also, my guest needs it. Also, my other guest."', steps: [
+      { q: 'A visitor asks for the office Wi-Fi.', o: [['Read out the main password', 0, 'Now it is on every phone in the building, forever.'], ['Give them the guest network', 1, 'Guests get internet. Your servers stay out of reach.']] },
+      { q: 'The guest password has been shared far and wide.', o: [['Ignore it', 0, 'It is now on a sticky note in a car park.'], ['Change it, and keep it separate from the staff network', 1, 'Changed in a minute. Staff devices never noticed.']] },
+      { q: 'How do you stop this happening every month?', o: [['Put the password in the group chat', 0, 'See "forever" above.'], ['Rotate guest access on a schedule, with a short note on how to ask', 1, 'Nobody has to ask you, and nobody is locked out.']] }
+    ], end: 'Keep guests on their own network. The password is the least interesting part.' },
     { tab: 'VPN won\'t connect', alert: '🔌 "I\'m working from home and the VPN just spins."', steps: [
       { q: 'First question?', o: [['Reinstall the VPN app', 0, 'Maybe later. Check the basics before the sledgehammer.'], ['Is their home internet working, and does it fail for others too?', 1, 'Internet is fine, and nobody else is affected. So it is their connection attempt.']] },
       { q: 'Wrong-password error, but they swear it is right.', o: [['Tell them to try harder', 0, 'Typing the same thing louder does not help.'], ['Check the account, the MFA prompt and the device clock', 1, 'Laptop clock was five minutes off, so the MFA code never matched. Fixed.']] },
