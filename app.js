@@ -852,3 +852,38 @@
   });
   show();
 })();
+
+/* network lab: tap a box to read about it; cut the main line to watch traffic fail over */
+(function () {
+  var box = document.getElementById('lab-box'); if (!box) return;
+  var D = {
+    net: ['The internet', 'Where everything outside the office lives. Everything below exists to reach it safely.'],
+    isp1: ['ISP 1: main line', 'The everyday connection. It is the one that fails at the worst moment, which is why there is a second one.'],
+    isp2: ['ISP 2: backup line', 'A second, independent connection. When the main line drops, traffic moves here and users barely notice. This is how downtime stays low.'],
+    fw: ['Firewall / router', 'The front door. It decides what gets in and out, routes between the networks, and holds the secure tunnel to the branch.'],
+    core: ['Core switch', 'Everything inside plugs in here. It carries each network separately, so a problem on one does not spill into the others.'],
+    lan: ['Wired network (VLAN)', 'Desks, printers and fixed devices on their own network, kept apart from Wi-Fi.'],
+    wifi: ['Wi-Fi network (VLAN)', 'Access points on a network of their own, with guests kept away from staff and servers.'],
+    srv: ['Servers and storage', 'Files, accounts and backups, sitting behind the firewall where only the right people and devices can reach them.'],
+    br: ['Branch office', 'A second site joined over an encrypted tunnel, so it works like part of the same network. Setting one up from scratch is one of my favourite jobs.']
+  };
+  var nodes = box.querySelectorAll('.nd'), t = document.getElementById('lab-t'), d = document.getElementById('lab-d');
+  function pick(n) {
+    nodes.forEach(function (x) { x.classList.toggle('sel', x === n); });
+    var v = D[n.dataset.k]; t.textContent = v[0]; d.textContent = v[1];
+  }
+  nodes.forEach(function (n) {
+    n.addEventListener('click', function () { pick(n); });
+    n.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(n); } });
+  });
+  var cut = document.getElementById('lab-cut'), st = document.getElementById('lab-state');
+  cut.addEventListener('click', function () {
+    var on = cut.getAttribute('aria-pressed') !== 'true';
+    cut.setAttribute('aria-pressed', on); cut.textContent = on ? 'restore main ISP line' : 'cut main ISP line';
+    box.dataset.cut = on ? '1' : '0';
+    document.getElementById('isp1').classList.toggle('down', on);
+    ['lp1', 'la'].forEach(function (id) { document.getElementById(id).classList.toggle('down', on); });
+    st.textContent = on ? 'main line down: running on backup' : 'all links up';
+    if (on) { t.textContent = 'Failover'; d.textContent = 'Main line cut. Traffic is now flowing through the backup. Everyone keeps working while the fault gets chased with the ISP.'; }
+  });
+})();

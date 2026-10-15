@@ -523,3 +523,29 @@ html.modal-open { overflow: hidden; }
 .fx-bar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width 0.4s; }
 @keyframes fxshake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 @media (prefers-reduced-motion: reduce) { .fx-opts button.bad { animation: none; } }
+
+/* network lab */
+.lab { display: grid; gap: 14px; max-width: 860px; }
+.lab-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.lab-bar .chip[aria-pressed="true"] { border-color: var(--warn); color: var(--warn); }
+.lab-state { font: 600 12px var(--font-mono); color: var(--muted); letter-spacing: 0.06em; }
+.lab-svg { width: 100%; height: auto; border: 1px solid var(--line); border-radius: 12px; background: linear-gradient(160deg, var(--panel2), var(--panel)); }
+.lab-svg .ln { fill: none; stroke: var(--line); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.lab-svg .ln.vpn { stroke-dasharray: 5 5; stroke: var(--accent); opacity: 0.6; }
+.lab-svg .ln.down { stroke: var(--warn); stroke-dasharray: 3 6; opacity: 0.8; }
+.lab-svg .nd { cursor: pointer; outline: none; }
+.lab-svg .nd rect { fill: var(--panel); stroke: var(--line); stroke-width: 1.5; transition: stroke 0.2s, fill 0.2s; }
+.lab-svg .nd text { fill: var(--fg); font: 600 13px var(--font-mono); text-anchor: middle; pointer-events: none; }
+.lab-svg .nd text.sub { font-size: 10px; fill: var(--muted); font-weight: 400; }
+.lab-svg .nd:hover rect, .lab-svg .nd:focus-visible rect, .lab-svg .nd.sel rect { stroke: var(--accent); fill: var(--accent-dim); }
+.lab-svg .nd.down rect { stroke: var(--warn); }
+.lab-svg .nd.down text { fill: var(--warn); }
+.lab-svg .pkt { fill: var(--accent); }
+.lab-svg .pkt.p2, .lab[data-cut="1"] .pkt.p1 { display: none; }
+.lab[data-cut="1"] .pkt.p2 { display: inline; }
+.lab-info { border: 1px solid var(--line); border-radius: 10px; padding: 14px 18px; background: var(--panel); }
+.lab-info h3 { font: 700 1.05rem var(--font-display); margin-bottom: 4px; }
+.lab-info p { color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { .lab-svg .pkt { display: none !important; } }
+.lab-scroll { overflow-x: auto; border-radius: 12px; }
+@media (max-width: 700px) { .lab-svg { min-width: 640px; } }

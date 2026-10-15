@@ -12,7 +12,7 @@
 <header class="top"><div class="wrap bar">
 <a class="brand" href="index.html#home"><span class="led" aria-hidden="true"></span>ajas@kochi</a>
 <nav class="nav" aria-label="Main">
-<a href="index.html#home">Home</a><a href="index.html#about">About</a><a href="index.html#experience">Experience</a><a href="index.html#skills">Skills</a><a href="index.html#fixit">Fix it</a><a href="index.html#resume">Resume</a><a href="index.html#contact">Contact</a>
+<a href="index.html#home">Home</a><a href="index.html#about">About</a><a href="index.html#experience">Experience</a><a href="index.html#skills">Skills</a><a href="index.html#fixit">Fix it</a><a href="index.html#lab">Lab</a><a href="index.html#resume">Resume</a><a href="index.html#contact">Contact</a>
 </nav>
 <button class="chip" id="pilot-toggle-top" data-packet type="button" aria-pressed="true" aria-label="Turn Packet the penguin on or off">packet: on</button>
 <button class="chip" id="theme" type="button" aria-label="Switch colour theme">light mode</button>
@@ -232,6 +232,47 @@
 <p class="fx-fb"></p>
 <div class="fx-bar"><i></i></div>
 </div>
+</div>
+</section>
+<div class="wrap next"><a href="index.html#lab">Next: Network lab <span aria-hidden="true">↓</span></a></div>
+</section>
+<section class="part" id="lab">
+<section class="wrap pagehead">
+<p class="eyebrow">Network lab</p>
+<h2 class="sec-title">How an office network hangs together</h2>
+<p class="lede">A simplified map of the kind of network I run. Tap any box. Then try cutting the main line.</p>
+</section>
+<section class="wrap block">
+<div class="lab" id="lab-box">
+<div class="lab-bar"><button class="chip" id="lab-cut" type="button" aria-pressed="false">cut main ISP line</button><span class="lab-state" id="lab-state">all links up</span></div>
+<div class="lab-scroll"><svg class="lab-svg" viewBox="0 0 800 420" role="group" aria-label="Network diagram: internet, two ISP lines, firewall, core switch, wired and Wi-Fi networks, servers and a branch office">
+<g class="lk">
+<path id="lp1" class="ln" d="M300 100 L300 75 L400 55"/>
+<path id="lp2" class="ln" d="M500 100 L500 75 L400 55"/>
+<path id="la" class="ln" d="M300 140 L400 180"/>
+<path id="lb" class="ln" d="M500 140 L400 180"/>
+<path class="ln" d="M400 215 L400 250"/>
+<path class="ln" d="M400 285 L230 330"/>
+<path class="ln" d="M400 285 L400 330"/>
+<path class="ln" d="M400 285 L570 330"/>
+<path class="ln vpn" d="M440 198 L650 198"/>
+</g>
+<g class="pk">
+<circle r="4" class="pkt p1"><animateMotion dur="2.4s" repeatCount="indefinite" path="M400 55 L300 75 L300 100 L300 140 L400 180 L400 250 L400 330"/></circle>
+<circle r="4" class="pkt p2"><animateMotion dur="2.4s" repeatCount="indefinite" path="M400 55 L500 75 L500 100 L500 140 L400 180 L400 250 L400 330"/></circle>
+<circle r="3.5" class="pkt pv"><animateMotion dur="3s" repeatCount="indefinite" path="M440 198 L650 198"/></circle>
+</g>
+<g class="nd" tabindex="0" role="button" data-k="net" transform="translate(340,20)"><rect width="120" height="36" rx="18"/><text x="60" y="23">Internet</text></g>
+<g class="nd" id="isp1" tabindex="0" role="button" data-k="isp1" transform="translate(240,100)"><rect width="120" height="40" rx="8"/><text x="60" y="25">ISP 1 · main</text></g>
+<g class="nd" id="isp2" tabindex="0" role="button" data-k="isp2" transform="translate(440,100)"><rect width="120" height="40" rx="8"/><text x="60" y="25">ISP 2 · backup</text></g>
+<g class="nd hot" tabindex="0" role="button" data-k="fw" transform="translate(325,180)"><rect width="150" height="36" rx="8"/><text x="75" y="23">Firewall / router</text></g>
+<g class="nd" tabindex="0" role="button" data-k="core" transform="translate(340,250)"><rect width="120" height="36" rx="8"/><text x="60" y="23">Core switch</text></g>
+<g class="nd" tabindex="0" role="button" data-k="lan" transform="translate(160,330)"><rect width="140" height="44" rx="8"/><text x="70" y="19">VLAN · wired</text><text x="70" y="35" class="sub">desks, printers</text></g>
+<g class="nd" tabindex="0" role="button" data-k="wifi" transform="translate(330,330)"><rect width="140" height="44" rx="8"/><text x="70" y="19">VLAN · Wi-Fi</text><text x="70" y="35" class="sub">staff + guests</text></g>
+<g class="nd" tabindex="0" role="button" data-k="srv" transform="translate(490,330)"><rect width="170" height="44" rx="8"/><text x="85" y="19">Servers</text><text x="85" y="35" class="sub">files, accounts, backup</text></g>
+<g class="nd" tabindex="0" role="button" data-k="br" transform="translate(650,180)"><rect width="130" height="44" rx="8"/><text x="65" y="19">Branch office</text><text x="65" y="35" class="sub">secure VPN tunnel</text></g>
+</svg></div>
+<div class="lab-info" aria-live="polite"><h3 id="lab-t">Start anywhere</h3><p id="lab-d">Tap a box to see what it does and why it is there.</p></div>
 </div>
 </section>
 <div class="wrap next"><a href="index.html#resume">Next: Resume <span aria-hidden="true">↓</span></a></div>
