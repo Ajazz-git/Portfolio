@@ -764,17 +764,45 @@
 (function () {
   var root = document.getElementById('fx'); if (!root) return;
   var S = [
-    { alert: '📵 Everyone: "Is the internet down?" (Yes. Everyone.)', steps: [
+    { tab: 'Can\'t log in', alert: '🔒 "I\'ve typed my password 11 times. It\'s definitely right."', steps: [
+      { q: 'First move?', o: [['Reset the password straight away', 0, 'Maybe. But if the account is locked, the new password locks too.'], ['Look at the account: locked, expired or disabled?', 1, 'Locked out after too many tries. Now you know what you are fixing.']] },
+      { q: 'It is locked. Before unlocking, what do you ask?', o: [['Nothing. Unlock and move on', 0, 'Fast. Also how the same device locks them again in 10 minutes.'], ['Where did the wrong tries come from?', 1, 'An old phone with the previous password still syncing. Mystery solved.']] },
+      { q: 'Last step?', o: [['Unlock it and walk away', 0, 'The phone will lock it again before lunch.'], ['Unlock, update the phone, confirm they are in', 1, 'Fixed once, not five times. And they get a polite reminder about MFA.']] }
+    ], end: 'Most lockouts are a forgotten device, not a forgotten password.' },
+    { tab: 'Printer', alert: '🖨️ "The printer is broken." (It is never the printer. Except when it is.)', steps: [
+      { q: 'Where do you start?', o: [['Replace the printer', 0, 'Ambitious. The budget has opinions.'], ['Is it one person or everyone?', 1, 'Just one laptop. The printer is innocent.']] },
+      { q: 'Their jobs sit in the queue and never print.', o: [['Reinstall Windows', 0, 'A hammer for a thumbtack.'], ['Clear the stuck job and restart the print service', 1, 'One stuck job was blocking everyone behind it.']] },
+      { q: 'Prevent a repeat?', o: [['Hope', 0, 'A strategy, technically.'], ['Update the driver and give it a fixed address', 1, 'Printer keeps its address, laptops keep finding it.']] }
+    ], end: 'Most printer problems are a stuck job or a changed address.' },
+    { tab: 'Wi-Fi is slow', alert: '🐌 "The Wi-Fi is so slow. Fix it."', steps: [
+      { q: 'What do you check first?', o: [['Buy a faster plan', 0, 'Expensive guess. Measure before you spend.'], ['Is it slow everywhere or in one spot, and wired too?', 1, 'Fine on cable, slow in one corner. It is the Wi-Fi, not the internet.']] },
+      { q: 'One corner, lots of devices.', o: [['Move the router to the cupboard', 0, 'Cupboards are where signals go to die.'], ['Check access point coverage and channel crowding', 1, 'Two access points shouting on the same channel. Spread them out.']] },
+      { q: 'After the fix?', o: [['Assume it is fixed', 0, 'Famous last words.'], ['Test from that corner again and note it down', 1, 'Fast again, and it is documented.']] }
+    ], end: 'Measure first. Most slow Wi-Fi is placement, not the plan.' },
+    { tab: 'Phishing email', alert: '🎣 "I think I clicked a link in an email..."', steps: [
+      { q: 'What do you do first?', o: [['Tell them off', 0, 'Next time they will hide it. Calm first, lecture later.'], ['Thank them for saying so and act fast', 1, 'Reporting quickly is exactly what you want.']] },
+      { q: 'Did they type their password into the page?', o: [['Probably not, skip it', 0, 'Probably is not a plan.'], ['Assume yes: reset it and sign out all sessions', 1, 'Locked the door before anyone used the key.']] },
+      { q: 'Then?', o: [['Done, it is fixed', 0, 'The same email is sitting in thirty other inboxes.'], ['Remove it from every mailbox and warn the team', 1, 'Gone everywhere. One clicker saved the whole office.']] }
+    ], end: 'Making it safe to report is the best security tool there is.' },
+    { tab: 'Disk full', alert: '💾 "The server is crawling and says disk almost full."', steps: [
+      { q: 'First?', o: [['Delete things until it works', 0, 'Delete the wrong folder and now you have a bigger problem.'], ['Find what is eating the space', 1, 'Old logs and forgotten backups. The usual.']] },
+      { q: 'Logs are huge and nobody reads them.', o: [['Turn logging off', 0, 'Great until the day you need them.'], ['Archive the old ones and set rotation', 1, 'Space back, and it will not refill.']] },
+      { q: 'Last touch?', o: [['Move on', 0, 'It fills up again in three months.'], ['Add a disk-space alert', 1, 'Next time it tells you at 80%, not at 100%.']] }
+    ], end: 'A server telling you early beats a server telling you at 3am.' },
+    { tab: 'The internet is gone', alert: '📵 Everyone: "Is the internet down?" (Yes. Everyone.)', steps: [
       { q: 'Where do you look first?', o: [['Reboot everything', 0, 'Bold. It also turns an outage into a mystery. Look first, reboot later.'], ['Check if it hits everyone, on Wi-Fi and wired', 1, 'Everyone, both. That points past the office walls.']] },
       { q: 'Can you reach the office router?', o: [['Blame the Wi-Fi password', 0, 'Nobody changed it. Nobody ever changes it.'], ['Yes, so check the line and the public IP', 1, 'Router is fine. The line is down: this is the ISP side.']] },
       { q: 'The line is down. Fastest way to get people working?', o: [['Wait for the ISP to call back', 0, 'Meanwhile 200+ people find out how long a minute is.'], ['Fail over to the secondary connection', 1, 'Back online. Restore first, root-cause second.']] }
     ], end: 'Then I raise it with the ISP and the router vendor, log it, and make sure it does not happen twice.' },
-    { alert: '📁 "The shared drive is gone. I had a meeting on it."', steps: [
+    { tab: 'The drive vanished', alert: '📁 "The shared drive is gone. I had a meeting on it."', steps: [
       { q: 'First question?', o: [['Restart the file server. It is Friday 5pm anyway.', 0, 'Bold. Also how one broken laptop becomes an outage.'], ['One user or everyone?', 1, 'Just a few. So the server is probably fine.']] },
       { q: 'By name it fails, by IP address it opens.', o: [['Rebuild the share from scratch', 0, 'Scorched earth. The server was fine.'], ['That is name resolution. Fix DNS.', 1, 'Names work again. Most "missing drives" are a missing name.']] },
       { q: 'One remote user still cannot connect.', o: [['Ask them to turn it off and on', 0, 'A classic. Not today.'], ['Check their VPN and the firewall rule for their network', 1, 'Found it. One rule, and the drive is back.']] }
     ], end: 'Then I confirm with the user and write it down, so the next person fixes it in two minutes.' }
   ];
+  S.push.apply(S, S.splice(0, 5));
+  var tabBar = root.querySelector('.fx-tabs');
+  S.forEach(function (s, i) { var b = document.createElement('button'); b.type = 'button'; b.className = 'chip' + (i ? '' : ' on'); b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', i ? 'false' : 'true'); b.dataset.s = i; b.textContent = s.tab; tabBar.appendChild(b); });
   var tabs = root.querySelectorAll('.fx-tabs button'), alertEl = root.querySelector('.fx-alert'), qEl = root.querySelector('.fx-q'),
       opts = root.querySelector('.fx-opts'), fb = root.querySelector('.fx-fb'), bar = root.querySelector('.fx-bar i');
   var sc = 0, st = 0;
