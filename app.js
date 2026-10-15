@@ -853,51 +853,120 @@
   show();
 })();
 
-/* network lab: hover or tap a box to read about it and light up its links; cut the main line to watch traffic fail over */
+/* network lab: hover to light up links, tap to pin, and three buttons to break things */
 (function () {
   var box = document.getElementById('lab-box'); if (!box) return;
+  var ICON = {"net": "<path d=\"M7 18a4 4 0 0 1-.5-7.97A5.5 5.5 0 0 1 17 9a4.5 4.5 0 0 1 .5 9H7z\"/>", "isp": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M3 12h18M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18\"/>", "fw": "<path d=\"M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3z\"/><path d=\"M9 12l2 2 4-4\"/>", "br": "<path d=\"M5 21V5l7-2v18M12 9h7v12M8 8v.01M8 12v.01M8 16v.01M15 13v.01M15 17v.01\"/>", "core": "<rect x=\"3\" y=\"7\" width=\"18\" height=\"10\" rx=\"2\"/><path d=\"M7 12v.01M11 12v.01M15 12v.01M19 12v.01\"/>", "lan": "<rect x=\"3\" y=\"4\" width=\"18\" height=\"12\" rx=\"2\"/><path d=\"M8 21h8M12 16v5\"/>", "wifi": "<path d=\"M4.5 10a11 11 0 0 1 15 0M8 13.5a6 6 0 0 1 8 0M12 18v.01\"/>", "srv": "<rect x=\"4\" y=\"3\" width=\"16\" height=\"7\" rx=\"2\"/><rect x=\"4\" y=\"14\" width=\"16\" height=\"7\" rx=\"2\"/><path d=\"M8 6.5v.01M8 17.5v.01\"/>"};
   var D = {
-    net: ['The internet', 'Where everything outside the office lives. Everything below exists to reach it safely.'],
-    isp1: ['ISP 1: main line', 'The everyday connection. It is the one that fails at the worst moment, which is why there is a second one.'],
-    isp2: ['ISP 2: backup line', 'A second, independent connection. When the main line drops, traffic moves here and users barely notice. This is how downtime stays low.'],
-    fw: ['Firewall / router', 'The front door. It decides what gets in and out, routes between the networks, and holds the secure tunnel to the branch.'],
-    core: ['Core switch', 'Everything inside plugs in here. It carries each network separately, so a problem on one does not spill into the others.'],
-    lan: ['Wired network (VLAN)', 'Desks, printers and fixed devices on their own network, kept apart from Wi-Fi.'],
-    wifi: ['Wi-Fi network (VLAN)', 'Access points on a network of their own, with guests kept away from staff and servers.'],
-    srv: ['Servers and storage', 'Files, accounts and backups, sitting behind the firewall where only the right people and devices can reach them.'],
-    br: ['Branch office', 'A second site joined over an encrypted tunnel, so it works like part of the same network. Setting one up from scratch is one of my favourite jobs.']
+    net: ['The internet', 'Everything outside the office. Everything below exists to reach it safely.', 'net', ['isp1', 'isp2']],
+    isp1: ['ISP 1: the main line', 'The everyday connection. It is the one that fails at the worst moment, which is why there is a second one.', 'isp', ['net', 'fw']],
+    isp2: ['ISP 2: the backup line', 'A second, independent connection. When the main line drops, traffic moves here and users barely notice. This is how downtime stays low.', 'isp', ['net', 'fw']],
+    fw: ['Firewall / router', 'The front door. It decides what gets in and out, routes between the networks and holds the secure tunnel to the branch.', 'fw', ['isp1', 'isp2', 'core', 'br']],
+    core: ['Core switch', 'Everything inside plugs in here. It carries each network separately, so a problem on one does not spill into the others.', 'core', ['fw', 'lan', 'wifi', 'srv']],
+    lan: ['Wired network (VLAN)', 'Desks, printers and fixed devices on their own network, kept apart from Wi-Fi.', 'lan', ['core']],
+    wifi: ['Wi-Fi network (VLAN)', 'Access points on a network of their own, with guests kept away from staff and servers.', 'wifi', ['core']],
+    srv: ['Servers and storage', 'Files, accounts and backups, sitting behind the firewall where only the right people and devices can reach them.', 'srv', ['core']],
+    br: ['Branch office', 'A second site joined over an encrypted tunnel, so it works like part of the same network. Setting one up from scratch is one of my favourite jobs.', 'br', ['fw']]
   };
-  var nodes = box.querySelectorAll('.nd'), t = document.getElementById('lab-t'), d = document.getElementById('lab-d'), pinned = null, cutOn = false;
-  function clearHl() { box.classList.remove('hov'); box.querySelectorAll('.ln.hl').forEach(function (l) { l.classList.remove('hl'); }); }
+  var NS = 'http://www.w3.org/2000/svg', svg = box.querySelector('.lab-svg'), fxg = document.getElementById('fxg');
+  var nodes = {}; box.querySelectorAll('.nd').forEach(function (n) { nodes[n.dataset.k] = n; });
+  var t = document.getElementById('lab-t'), d = document.getElementById('lab-d'), ch = document.getElementById('lab-ch'), lis = document.getElementById('li-svg');
+  var st = document.getElementById('lab-state'), pinned = null, cutOn = false, busy = false;
+  var DEF = { t: t.textContent, d: d.textContent, ic: 'net' };
+  function setIcon(k) { lis.innerHTML = ICON[k] || ''; }
+  function setState(txt) { st.querySelector('b').textContent = txt; }
+  function clearHl() { box.classList.remove('hov'); box.querySelectorAll('.lk.hl').forEach(function (l) { l.classList.remove('hl'); }); Object.keys(nodes).forEach(function (k) { nodes[k].classList.remove('lit'); }); }
+  function info(k) {
+    var v = D[k]; t.textContent = v[0]; d.textContent = v[1]; setIcon(v[2]); ch.textContent = '';
+    v[3].forEach(function (o) { var b = document.createElement('button'); b.type = 'button'; b.textContent = D[o][0].split(':')[0].split(' (')[0]; b.addEventListener('click', function () { pin(nodes[o]); }); ch.appendChild(b); });
+  }
   function show(n) {
-    var v = D[n.dataset.k]; t.textContent = v[0]; d.textContent = v[1];
-    clearHl(); box.classList.add('hov');
+    info(n.dataset.k); clearHl(); box.classList.add('hov'); n.classList.add('lit');
     n.dataset.l.split(' ').forEach(function (id) { var l = document.getElementById(id); if (l) l.classList.add('hl'); });
+    D[n.dataset.k][3].forEach(function (o) { nodes[o].classList.add('lit'); });
   }
   function rest() {
     clearHl();
-    if (pinned) show(pinned);
-    else if (cutOn) { t.textContent = 'Failover'; d.textContent = 'Main line cut. Traffic now flows through the backup. Everyone keeps working while the fault gets chased with the ISP.'; }
-    else { t.textContent = 'Start anywhere'; d.textContent = 'Hover or tap a box to see what it does and why it is there.'; }
+    if (pinned) { show(pinned); return; }
+    ch.textContent = '';
+    if (cutOn) { t.textContent = 'Failover'; d.textContent = 'Main line cut. Traffic now flows through the backup. Everyone keeps working while the fault gets chased with the ISP.'; setIcon('isp'); }
+    else { t.textContent = DEF.t; d.textContent = DEF.d; setIcon(DEF.ic); }
   }
-  nodes.forEach(function (n) {
+  function pin(n) {
+    pinned = pinned === n ? null : n;
+    Object.keys(nodes).forEach(function (k) { nodes[k].classList.toggle('sel', nodes[k] === pinned); });
+    if (pinned) show(pinned); else rest();
+  }
+  Object.keys(nodes).forEach(function (k) {
+    var n = nodes[k];
     n.addEventListener('mouseenter', function () { show(n); });
     n.addEventListener('mouseleave', rest);
     n.addEventListener('focus', function () { show(n); });
     n.addEventListener('blur', rest);
-    function pick() { pinned = pinned === n ? null : n; nodes.forEach(function (x) { x.classList.toggle('sel', x === pinned); }); show(n); }
-    n.addEventListener('click', pick);
-    n.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } });
+    n.addEventListener('click', function () { pin(n); });
+    n.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pin(n); } });
   });
-  var cut = document.getElementById('lab-cut'), st = document.getElementById('lab-state');
-  cut.addEventListener('click', function () {
-    cutOn = cut.getAttribute('aria-pressed') !== 'true';
-    cut.setAttribute('aria-pressed', cutOn); cut.textContent = cutOn ? 'restore main ISP line' : 'cut main ISP line';
+  setIcon(DEF.ic);
+
+  /* little animation helpers */
+  function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  function travel(dstr, bad, ms) {
+    return new Promise(function (res) {
+      var p = document.createElementNS(NS, 'path'); p.setAttribute('d', dstr); var L = p.getTotalLength();
+      var c = document.createElementNS(NS, 'circle'); c.setAttribute('r', 7); c.setAttribute('class', 'fxp' + (bad ? ' bad' : '')); fxg.appendChild(c);
+      var t0 = performance.now();
+      (function f(now) {
+        var k = Math.min(1, (now - t0) / ms), pt = p.getPointAtLength(L * k);
+        c.setAttribute('cx', pt.x); c.setAttribute('cy', pt.y);
+        if (k < 1) requestAnimationFrame(f); else { c.remove(); res(); }
+      })(t0);
+    });
+  }
+  function label(x, y, txt, bad) {
+    var e = document.createElementNS(NS, 'text'); e.setAttribute('x', x); e.setAttribute('y', y); e.setAttribute('class', 'fxt' + (bad ? ' bad' : '')); e.textContent = txt; fxg.appendChild(e);
+    e.animate([{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 220, fill: 'forwards' });
+    return e;
+  }
+  function route() { return cutOn ? { a: 'M480 239 C480 212 630 215 630 187 L630 133 C630 108 480 112 480 84', x: 630 } : { a: 'M480 239 C480 212 330 215 330 187 L330 133 C330 108 480 112 480 84', x: 330 }; }
+  function lock(on) { box.querySelectorAll('.lab-bar .chip').forEach(function (b) { if (b.id !== 'lab-cut' || on) b.disabled = on; }); busy = on; }
+
+  document.getElementById('lab-cut').addEventListener('click', function () {
+    cutOn = !cutOn; var b = this;
+    b.setAttribute('aria-pressed', cutOn); b.textContent = cutOn ? '↺ restore main ISP line' : '✂ cut main ISP line';
     box.dataset.cut = cutOn ? '1' : '0';
-    document.getElementById('n-isp1').classList.toggle('down', cutOn);
+    nodes.isp1.classList.toggle('down', cutOn);
     ['l1', 'l3'].forEach(function (id) { document.getElementById(id).classList.toggle('down', cutOn); });
-    st.lastChild.textContent = cutOn ? 'main line down: running on backup' : 'all links up';
+    setState(cutOn ? 'main line down: running on backup' : 'all links up');
     rest();
+  });
+  document.getElementById('lab-ping').addEventListener('click', async function () {
+    if (busy) return; lock(true); var r = route();
+    var up = 'M200 459 C200 428 480 432 480 402 L480 301 L480 239 ' + r.a.replace(/^M[\d.]+ [\d.]+ /, '');
+    var lab = label(200, 436, 'ping…');
+    await travel(up, false, 1500);
+    lab.remove(); var ok = label(480, 38, 'reply from the internet ✔'); await wait(250);
+    await travel(reverse(up), false, 1500); ok.remove();
+    setState('ping answered. all good'); await wait(900); fxg.textContent = ''; setState(cutOn ? 'main line down: running on backup' : 'all links up'); lock(false);
+  });
+  /* reverse a simple absolute path by sampling it, so the reply retraces the route */
+  function reverse(dstr) {
+    var p = document.createElementNS(NS, 'path'); p.setAttribute('d', dstr); var L = p.getTotalLength(), s = 'M', i;
+    for (i = 0; i <= 60; i++) { var pt = p.getPointAtLength(L * (1 - i / 60)); s += (i ? ' L' : '') + pt.x.toFixed(1) + ' ' + pt.y.toFixed(1); }
+    return s;
+  }
+  document.getElementById('lab-atk').addEventListener('click', async function () {
+    if (busy) return; lock(true); box.classList.add('atk'); setState('intrusion attempt…');
+    var r = route(), down = reverse(r.a);
+    for (var i = 0; i < 3; i++) {
+      await travel(down, true, 700);
+      nodes.fw.classList.add('flash');
+      var ring = document.createElementNS(NS, 'circle'); ring.setAttribute('cx', 480); ring.setAttribute('cy', 270); ring.setAttribute('r', 40); ring.setAttribute('class', 'fxr'); fxg.appendChild(ring);
+      ring.animate([{ r: 40, opacity: 1 }, { r: 120, opacity: 0 }], { duration: 600, fill: 'forwards' });
+      var l = label(480 + (i - 1) * 90, 214 + i * 0, 'BLOCKED ✕', true);
+      await wait(380); nodes.fw.classList.remove('flash'); setTimeout(function (e, g) { e.remove(); g.remove(); }, 700, l, ring);
+    }
+    setState('3 attacks blocked at the firewall. nothing got in');
+    await wait(1600); fxg.textContent = ''; box.classList.remove('atk'); setState(cutOn ? 'main line down: running on backup' : 'all links up'); lock(false);
   });
   var sc = box.querySelector('.lab-scroll');
   function center() { sc.scrollLeft = (sc.scrollWidth - sc.clientWidth) / 2; }
