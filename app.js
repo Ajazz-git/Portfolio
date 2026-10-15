@@ -760,7 +760,7 @@
   });
 })();
 
-/* fix-it: a tiny choose-your-own-outage game */
+/* fix-it: a choose-your-own-outage incident console */
 (function () {
   var root = document.getElementById('fx'); if (!root) return;
   var S = [
@@ -818,39 +818,68 @@
       { q: 'Still slow after that?', o: [['Shrug', 0, 'The user will not.'], ['Check disk health and RAM; upgrade only if needed', 1, 'A cheap SSD swap beats a whole new laptop.']] }
     ], end: 'Measure before replacing. Most slow laptops need a clean-up, not a new one.' }
   );
-  var tabBar = root.querySelector('.fx-tabs');
-  S.forEach(function (s, i) { var b = document.createElement('button'); b.type = 'button'; b.className = 'chip' + (i ? '' : ' on'); b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', i ? 'false' : 'true'); b.dataset.s = i; b.textContent = s.tab; tabBar.appendChild(b); });
-  var tabs = root.querySelectorAll('.fx-tabs button'), alertEl = root.querySelector('.fx-alert'), qEl = root.querySelector('.fx-q'),
-      opts = root.querySelector('.fx-opts'), fb = root.querySelector('.fx-fb'), bar = root.querySelector('.fx-bar i');
-  var sc = 0, st = 0;
-  function show() {
-    var s = S[sc]; alertEl.textContent = s.alert; fb.textContent = ''; opts.textContent = '';
-    bar.style.width = (st / s.steps.length * 100) + '%';
-    if (st >= s.steps.length) {
-      qEl.textContent = 'Service restored ✔';
-      fb.textContent = s.end;
-      var b = document.createElement('button'); b.type = 'button'; b.textContent = 'Play again'; b.onclick = function () { st = 0; show(); }; opts.appendChild(b);
-      return;
-    }
-    var step = s.steps[st]; qEl.textContent = step.q;
-    step.o.slice().sort(function () { return Math.random() - 0.5; }).forEach(function (o) {
-      var b = document.createElement('button'); b.type = 'button'; b.textContent = o[0];
-      b.onclick = function () {
-        fb.textContent = o[2];
-        if (o[1]) { b.classList.add('good'); st++; setTimeout(show, 1500); opts.querySelectorAll('button').forEach(function (x) { x.disabled = true; }); }
-        else { b.classList.remove('bad'); void b.offsetWidth; b.classList.add('bad'); }
-      };
+  var ICO = {"The internet is gone": "M2 8.8a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0M12 20v.01M3 3l18 18", "The drive vanished": "M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z", "Can't log in": "M6 11h12v9H6zM8 11V8a4 4 0 0 1 8 0v3", "Printer": "M7 9V3h10v6M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M7 14h10v7H7z", "Wi-Fi is slow": "M4.5 10a11 11 0 0 1 15 0M8 13.5a6 6 0 0 1 8 0M12 18v.01", "Phishing email": "M3 6h18v12H3zM3 7l9 6 9-6", "Disk full": "M4 6c0-1.7 3.6-3 8-3s8 1.3 8 3-3.6 3-8 3-8-1.3-8-3zM4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6", "VPN won't connect": "M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z", "Slow laptop": "M4 5h16v11H4zM2 19h20", "Wi-Fi password": "M21 2l-2 2m-7.6 7.6a5.5 5.5 0 1 1-7.8 7.8 5.5 5.5 0 0 1 7.8-7.8zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"}, META = {"The internet is gone": ["P1", "Neha"], "The drive vanished": ["P2", "Rahul"], "Can't log in": ["P3", "Anjali"], "Printer": ["P3", "Suresh"], "Wi-Fi is slow": ["P2", "Divya"], "Phishing email": ["P1", "Meera"], "Disk full": ["P2", "the monitoring bot"], "VPN won't connect": ["P2", "Arun"], "Slow laptop": ["P3", "Fathima"], "Wi-Fi password": ["P4", "Reception"]};
+  var NS = 'http://www.w3.org/2000/svg';
+  var pick = root.querySelector('.fx-pick'), tk = root.querySelector('.fx-tk'), sev = root.querySelector('.fx-sev'), pill = root.querySelector('.fx-pill'),
+      av = root.querySelector('.fx-av'), who = root.querySelector('.fx-who'), msg = root.querySelector('.fx-msg'), steps = root.querySelector('.fx-steps'),
+      q = root.querySelector('.fx-q'), opts = root.querySelector('.fx-opts'), logEl = root.querySelector('.fx-log'), bar = root.querySelector('.fx-bar i'),
+      dtEl = document.getElementById('fx-dt'), wrEl = document.getElementById('fx-wr'), body = root.querySelector('.fx-body');
+  var sc = 0, st = 0, wrong = 0, done = {}, cards = [], gen = 0;
+  S.forEach(function (s, i) {
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'fx-card' + (i ? '' : ' on'); b.setAttribute('role', 'tab');
+    b.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="' + (ICO[s.tab] || '') + '"/></svg><b></b><em></em>';
+    b.querySelector('b').textContent = s.tab; b.querySelector('em').textContent = (META[s.tab] || ['P3'])[0] + ' INCIDENT';
+    b.addEventListener('click', function () { sc = i; start(); });
+    pick.appendChild(b); cards.push(b);
+  });
+  function health(n) { root.dataset.h = n; bar.style.width = [10, 38, 68, 100][n] + '%'; pill.textContent = ['DOWN', 'DEGRADED', 'RECOVERING', 'RESTORED'][n]; }
+  function stats() { dtEl.textContent = wrong * 5; wrEl.textContent = wrong; }
+  function start() {
+    gen++; var s = S[sc], m = META[s.tab] || ['P3', 'A user']; st = 0; wrong = 0; stats();
+    cards.forEach(function (c, i) { c.classList.toggle('on', i === sc); c.setAttribute('aria-selected', i === sc); });
+    tk.textContent = 'INC-' + (4200 + sc * 7 + 11); sev.textContent = m[0];
+    av.textContent = m[1].replace(/^the /, '').charAt(0).toUpperCase(); who.textContent = m[1];
+    msg.textContent = s.alert.replace(/^[^\w"]+\s*/, '');
+    body.querySelector('.fx-user').style.display = '';
+    render();
+  }
+  function render() {
+    var s = S[sc]; steps.textContent = ''; logEl.className = 'fx-log'; logEl.textContent = '';
+    s.steps.forEach(function (x, i) { var e = document.createElement('i'); e.className = i < st ? 'on' : (i === st ? 'cur' : ''); steps.appendChild(e); });
+    health(Math.min(3, st)); opts.textContent = '';
+    if (st >= s.steps.length) { finish(); return; }
+    var step = s.steps[st]; q.style.display = ''; opts.style.display = ''; q.textContent = step.q;
+    step.o.slice().sort(function () { return Math.random() - 0.5; }).forEach(function (o, k) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'fx-opt'; b.style.animationDelay = (0.08 * k) + 's';
+      b.innerHTML = '<kbd>' + 'AB'.charAt(k) + '</kbd><span></span>'; b.querySelector('span').textContent = o[0];
+      b.addEventListener('click', function () {
+        logEl.textContent = (o[1] ? '✓ ' : '✕ ') + o[2];
+        if (o[1]) {
+          logEl.className = 'fx-log good'; b.classList.add('good');
+          opts.querySelectorAll('.fx-opt').forEach(function (x) { x.disabled = true; if (x !== b) x.classList.add('dim'); });
+          var g = gen; setTimeout(function () { if (g !== gen) return; st++; render(); }, 1700);
+        } else {
+          wrong++; stats(); logEl.className = 'fx-log bad'; b.classList.remove('bad'); void b.offsetWidth; b.classList.add('bad'); b.disabled = true;
+        }
+      });
       opts.appendChild(b);
     });
   }
-  tabs.forEach(function (t) {
-    t.addEventListener('click', function () {
-      sc = +t.dataset.s; st = 0;
-      tabs.forEach(function (x) { var on = x === t; x.classList.toggle('on', on); x.setAttribute('aria-selected', on); });
-      show();
-    });
-  });
-  show();
+  function finish() {
+    var s = S[sc]; done[s.tab] = 1; cards[sc].classList.add('done'); health(3);
+    var rate = wrong === 0 ? 'FLAWLESS' : (wrong < 3 ? 'SMOOTH' : 'BUMPY BUT FIXED');
+    q.style.display = 'none'; opts.style.display = 'none';
+    var nxt = (sc + 1) % S.length;
+    var e = document.createElement('div'); e.className = 'fx-end';
+    e.innerHTML = '<span class="rate"></span><h3>Service restored ✔</h3><p></p><div class="btns"><button type="button" data-a="n"></button><button type="button" data-a="r">Replay this one</button></div>';
+    e.querySelector('.rate').textContent = rate + ' · ' + wrong * 5 + ' min simulated downtime';
+    e.querySelector('p').textContent = s.end; e.querySelector('[data-a="n"]').textContent = 'Next: ' + S[nxt].tab + ' →';
+    e.addEventListener('click', function (ev) { var a = ev.target.getAttribute && ev.target.getAttribute('data-a'); if (a === 'n') { sc = nxt; start(); } else if (a === 'r') start(); });
+    opts.after(e); e.id = 'fx-end'; logEl.style.display = 'none';
+    var old = root.querySelectorAll('.fx-end'); if (old.length > 1) old[0].remove();
+  }
+  var _render = render; render = function () { var e = document.getElementById('fx-end'); if (e) e.remove(); logEl.style.display = ''; _render(); };
+  start();
 })();
 
 /* network lab: hover to light up links, tap to pin, and three buttons to break things */
@@ -928,7 +957,7 @@
     return e;
   }
   function route() { return cutOn ? { a: 'M480 239 C480 212 630 215 630 187 L630 133 C630 108 480 112 480 84', x: 630 } : { a: 'M480 239 C480 212 330 215 330 187 L330 133 C330 108 480 112 480 84', x: 330 }; }
-  function lock(on) { box.querySelectorAll('.lab-bar .chip').forEach(function (b) { if (b.id !== 'lab-cut' || on) b.disabled = on; }); busy = on; }
+  function lock(on) { box.querySelectorAll('.lab-bar .chip').forEach(function (b) { b.disabled = on; }); busy = on; }
 
   document.getElementById('lab-cut').addEventListener('click', function () {
     cutOn = !cutOn; var b = this;
