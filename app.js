@@ -801,6 +801,18 @@
     ], end: 'Then I confirm with the user and write it down, so the next person fixes it in two minutes.' }
   ];
   S.push.apply(S, S.splice(0, 5));
+  S.push(
+    { tab: 'VPN won\'t connect', alert: '🔌 "I\'m working from home and the VPN just spins."', steps: [
+      { q: 'First question?', o: [['Reinstall the VPN app', 0, 'Maybe later. Check the basics before the sledgehammer.'], ['Is their home internet working, and does it fail for others too?', 1, 'Internet is fine, and nobody else is affected. So it is their connection attempt.']] },
+      { q: 'Wrong-password error, but they swear it is right.', o: [['Tell them to try harder', 0, 'Typing the same thing louder does not help.'], ['Check the account, the MFA prompt and the device clock', 1, 'Laptop clock was five minutes off, so the MFA code never matched. Fixed.']] },
+      { q: 'Connected, but the shared drive still will not open.', o: [['Reboot the whole server', 0, 'The server was never the problem.'], ['Check the firewall rule and DNS for VPN users', 1, 'The VPN group was missing a rule. Added, and the drive opens.']] }
+    ], end: 'VPN faults are usually the account, the clock or a missing rule, not the tunnel.' },
+    { tab: 'Slow laptop', alert: '🐢 "My laptop takes ten minutes to start. It is useless."', steps: [
+      { q: 'Where do you start?', o: [['Order a new laptop', 0, 'The budget would like a word.'], ['Look at what is actually using the CPU, memory and disk', 1, 'Disk at 100% and thirty things starting at login.']] },
+      { q: 'Too many startup programs, and the disk is nearly full.', o: [['Delete random files', 0, 'That is how a laptop loses the quarterly report.'], ['Trim startup apps, clear temp files, check updates', 1, 'Starts in under a minute now.']] },
+      { q: 'Still slow after that?', o: [['Shrug', 0, 'The user will not.'], ['Check disk health and RAM; upgrade only if needed', 1, 'A cheap SSD swap beats a whole new laptop.']] }
+    ], end: 'Measure before replacing. Most slow laptops need a clean-up, not a new one.' }
+  );
   var tabBar = root.querySelector('.fx-tabs');
   S.forEach(function (s, i) { var b = document.createElement('button'); b.type = 'button'; b.className = 'chip' + (i ? '' : ' on'); b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', i ? 'false' : 'true'); b.dataset.s = i; b.textContent = s.tab; tabBar.appendChild(b); });
   var tabs = root.querySelectorAll('.fx-tabs button'), alertEl = root.querySelector('.fx-alert'), qEl = root.querySelector('.fx-q'),
