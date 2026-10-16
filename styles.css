@@ -747,3 +747,21 @@ html.modal-open { overflow: hidden; }
 @media (max-width: 1000px) { .dx-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); } .dx-card:nth-child(n+4) .pk { left: 0; right: auto; transform-origin: top left; } .dx-card:nth-child(3n) .pk { left: auto; right: 0; } }
 @media (max-width: 640px) { .dx-cards { grid-template-columns: none; grid-auto-columns: 46%; } .dx-card .pk { display: none; } .dx-card h3 { min-height: 0; } .dx-card:hover { transform: none; } }
 @media (hover: none) { .dx-card .pk { display: none; } }
+
+/* docs: four up, four down */
+.dx-cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.dx-card:nth-child(n+4) .pk { left: 0; right: auto; transform-origin: top left; }
+.dx-card:nth-child(n+4) .pk::before { left: 28px; right: auto; }
+.dx-card:nth-child(4n+3) .pk, .dx-card:nth-child(4n) .pk { left: auto; right: 0; transform-origin: top right; }
+.dx-card:nth-child(4n+3) .pk::before, .dx-card:nth-child(4n) .pk::before { left: auto; right: 28px; }
+@media (max-width: 1000px) { .dx-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } .dx-card:nth-child(n) .pk { left: 0; right: auto; transform-origin: top left; } .dx-card:nth-child(2n) .pk { left: auto; right: 0; transform-origin: top right; } }
+@media (max-width: 640px) { .dx-cards { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 46%; } }
+.dx-card:hover, .dx-card:focus-visible { z-index: 8; }
+
+/* docs: eight cards, four up and four down */
+@media (min-width: 1001px) { .dx-cards { grid-template-columns: repeat(4, minmax(0, 1fr)); row-gap: 16px; }
+  .dx-card:nth-child(n+4) .pk, .dx-card .pk { left: 0; right: auto; transform-origin: top left; }
+  .dx-card:nth-child(n+4) .pk::before, .dx-card .pk::before { left: 28px; right: auto; }
+  .dx-card:nth-child(4n+3) .pk, .dx-card:nth-child(4n) .pk { left: auto; right: 0; transform-origin: top right; }
+  .dx-card:nth-child(4n+3) .pk::before, .dx-card:nth-child(4n) .pk::before { left: auto; right: 28px; } }
+@media (max-width: 1000px) and (min-width: 641px) { .dx-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } .dx-card:nth-child(n) .pk { left: 0; right: auto; } .dx-card:nth-child(2n) .pk { left: auto; right: 0; } }
