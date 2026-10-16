@@ -1076,5 +1076,21 @@
     });
     empty.hidden = n > 0;
   });
+  /* cards on the page; the full viewer opens in a dialog */
+  var dlg = document.getElementById('dx-dlg'), cards = document.getElementById('dx-cards'), lastCard = null;
+  DOCS.forEach(function (d, i) {
+    var c = el('button', 'dx-card'); c.type = 'button'; c.setAttribute('aria-haspopup', 'dialog');
+    var heads = d.blocks.filter(function (b) { return b[0] === 'h'; }).map(function (b) { return b[1]; }).slice(0, 3);
+    var items = 0; d.blocks.forEach(function (b) { if (b[0] === 'check' || b[0] === 'ol') items += b[1].length; });
+    var intro = (d.blocks.filter(function (b) { return b[0] === 'p'; })[0] || ['', ''])[1];
+    c.innerHTML = '<div class="ct"><div class="ci"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="' + d.ic + '"/></svg></div><span class="ck"></span></div><h3></h3><p></p><div class="cs"></div><div class="co">OPEN DOCUMENT <i aria-hidden="true">↗</i></div>';
+    c.querySelector('.ck').textContent = d.kind.toUpperCase(); c.querySelector('h3').textContent = d.name; c.querySelector('p').textContent = intro;
+    var cs = c.querySelector('.cs'); heads.forEach(function (x) { cs.appendChild(el('span', '', x)); }); if (items) cs.appendChild(el('span', '', items + ' steps'));
+    c.addEventListener('click', function () { lastCard = c; open(i); if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', ''); doc.scrollTop = 0; });
+    cards.appendChild(c);
+  });
+  document.getElementById('dx-x').addEventListener('click', function () { dlg.close(); });
+  dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+  dlg.addEventListener('close', function () { if (lastCard) lastCard.focus(); });
   open(0);
 })();
