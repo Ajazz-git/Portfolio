@@ -1001,3 +1001,80 @@
   function center() { sc.scrollLeft = (sc.scrollWidth - sc.clientWidth) / 2; }
   center(); window.addEventListener('load', center);
 })();
+
+/* documentation samples: a small docs viewer */
+(function () {
+  var list = document.getElementById('dx-list'); if (!list) return;
+  var DOCS = [{"id": "onb", "ic": "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM19 8v6M22 11h-6", "name": "New user onboarding", "kind": "SOP", "ver": "v1.3", "blocks": [["p", "Get a new joiner productive on day one: account, device, access and a friendly hand-over."], ["meta", ["Owner", "IT support"], ["Audience", "IT team"], ["Time", "about 45 min"]], ["h", "Before day one"], ["check", ["Get the request form from HR: name, role, manager, start date", "Create the account and a temporary password", "Add them to the right groups for their team (access follows role, not favours)", "Prepare the device: updates, security tools, disk encryption on", "Create the mailbox and add to the relevant mailing lists"]], ["note", "warn", "Never send the temporary password and the username in the same message."], ["h", "On day one"], ["ol", ["Hand over the device and walk through first sign-in", "Enrol multi-factor sign-in on their phone and test it together", "Show them how to raise a ticket, and who to call if it is urgent", "Check printer, shared drive and VPN (if they need it) actually work for them"]], ["h", "Afterwards"], ["ul", ["Log the setup in the ticket and the asset list", "Check in after a week: anything missing or annoying?"]], ["note", "note", "If the checklist keeps growing, it belongs in the HR form, not in IT heads."]]}, {"id": "off", "ic": "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM17 8l5 5M22 8l-5 5", "name": "Offboarding", "kind": "SOP", "ver": "v1.1", "blocks": [["p", "Close access cleanly the moment someone leaves, without losing anything the business needs."], ["meta", ["Owner", "IT support"], ["Trigger", "HR leaving notice"], ["Time", "about 30 min"]], ["note", "warn", "Disable first, delete later. A disabled account can be undone. A deleted one often cannot."], ["h", "On the last day"], ["check", ["Disable the account and sign out all active sessions", "Reset the password and remove multi-factor devices", "Remove from groups, mailing lists and remote access", "Collect the laptop, phone and any badges. Tick them off the asset list", "Forward the mailbox to the manager for an agreed period"]], ["h", "Within a month"], ["ol", ["Copy any data the manager needs, then confirm in writing", "Wipe and re-image the returned device", "Delete the account only after the retention period"]], ["table", ["Item", "Who decides"], [["Mailbox forwarding length", "Manager + HR"], ["Data to keep", "Manager"], ["Final deletion", "IT, after retention"]]]]}, {"id": "net", "ic": "M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M18 6l-2.5 2.5M8.5 15.5L6 18", "name": "Network summary", "kind": "Overview", "ver": "v2.0", "blocks": [["p", "A one-page map of how a typical office network is laid out, so anyone can find their way around in five minutes."], ["meta", ["Owner", "IT"], ["Audience", "IT team, new admins"], ["Review", "every 6 months"]], ["h", "Layout"], ["ul", ["Two internet lines: one main, one backup that takes over automatically or by a quick manual switch", "One firewall at the edge doing routing, filtering and the VPN", "One core switch feeding wired desks, Wi-Fi access points and servers", "Each site has its own separate networks (VLANs) for wired and Wi-Fi"]], ["h", "Networks"], ["table", ["Network", "Used for", "Rule of thumb"], [["Wired", "Desks, printers", "Fixed addresses for printers and key devices"], ["Wi-Fi", "Staff and guests", "Guests never see internal systems"], ["Servers", "Files, accounts, backup", "Only IT and approved services reach it"], ["Branch (VPN)", "Second site", "Joined by an encrypted tunnel"]]], ["note", "note", "If you change anything here, update this page the same day."], ["h", "When the internet drops"], ["ol", ["Check whether it is everyone or one person", "Check the router and the main line", "Fail over to the backup line", "Raise it with the provider with times and evidence", "Write it up (see the incident report)"]]]}, {"id": "inc", "ic": "M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01", "name": "Incident report: internet outage", "kind": "Report", "ver": "sample", "blocks": [["p", "A sample of how I write up an incident: short, blameless and focused on what changes next time."], ["meta", ["Severity", "High (whole office)"], ["Status", "Resolved"], ["Type", "Provider line failure"]], ["h", "Summary"], ["p", "The main internet line dropped and the whole office lost access. Traffic was moved to the backup line, and the provider fixed the main line later the same day."], ["h", "Timeline"], ["table", ["When", "What happened"], [["T+0", "Users report no internet. Confirmed it is everyone, wired and Wi-Fi"], ["T+5 min", "Router reachable. Main line shows down"], ["T+10 min", "Traffic moved to the backup line. Service back"], ["T+30 min", "Ticket raised with the provider, with times and line status"], ["Later", "Provider restores the main line. Switched back and tested"]]], ["h", "Root cause"], ["p", "A fault on the provider side of the main line. Nothing inside the office was at fault."], ["h", "What we will do next time"], ["check", ["Add an alert when the main line drops, so we hear before users do", "Keep the failover steps in a one-page checklist at the front of the runbook", "Review the provider's response time against the agreed service level"]], ["note", "note", "Sample for illustration. It does not describe a specific company or event."]]}, {"id": "bak", "ic": "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3", "name": "Backup and restore", "kind": "Runbook", "ver": "v1.2", "blocks": [["p", "A backup that has never been restored is only a hope. This runbook covers what is backed up, how often, and how I prove it works."], ["meta", ["Owner", "IT"], ["Test", "every quarter"], ["Rule", "3 copies, 2 places, 1 offsite"]], ["h", "What gets backed up"], ["table", ["Data", "How often", "Kept for"], [["File shares", "Daily", "Weeks, with monthly copies"], ["Servers and databases", "Daily", "Weeks"], ["Configurations (firewall, switches)", "After every change", "Latest 10 versions"]]], ["h", "Check it every morning"], ["ol", ["Open the backup status report", "Look for failed or skipped jobs", "Rerun anything that failed and note why in the ticket"]], ["h", "Restore test"], ["check", ["Pick a random file and a random server", "Restore them to a safe test location", "Check they open and the data is correct", "Record the time it took and any surprises"]], ["note", "warn", "Never restore over live data first. Restore alongside, check it, then swap."]]}];
+  var doc = document.getElementById('dx-doc'), q = document.getElementById('dx-q'), empty = document.getElementById('dx-empty'), cur = 0, btns = [];
+  function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt !== undefined) e.textContent = txt; return e; }
+  function md(d) {
+    var o = '# ' + d.name + '\n\n';
+    d.blocks.forEach(function (b) {
+      var t = b[0];
+      if (t === 'p') o += b[1] + '\n\n';
+      else if (t === 'h') o += '## ' + b[1] + '\n\n';
+      else if (t === 'ul') o += b[1].map(function (x) { return '- ' + x; }).join('\n') + '\n\n';
+      else if (t === 'ol') o += b[1].map(function (x, i) { return (i + 1) + '. ' + x; }).join('\n') + '\n\n';
+      else if (t === 'check') o += b[1].map(function (x) { return '- [ ] ' + x; }).join('\n') + '\n\n';
+      else if (t === 'note') o += '> **' + (b[1] === 'warn' ? 'Warning' : 'Note') + ':** ' + b[2] + '\n\n';
+      else if (t === 'meta') o += b.slice(1).map(function (m) { return '**' + m[0] + ':** ' + m[1]; }).join(' | ') + '\n\n';
+      else if (t === 'table') { o += '| ' + b[1].join(' | ') + ' |\n|' + b[1].map(function () { return '---'; }).join('|') + '|\n'; b[2].forEach(function (r) { o += '| ' + r.join(' | ') + ' |\n'; }); o += '\n'; }
+    });
+    return o;
+  }
+  function open(i) {
+    cur = i; var d = DOCS[i];
+    btns.forEach(function (b, k) { b.classList.toggle('on', k === i); b.setAttribute('aria-current', k === i ? 'page' : 'false'); });
+    var a = doc.cloneNode(false); a.id = 'dx-doc';
+    var head = el('div', 'dx-head'); head.appendChild(el('span', 'dx-tag', d.kind.toUpperCase())); head.appendChild(el('span', 'dx-ver', d.ver));
+    var cp = el('button', 'dx-copy', 'copy as markdown'); cp.type = 'button';
+    cp.addEventListener('click', function () {
+      var done = function () { cp.textContent = 'copied ✔'; setTimeout(function () { cp.textContent = 'copy as markdown'; }, 1600); };
+      try { navigator.clipboard.writeText(md(d)).then(done, done); } catch (e) { done(); }
+    });
+    head.appendChild(cp); a.appendChild(head); a.appendChild(el('h3', 'dx-t', d.name));
+    d.blocks.forEach(function (b) {
+      var t = b[0], n;
+      if (t === 'p') a.appendChild(el('p', '', b[1]));
+      else if (t === 'h') a.appendChild(el('h4', '', b[1]));
+      else if (t === 'ul' || t === 'ol') { n = el(t); b[1].forEach(function (x) { n.appendChild(el('li', '', x)); }); a.appendChild(n); }
+      else if (t === 'note') { n = el('div', 'dx-note' + (b[1] === 'warn' ? ' warn' : '')); n.appendChild(el('b', '', b[1] === 'warn' ? 'WARNING' : 'NOTE')); n.appendChild(el('span', '', b[2])); a.appendChild(n); }
+      else if (t === 'meta') { n = el('div', 'dx-meta'); b.slice(1).forEach(function (m) { var c = el('div'); c.appendChild(el('span', '', m[0])); c.appendChild(el('b', '', m[1])); n.appendChild(c); }); a.appendChild(n); }
+      else if (t === 'table') {
+        n = el('table', 'dx-table'); var th = el('thead'), tr = el('tr'); b[1].forEach(function (x) { tr.appendChild(el('th', '', x)); }); th.appendChild(tr); n.appendChild(th);
+        var tb = el('tbody'); b[2].forEach(function (r) { var rr = el('tr'); r.forEach(function (x) { rr.appendChild(el('td', '', x)); }); tb.appendChild(rr); }); n.appendChild(tb);
+        var w = el('div'); w.style.overflowX = 'auto'; w.appendChild(n); a.appendChild(w);
+      } else if (t === 'check') {
+        var pr = el('div', 'dx-prog'), bar = el('div'), fill = el('i'), lab = el('span', '', '0 / ' + b[1].length); bar.appendChild(fill); pr.appendChild(bar); pr.appendChild(lab);
+        n = el('div', 'dx-check'); var boxes = [];
+        b[1].forEach(function (x) {
+          var l = el('label'), c = el('input'); c.type = 'checkbox'; boxes.push(c);
+          c.addEventListener('change', function () {
+            l.classList.toggle('done', c.checked);
+            var k = boxes.filter(function (z) { return z.checked; }).length; fill.style.width = (k / boxes.length * 100) + '%'; lab.textContent = k === boxes.length ? 'all done ✔' : k + ' / ' + boxes.length;
+          });
+          l.appendChild(c); l.appendChild(el('span', '', x)); n.appendChild(l);
+        });
+        a.appendChild(pr); a.appendChild(n);
+      }
+    });
+    doc.replaceWith(a); doc = a;
+  }
+  DOCS.forEach(function (d, i) {
+    var b = el('button', 'dx-item'); b.type = 'button';
+    b.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="' + d.ic + '"/></svg><span><b></b><em></em></span>';
+    b.querySelector('b').textContent = d.name; b.querySelector('em').textContent = d.kind.toUpperCase() + ' · ' + d.ver;
+    b.addEventListener('click', function () { open(i); });
+    list.appendChild(b); btns.push(b);
+  });
+  q.addEventListener('input', function () {
+    var v = q.value.trim().toLowerCase(), n = 0;
+    DOCS.forEach(function (d, i) {
+      var hit = !v || (d.name + ' ' + d.kind + ' ' + JSON.stringify(d.blocks)).toLowerCase().indexOf(v) > -1;
+      btns[i].style.display = hit ? '' : 'none'; if (hit) n++;
+    });
+    empty.hidden = n > 0;
+  });
+  open(0);
+})();
