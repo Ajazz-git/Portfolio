@@ -676,15 +676,16 @@
   var C = {
     help: function () {
       return [
-        'Commands:',
-        '  whoami       who I am',
-        '  skills       what I work with, and how well',
-        '  experience   where I have worked',
-        '  resume       my resume',
-        '  contact      how to reach me',
-        '  location     where I am based',
-        '  ls           list the pages',
-        '  clear        clear the screen'
+        'About me:',
+        '  whoami  skills  experience  resume  contact  location',
+        'Look around:',
+        '  ls  pwd  cd <place>  cat <file>  open <place>',
+        'System:',
+        '  date  uname  uptime  ping  ifconfig  neofetch  history  echo',
+        'Fun:',
+        '  tetris  fortune  packet  theme',
+        'Other:',
+        '  clear  (Tab completes, arrows recall)'
       ];
     },
     whoami: function () { return ['Ajas Muhammed, IT Specialist and Systems Administrator.']; },
@@ -723,8 +724,78 @@
         [{ text: 'about/', href: 'index.html#about' }, '  ', { text: 'experience/', href: 'index.html#experience' }, '  ', { text: 'skills/', href: 'index.html#skills' }, '  ', { text: 'resume/', href: 'index.html#resume' }, '  ', { text: 'contact/', href: 'index.html#contact' }],
         'case-studies/  (in progress)'
       ];
-    }
+    },
+    pwd: function () { return ['/home/ajas']; },
+    hostname: function () { return ['kochi']; },
+    id: function () { return ['uid=1000(ajas) gid=1000(ajas) groups=1000(ajas),27(sudo),999(coffee)']; },
+    date: function () { return [new Date().toString()]; },
+    uname: function () { return ['Linux kochi 6.1.0-packet #1 SMP x86_64 GNU/Linux']; },
+    uptime: function () { return ['up since June 2023, 3 jobs, load average: 0.42, 0.37, 0.31', 'no reboots without a change window.']; },
+    ifconfig: function () {
+      return ['eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500', '      inet 192.168.1.10  netmask 255.255.255.0  broadcast 192.168.1.255', '      status: connected, firewall: on, VPN: ready'];
+    },
+    neofetch: function () {
+      return [
+        '   .--.      ajas@kochi', '  |o_o |     ---------', '  |:_/ |     OS: Windows, Linux, macOS (all three)', ' //   \\ \\    Role: IT Specialist', '(|     | )   Shell: bash, PowerShell, patience',
+        "/'\\_   _/`\\   Uptime: since 2023", '\\___)=(___/   Mascot: Packet the penguin'
+      ];
+    },
+    fortune: function () {
+      return [pick(['Have you tried turning it off and on again?', 'It is always DNS. Except when it is the cable.', 'Back up before you fix it. Always.', 'The best outage is the one users never notice.', 'Document it now, thank yourself at 2 a.m.', 'A reboot fixes everything except understanding.'])];
+    },
+    theme: function () { var b = document.getElementById('theme'); if (b) b.click(); return ['Theme switched.']; },
+    packet: function () { var b = document.querySelector('.pk-call'); if (b && !b.hidden && b.offsetParent) { setTimeout(function () { b.click(); }, 250); return ['Calling Packet...']; } return ['Packet is off. Turn him on with the packet button up top.']; },
+    history: function () { return hist.length ? hist.map(function (h, n) { return '  ' + (n + 1) + '  ' + h; }) : ['(empty)']; },
+    tetris: function () { return startGame(); },
+    play: function () { return startGame(); },
+    exit: function () { return ['There is no escape. Try the Contact button instead.']; },
+    rm: function () { return ['rm: permission denied. Packet guards this server.']; },
+    sudo: function () { return ['ajas is not in the sudoers file. This incident will be reported.']; }
   };
+  C.ls = (function (old) { return function () { var r = old(); r.splice(1, 0, 'summary.txt  skills.txt  about.txt  readme.md'); return r; }; })(C.ls);
+  var FILES = {
+    'summary.txt': ['Working in IT since 2023. From the support desk to systems administration: networks, servers, endpoints, backups and monitoring.'],
+    'skills.txt': null, 'about.txt': ['IT specialist based in Kochi. I look after the networks, servers, devices and accounts that keep an office running, across Windows, Linux and macOS.'],
+    'readme.md': ['This is a portfolio built as a network. Poke around: try tetris, or call Packet.']
+  };
+  var PLACES = ['home', 'about', 'experience', 'skills', 'roadmap', 'fixit', 'lab', 'docs', 'resume', 'contact'];
+  function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+  function goTo(p) { var t = document.getElementById(p); if (t) t.scrollIntoView({ behavior: 'smooth' }); }
+  var ARGS = {
+    echo: function (a) { return [a.join(' ')]; },
+    cat: function (a) {
+      if (!a.length) return ['cat: missing file. Try cat summary.txt'];
+      var f = a[0].toLowerCase();
+      if (f === 'skills.txt') return C.skills();
+      return FILES.hasOwnProperty(f) ? FILES[f] : ['cat: ' + a[0] + ': No such file'];
+    },
+    cd: function (a) {
+      var p = (a[0] || '~').replace(/\/$/, '').toLowerCase();
+      if (p === '~' || p === '..' || p === '') { goTo('home'); return []; }
+      if (p === 'fix-it' || p === 'fix') p = 'fixit';
+      if (PLACES.indexOf(p) < 0) return ['cd: ' + a[0] + ': No such directory. Try ls'];
+      goTo(p); return ['Heading to ' + p + '...'];
+    },
+    open: function (a) { return ARGS.cd(a); },
+    ping: function (a) {
+      var h = a[0] || 'ajasmhd.in', r = [];
+      r.push('PING ' + h + ' 56 bytes of data');
+      for (var i = 0; i < 4; i++) r.push('64 bytes from ' + h + ': icmp_seq=' + (i + 1) + ' ttl=58 time=' + (8 + Math.random() * 9).toFixed(1) + ' ms');
+      r.push('4 packets sent, 4 received, 0% loss');
+      r.slow = true; return r;
+    },
+    man: function (a) { return [a.length ? 'No manual entry for ' + a[0] + '. Try help.' : 'What manual page do you want?']; }
+  };
+  function startGame() {
+    if (!window.Tetris) return ['The game did not load. Try reloading.'];
+    var term = document.getElementById('term');
+    form.hidden = true;
+    window.Tetris.start(term, function (sc) {
+      form.hidden = false; input.focus({ preventScroll: true });
+      add('res', ['tetris: final score ' + (sc || 0) + '. Type tetris to play again.']);
+    });
+    return ['Starting tetris... arrows to move, up to rotate, space to slam, Q to quit.'];
+  }
 
   var hist = [];
   var hi = 0;
@@ -735,13 +806,17 @@
     hist.push(cmd);
     hi = hist.length;
     add('line', [{ cls: 'ps', text: '$ ' }, cmd]);
-    var key = cmd.toLowerCase();
+    var parts = cmd.split(/\s+/), key = parts[0].toLowerCase(), args = parts.slice(1);
+    if (key === 'sudo' && /rm\s+-rf?\s+\//.test(cmd)) { add('res', ['Nice try. Packet is watching.']); return; }
     if (key === 'clear') { out.innerHTML = ''; return; }
-    if (C.hasOwnProperty(key)) {
-      C[key]().forEach(function (ln) { add('res', Array.isArray(ln) ? ln : [ln]); });
-    } else {
-      add('res', ['command not found: ' + cmd + '. Type help to see the commands.']);
-    }
+    var lines = null;
+    if (ARGS.hasOwnProperty(key)) lines = ARGS[key](args);
+    else if (key === 'ls' && args.length) lines = C.ls();
+    else if (C.hasOwnProperty(key)) lines = C[key]();
+    if (!lines) { add('res', ['command not found: ' + parts[0] + '. Type help to see the commands.']); return; }
+    var put = function (ln) { add('res', Array.isArray(ln) ? ln : [ln]); };
+    if (lines.slow) { lines.forEach(function (ln, n) { setTimeout(function () { put(ln); }, n * 330); }); }
+    else lines.forEach(put);
   }
 
   form.addEventListener('submit', function (e) {
@@ -750,6 +825,13 @@
     input.value = '';
   });
   input.addEventListener('keydown', function (e) {
+    if (e.key === 'Tab' && input.value && input.value.indexOf(' ') < 0) {
+      var v = input.value.toLowerCase(), names = Object.keys(C).concat(Object.keys(ARGS), ['clear']);
+      var m = names.filter(function (n) { return n.indexOf(v) === 0; });
+      if (m.length === 1) { e.preventDefault(); input.value = m[0]; }
+      else if (m.length > 1) { e.preventDefault(); add('res', [m.join('  ')]); }
+      return;
+    }
     if (e.key === 'ArrowUp' && hist.length) {
       e.preventDefault();
       hi = Math.max(0, hi - 1);
