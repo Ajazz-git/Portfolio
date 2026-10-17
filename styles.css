@@ -806,11 +806,6 @@ html.modal-open { overflow: hidden; }
 @media (min-width: 761px) and (max-width: 1400px) { .dd-b { padding-inline: 7px; font-size: 12.5px; } }
 @media (max-width: 760px) { .nav { overflow: visible; flex-wrap: wrap; } .dd-b { font-size: 12px; padding: 6px 8px; } .dd-m { left: auto; right: auto; } }
 
-.pk-call { position: fixed; right: 16px; bottom: 16px; z-index: 12; display: flex; align-items: center; gap: 8px; padding: 8px 14px 8px 10px; font: 12px var(--font-mono); color: var(--accent); background: color-mix(in srgb, var(--panel) 70%, transparent); border: 1px solid var(--line); border-radius: 999px; cursor: pointer; opacity: 0.5; backdrop-filter: blur(4px); transition: opacity 0.25s, transform 0.25s, box-shadow 0.25s, border-color 0.25s; }
-.pk-call:hover, .pk-call:focus-visible { opacity: 1; transform: translateY(-2px); border-color: var(--accent); box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 45%, transparent); }
-.pk-call svg { transition: transform 0.3s; }
-.pk-call:hover svg { transform: rotate(-8deg) scale(1.12); }
-.pk-call.away, .pk-call[hidden] { display: none; }
 .pk-chat { position: fixed; right: 16px; bottom: 16px; z-index: 15; width: min(300px, calc(100vw - 32px)); display: grid; gap: 10px; padding: 12px; background: var(--panel); border: 1px solid var(--accent); border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), 0 0 18px color-mix(in srgb, var(--accent) 25%, transparent); opacity: 0; transform: translateY(12px); transition: opacity 0.25s, transform 0.25s; }
 .pk-chat[hidden] { display: none; }
 .pk-chat.show { opacity: 1; transform: none; }
@@ -837,3 +832,26 @@ html.modal-open { overflow: hidden; }
 .tt-msg { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; background: color-mix(in srgb, var(--panel) 82%, transparent); text-align: center; cursor: pointer; }
 .tt-msg[hidden] { display: none; }
 .tt-msg b { color: var(--accent); font-size: 18px; letter-spacing: 0.15em; text-transform: uppercase; }
+
+.pk-call { position: fixed; right: 18px; bottom: 18px; z-index: 12; width: 70px; height: 70px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--accent); cursor: pointer; opacity: 0.62; transition: opacity 0.25s, transform 0.3s cubic-bezier(.2,.9,.3,1.4); -webkit-tap-highlight-color: transparent; }
+.pk-call:hover, .pk-call:focus-visible { opacity: 1; transform: translateY(-3px) scale(1.1); outline: none; }
+.pk-call.away, .pk-call[hidden] { display: none; }
+.pk-glass { position: absolute; inset: 7px; border-radius: 50%; overflow: hidden; border: 1.6px solid var(--accent); background: radial-gradient(circle at 34% 28%, color-mix(in srgb, var(--accent) 32%, var(--panel)), var(--panel) 72%); box-shadow: inset 0 0 14px color-mix(in srgb, var(--accent) 35%, transparent), 0 6px 18px rgba(0,0,0,.28); transition: box-shadow 0.3s; }
+.pk-call:hover .pk-glass, .pk-call:focus-visible .pk-glass { box-shadow: inset 0 0 14px color-mix(in srgb, var(--accent) 45%, transparent), 0 0 22px color-mix(in srgb, var(--accent) 65%, transparent); }
+.pk-head { position: absolute; left: -17%; top: 12%; width: 136%; height: auto; transition: transform 0.3s; animation: pkbob 3.2s ease-in-out infinite; transform-origin: 50% 80%; }
+.pk-call:hover .pk-head, .pk-call:focus-visible .pk-head { transform: rotate(-7deg) scale(1.08); animation-play-state: paused; }
+.pk-ring { position: absolute; inset: 0; border-radius: 50%; border: 1.5px dashed var(--accent); opacity: 0.6; animation: pkspin 16s linear infinite; }
+.pk-ping { position: absolute; inset: 7px; border-radius: 50%; border: 1.5px solid var(--accent); opacity: 0; animation: pkping 3s ease-out infinite; }
+.pk-dot { position: absolute; top: 6px; right: 6px; width: 11px; height: 11px; border-radius: 50%; background: var(--accent); border: 2px solid var(--bg); box-shadow: 0 0 8px var(--accent); animation: pkdot 1.8s ease-in-out infinite; }
+.pk-tip { position: absolute; right: calc(100% + 8px); top: 50%; transform: translate(8px, -50%); padding: 7px 11px; font: 12px var(--font-mono); white-space: nowrap; color: var(--fg); background: var(--panel); border: 1px solid var(--accent); border-radius: 12px 12px 3px 12px; opacity: 0; pointer-events: none; transition: opacity 0.25s, transform 0.25s; animation: pkhint 5.5s ease 3.5s 1 both; }
+.pk-call:hover .pk-tip, .pk-call:focus-visible .pk-tip { opacity: 1; transform: translate(0, -50%); animation: none; }
+.pk-call .eyes .blinker > g { display: none; }
+.pk-call[data-mood="normal"] .eyes .blinker > [data-m="normal"], .pk-call[data-mood="happy"] .eyes .blinker > [data-m="happy"], .pk-call[data-mood="wink"] .eyes .blinker > [data-m="wink"], .pk-call[data-mood="surprised"] .eyes .blinker > [data-m="surprised"] { display: inline; }
+.pk-call .eyes .blinker { transform-box: fill-box; transform-origin: 50% 55%; animation: blink 4.8s infinite; }
+@keyframes pkbob { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-2.5px) rotate(2deg); } }
+@keyframes pkspin { to { transform: rotate(360deg); } }
+@keyframes pkping { 0% { opacity: 0.7; transform: scale(1); } 100% { opacity: 0; transform: scale(1.45); } }
+@keyframes pkdot { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.25); } }
+@keyframes pkhint { 0% { opacity: 0; transform: translate(8px, -50%); } 12%, 82% { opacity: 1; transform: translate(0, -50%); } 100% { opacity: 0; transform: translate(8px, -50%); } }
+@media (max-width: 760px) { .pk-call { width: 60px; height: 60px; right: 12px; bottom: 12px; } .pk-call .pk-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .pk-call *, .pk-call { animation: none !important; } }

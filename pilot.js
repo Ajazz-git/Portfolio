@@ -787,7 +787,19 @@
   var callBtn = document.createElement('button');
   callBtn.type = 'button'; callBtn.className = 'pk-call';
   callBtn.setAttribute('aria-label', 'Call Packet the penguin to chat');
-  callBtn.innerHTML = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><ellipse cx="12" cy="13" rx="8" ry="9" fill="#0b1a12" stroke="currentColor" stroke-width="1.4"/><ellipse cx="12" cy="15" rx="5" ry="6" fill="#e9fff2"/><circle cx="9.6" cy="10.2" r="1.3" fill="#0b1a12"/><circle cx="14.4" cy="10.2" r="1.3" fill="#0b1a12"/><path d="M10.4 12.4h3.2L12 14.2z" fill="#ffb347"/></svg><span>talk to Packet</span>';
+  var AVHEAD = HEAD.replace('class="lyr pheadf" viewBox="0 0 140 100"', 'class="pk-head" viewBox="34 0 68 40"');
+  callBtn.setAttribute('data-mood', 'normal');
+  callBtn.innerHTML = '<span class="pk-ping" aria-hidden="true"></span><span class="pk-ring" aria-hidden="true"></span><span class="pk-glass" aria-hidden="true">' + AVHEAD + '</span><span class="pk-dot" aria-hidden="true"></span><span class="pk-tip" aria-hidden="true">psst... talk to me</span>';
+  var avT = 0;
+  function avMood(m) { callBtn.setAttribute('data-mood', m); }
+  callBtn.addEventListener('pointerenter', function () { clearTimeout(avT); avMood('surprised'); avT = setTimeout(function () { avMood('happy'); }, 320); });
+  callBtn.addEventListener('pointerleave', function () { clearTimeout(avT); avMood('normal'); });
+  callBtn.addEventListener('focus', function () { avMood('happy'); });
+  callBtn.addEventListener('blur', function () { avMood('normal'); });
+  setInterval(function () {
+    if (callBtn.hidden || document.hidden || callBtn.matches(':hover, :focus-visible')) return;
+    avMood('wink'); setTimeout(function () { if (!callBtn.matches(':hover')) avMood('normal'); }, 750);
+  }, 7000);
   var chat = document.createElement('div');
   chat.className = 'pk-chat'; chat.hidden = true;
   chat.setAttribute('role', 'dialog'); chat.setAttribute('aria-label', 'Chat with Packet');
