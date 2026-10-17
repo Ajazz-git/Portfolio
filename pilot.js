@@ -779,99 +779,210 @@
     mouse.x = e.clientX; mouse.y = e.clientY; mouse.t = performance.now();
   }, { passive: true });
 
-  /* ---- call button and chat ---- */
+  /* ---- call avatar and chat ---- */
   var ME = "I'm Packet, a penguin who lives in this network. I carry data around and keep Ajas's site tidy. 🐧";
-  var AJAS = "Ajas is an IT specialist in Kochi: networks, servers, devices and accounts, on Windows, Linux and macOS.";
-  var JOKES = ["Why did the router go to therapy? Too many connection issues.", "There are 10 kinds of people: those who know binary and those who don't.", "It's not DNS. There's no way it's DNS. ...It was DNS.", "A SQL query walks into a bar, sees two tables and asks: can I join you?", "I would tell you a UDP joke, but you might not get it."];
-  var BYE = ['See you around! 🐧', 'Back to my rounds. ping me anytime!', 'Bye! Mind the cables.'];
+  var AJAS = "Ajas is an IT specialist in Kochi: networks, servers, devices and accounts, on Windows, Linux and macOS. He keeps offices running.";
+  var JOKES = ["Why did the router go to therapy? Too many connection issues.", "There are 10 kinds of people: those who know binary and those who don't.", "It's not DNS. There's no way it's DNS. ...It was DNS.", "A SQL query walks into a bar, sees two tables and asks: can I join you?", "I would tell you a UDP joke, but you might not get it.", "My other computer is a data center. 🐧"];
+  var BYE = ['See you around! 🐧', 'Back to my rounds. Ping me anytime!', 'Bye! Mind the cables.'];
+  var FISHL = ['Nom nom nom 🐟', 'Ooh, fresh! Thank you!', 'That one was salmon. Fancy!', '*gulp* ...more?', 'Best. Human. Ever.'];
+  var TOUR = [
+    ['about', 'This is the human behind the keyboard. Short, honest, no buzzwords.'],
+    ['experience', 'Four roles, from the support desk to senior admin. Tap one for the story.'],
+    ['skills', 'What he uses every day, and what he is still learning. Try the skill map!'],
+    ['roadmap', 'Learning, working, daily: where each skill sits today.'],
+    ['fixit', 'Packet Park starts here. Real help-desk problems. Pick the right call, or cause downtime. 😬'],
+    ['lab', 'A tiny network you can poke. Go on, cut the ISP line. I dare you.'],
+    ['docs', 'Sample runbooks and checklists. The boring stuff, done properly.'],
+    ['contact', 'And this is where you say hi. He replies. 🐧']
+  ];
+  var WHERE = { home: "This is the front door. Try the terminal: type help, or tetris!", about: TOUR[0][1], experience: TOUR[1][1], skills: TOUR[2][1], roadmap: TOUR[3][1], fixit: TOUR[4][1], lab: TOUR[5][1], docs: TOUR[6][1], resume: 'The resume lives here. Ajas is still polishing it, so check back soon. 📄', contact: TOUR[7][1] };
+  var NAMEOF = { home: 'Home', about: 'About', experience: 'Experience', skills: 'Skills', roadmap: 'Roadmap', fixit: 'Fix it', lab: 'Network lab', docs: 'Docs', resume: 'Resume', contact: 'Contact' };
+
+  function mkAv() {
+    var I = '#101c2b', BD = '#243b55', W = '#fdfdf5';
+    var eye = function (x, rx, ry, hl) { return '<ellipse cx="' + x + '" cy="48" rx="' + rx + '" ry="' + ry + '" fill="' + I + '"/><circle cx="' + (x + 2.3) + '" cy="' + (48 - ry * 0.45) + '" r="' + hl + '" fill="#fff"/><circle cx="' + (x - 2) + '" cy="' + (48 + ry * 0.5) + '" r="1.1" fill="#fff"/>'; };
+    var arc = function (x) { return '<path d="M' + (x - 6) + ' 50 Q' + x + ' 41.5 ' + (x + 6) + ' 50" stroke="' + I + '" stroke-width="3" fill="none" stroke-linecap="round"/>'; };
+    var heart = function (x) { return '<path d="M' + x + ' 55 C' + (x - 8) + ' 49 ' + (x - 6.5) + ' 41 ' + x + ' 45 C' + (x + 6.5) + ' 41 ' + (x + 8) + ' 49 ' + x + ' 55Z" fill="#ff6fa8"/>'; };
+    return '<svg class="pk-svg" viewBox="0 0 100 100" focusable="false" aria-hidden="true"><g class="av-body">'
+      + '<g class="fl fl1"><ellipse cx="13" cy="70" rx="7" ry="14" transform="rotate(16 13 70)" fill="' + BD + '" stroke="' + I + '" stroke-width="2"/></g>'
+      + '<g class="fl fl2"><ellipse cx="87" cy="70" rx="7" ry="14" transform="rotate(-16 87 70)" fill="' + BD + '" stroke="' + I + '" stroke-width="2"/></g>'
+      + '<ellipse cx="50" cy="86" rx="27" ry="17" fill="' + BD + '" stroke="' + I + '" stroke-width="2"/><ellipse cx="50" cy="88" rx="17" ry="12" fill="' + W + '"/>'
+      + '<circle cx="50" cy="48" r="35" fill="' + BD + '" stroke="' + I + '" stroke-width="2"/>'
+      + '<path d="M50 39 C44 28 24 30 24 50 C24 67 40 75 50 75 C60 75 76 67 76 50 C76 30 56 28 50 39Z" fill="' + W + '"/>'
+      + '<ellipse cx="29" cy="60" rx="5.5" ry="3.4" fill="#ff8fab" opacity=".6"/><ellipse cx="71" cy="60" rx="5.5" ry="3.4" fill="#ff8fab" opacity=".6"/>'
+      + '<g class="pp"><g class="blk" data-m="normal">' + eye(38, 6, 7.6, 2.4) + eye(62, 6, 7.6, 2.4) + '</g>'
+      + '<g data-m="surprised">' + eye(38, 7, 9, 2.8) + eye(62, 7, 9, 2.8) + '</g></g>'
+      + '<g data-m="happy">' + arc(38) + arc(62) + '</g>'
+      + '<g data-m="wink">' + eye(38, 6, 7.6, 2.4) + arc(62) + '</g>'
+      + '<g data-m="love">' + heart(38) + heart(62) + '</g>'
+      + '<g data-m="sleepy"><path d="M32 50 H44 M56 50 H68" stroke="' + I + '" stroke-width="3" stroke-linecap="round"/><text x="74" y="36" font-size="11" font-family="monospace" font-weight="700" fill="' + I + '" class="zz">z</text></g>'
+      + '<path d="M43.5 57 Q50 52 56.5 57 Q55.5 65 50 66.5 Q44.5 65 43.5 57Z" fill="#ffb02e" stroke="' + I + '" stroke-width="1.6" stroke-linejoin="round"/>'
+      + '<path d="M46.5 57.5 Q50 55.3 53.5 57.5" stroke="#fff" stroke-opacity=".65" stroke-width="1.3" fill="none" stroke-linecap="round"/>'
+      + '<path class="smile" d="M44.5 70 Q50 75 55.5 70" stroke="' + I + '" stroke-width="2" fill="none" stroke-linecap="round"/>'
+      + '<path d="M21 77 Q50 94 79 77 L82 86 Q50 103 18 86Z" fill="#ff5d4a" stroke="' + I + '" stroke-width="2" stroke-linejoin="round"/>'
+      + '<path d="M17 37 Q50 -7 83 37 Q50 27 17 37Z" style="fill:var(--accent)" stroke="' + I + '" stroke-width="2" stroke-linejoin="round"/>'
+      + '<path d="M30 24 Q50 9 70 24" stroke="#fff" stroke-opacity=".5" stroke-width="2.4" fill="none" stroke-linecap="round"/><circle cx="50" cy="11.5" r="2.6" fill="#fff" stroke="' + I + '" stroke-width="1.3"/>'
+      + '</g></svg>';
+  }
+  var AV = mkAv();
   var callBtn = document.createElement('button');
-  callBtn.type = 'button'; callBtn.className = 'pk-call';
+  callBtn.type = 'button';
   callBtn.setAttribute('aria-label', 'Call Packet the penguin to chat');
-  var AVHEAD = HEAD.replace('class="lyr pheadf" viewBox="0 0 140 100"', 'class="pk-head" viewBox="34 0 68 40"');
+  callBtn.className = 'pk-call pkav';
   callBtn.setAttribute('data-mood', 'normal');
-  callBtn.innerHTML = '<span class="pk-ping" aria-hidden="true"></span><span class="pk-ring" aria-hidden="true"></span><span class="pk-glass" aria-hidden="true">' + AVHEAD + '</span><span class="pk-dot" aria-hidden="true"></span><span class="pk-tip" aria-hidden="true">psst... talk to me</span>';
-  var avT = 0;
+  callBtn.innerHTML = '<span class="pk-ping" aria-hidden="true"></span><span class="pk-ring" aria-hidden="true"></span><span class="pk-glass" aria-hidden="true">' + AV + '</span><span class="pk-dot" aria-hidden="true"></span><span class="pk-tip" aria-hidden="true">psst... talk to me</span>';
+  var chat = document.createElement('div');
+  chat.className = 'pk-chat'; chat.hidden = true;
+  chat.setAttribute('role', 'dialog'); chat.setAttribute('aria-label', 'Chat with Packet');
+  chat.innerHTML = '<div class="pk-hd"><span class="pk-hav pkav" data-mood="normal">' + AV + '</span><div class="pk-who"><b>Packet</b><small><i></i>online · network penguin</small></div><button type="button" class="pk-x" aria-label="Close chat">✕</button></div>'
+    + '<div class="pk-log" aria-live="polite"></div><div class="pk-acts"></div>'
+    + '<form class="pk-form"><input type="text" maxlength="60" placeholder="say something to Packet" aria-label="Message to Packet" autocomplete="off"><button class="chip" type="submit">send</button></form>';
+  document.body.appendChild(callBtn);
+  document.body.appendChild(chat);
+  var hav = chat.querySelector('.pk-hav'), log = chat.querySelector('.pk-log'), acts = chat.querySelector('.pk-acts');
+  var form = chat.querySelector('.pk-form'), field = form.querySelector('input');
+  var chatMy = 0, chatBusy = false, closeFn = null, visitNoted = false;
+
+  /* the avatar looks at you, wakes up, winks, falls asleep when you leave it alone */
+  var avT = 0, lastAct = performance.now(), asleep = false, pend = null;
   function avMood(m) { callBtn.setAttribute('data-mood', m); }
+  function avLook() {
+    pend = null;
+    var targets = [callBtn, hav];
+    targets.forEach(function (el) {
+      var r = el.getBoundingClientRect(); if (!r.width) return;
+      var dx = mouse.x - (r.left + r.width / 2), dy = mouse.y - (r.top + r.height / 2), d = Math.sqrt(dx * dx + dy * dy) || 1, k = Math.min(1, d / 160) * 3;
+      el.style.setProperty('--lx', (dx / d * k).toFixed(2)); el.style.setProperty('--ly', (dy / d * k * 0.8).toFixed(2));
+    });
+  }
+  function poke() {
+    lastAct = performance.now();
+    if (asleep) { asleep = false; avMood('surprised'); clearTimeout(avT); avT = setTimeout(function () { avMood('normal'); }, 700); }
+    if (!pend) pend = requestAnimationFrame(avLook);
+  }
+  window.addEventListener('pointermove', poke, { passive: true });
+  window.addEventListener('scroll', poke, { passive: true });
+  window.addEventListener('keydown', poke);
   callBtn.addEventListener('pointerenter', function () { clearTimeout(avT); avMood('surprised'); avT = setTimeout(function () { avMood('happy'); }, 320); });
   callBtn.addEventListener('pointerleave', function () { clearTimeout(avT); avMood('normal'); });
   callBtn.addEventListener('focus', function () { avMood('happy'); });
   callBtn.addEventListener('blur', function () { avMood('normal'); });
   setInterval(function () {
     if (callBtn.hidden || document.hidden || callBtn.matches(':hover, :focus-visible')) return;
-    avMood('wink'); setTimeout(function () { if (!callBtn.matches(':hover')) avMood('normal'); }, 750);
+    if (performance.now() - lastAct > 45000) { if (!asleep) { asleep = true; avMood('sleepy'); } return; }
+    avMood('wink'); setTimeout(function () { if (!asleep && !callBtn.matches(':hover')) avMood('normal'); }, 750);
   }, 7000);
-  var chat = document.createElement('div');
-  chat.className = 'pk-chat'; chat.hidden = true;
-  chat.setAttribute('role', 'dialog'); chat.setAttribute('aria-label', 'Chat with Packet');
-  chat.innerHTML = '<div class="pk-chips"></div><form class="pk-form"><input type="text" maxlength="60" placeholder="say something to Packet" aria-label="Message to Packet" autocomplete="off"><button type="submit" class="chip">send</button></form>';
-  document.body.appendChild(callBtn);
-  document.body.appendChild(chat);
-  var chips = chat.querySelector('.pk-chips'), form = chat.querySelector('.pk-form'), field = form.querySelector('input');
-  var chatMy = 0, chatBusy = false, closeFn = null;
-  function setChips(list) {
-    chips.textContent = '';
+
+  function bubble(cls, html) { var b = document.createElement('div'); b.className = 'pk-b ' + cls; if (html) b.innerHTML = html; log.appendChild(b); log.scrollTop = log.scrollHeight; return b; }
+  function alive(my) { return my === chatMy && !chat.hidden; }
+  async function reply(text) {
+    var my = chatMy; if (!my) return;
+    chatBusy = true; chat.classList.add('busy'); hav.setAttribute('data-mood', 'happy');
+    var b = bubble('pk', '<i class="dots"><i></i><i></i><i></i></i>');
+    var chars = Array.from(text);
+    await wait(380 + Math.min(650, chars.length * 8)); if (!alive(my)) return;
+    var step = Math.max(1, Math.ceil(chars.length / 50));
+    for (var i = 0; i < chars.length; i += step) { b.textContent = chars.slice(0, i + step).join(''); log.scrollTop = log.scrollHeight; await wait(18); if (!alive(my)) return; }
+    chatBusy = false; chat.classList.remove('busy'); hav.setAttribute('data-mood', 'normal');
+  }
+  function setActs(list) {
+    acts.textContent = '';
     list.forEach(function (it) {
-      var b = document.createElement('button');
-      b.type = 'button'; b.className = 'chip'; b.textContent = it[0];
-      b.addEventListener('click', it[1]);
-      chips.appendChild(b);
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'pk-act';
+      b.innerHTML = '<span class="e"></span><span class="t"><b></b><small></small></span>';
+      b.querySelector('.e').textContent = it[0]; b.querySelector('b').textContent = it[1]; b.querySelector('small').textContent = it[2];
+      b.addEventListener('click', function () { if (!chatBusy) { bubble('me').textContent = it[1]; it[3](); } });
+      acts.appendChild(b);
     });
   }
-  async function reply(text) {
-    if (chatBusy) return;
-    chatBusy = true; chat.classList.add('busy');
-    setMood('happy');
-    await typeSay(chatMy, text, 0, 22);
-    chatBusy = false; chat.classList.remove('busy');
-    if (on) setMood('normal');
+  function here() { var cur = 'home'; Array.prototype.forEach.call(document.querySelectorAll('.part'), function (p) { if (p.getBoundingClientRect().top <= window.innerHeight * 0.4) cur = p.id; }); return cur; }
+  function fishUp() {
+    var n = (parseInt(get('pk-fish'), 10) || 0) + 1; put('pk-fish', String(n));
+    var f = document.createElement('span'); f.className = 'pk-fish'; f.textContent = '🐟'; chat.appendChild(f); setTimeout(function () { f.remove(); }, 1100);
+    setMood('love'); setTimeout(function () { if (on && !busy) setMood('normal'); }, 1600);
+    return n;
   }
-  function go(id) {
-    var t = document.getElementById(id);
-    if (t) t.scrollIntoView({ behavior: 'smooth' });
-    reply('Off we go! 🚀');
-    setChips(TOP);
+  async function feed() {
+    var n = fishUp();
+    await reply(n === 5 ? "I'm full! ...okay, one more. 🐟" : n === 10 ? "You're my favourite human. 💙 That's " + n + " fish!" : FISHL[(n - 1) % FISHL.length] + (n > 1 ? '  (fish eaten: ' + n + ')' : ''));
+    setActs(TOP);
   }
-  var TOP = [
-    ['Who are you?', function () { reply(ME); }],
-    ['What does Ajas do?', function () { reply(AJAS); }],
-    ['Tell me a joke', function () { reply(pick(JOKES)); }],
-    ['Take me somewhere', function () { setChips(PLACES); }],
-    ['Bye', function () { if (closeFn && !chatBusy) closeFn(); }]
-  ];
-  var PLACES = [['Fix it', 'fixit'], ['Network lab', 'lab'], ['Docs', 'docs'], ['Roadmap', 'roadmap'], ['Contact', 'contact']].map(function (p) {
-    return [p[0], function () { go(p[1]); }];
-  }).concat([['« back', function () { setChips(TOP); }]]);
+  async function tourStep(i) {
+    if (i >= TOUR.length) { await reply("That's the whole tour! Questions? I live here. 🐧"); setActs(TOP); return; }
+    var t = document.getElementById(TOUR[i][0]); if (t) t.scrollIntoView({ behavior: 'smooth' });
+    await reply('(' + (i + 1) + '/' + TOUR.length + ') ' + TOUR[i][1]);
+    setActs([['▶', 'Next stop', (i + 1) + ' of ' + TOUR.length + ' done', function () { tourStep(i + 1); }], ['✕', 'End tour', 'back to chat', function () { reply('Okay! Back to chatting.'); setActs(TOP); }]]);
+  }
+  async function playGame() {
+    await reply('Tetris! In the terminal. Arrows to move, space to slam. Good luck!');
+    if (closeFn && alive(chatMy)) {
+      var go = function () {
+        var h = document.getElementById('home'); if (h) h.scrollIntoView({ behavior: 'smooth' });
+        setTimeout(function () { var i = document.getElementById('cmd'), f = document.getElementById('form'); if (i && f) { i.value = 'tetris'; if (f.requestSubmit) f.requestSubmit(); } }, 700);
+      };
+      closeFn(); go();
+    }
+  }
+  function ctx() {
+    var id = here();
+    reply('You are in ' + NAMEOF[id] + '. ' + WHERE[id]).then(function () { setActs(TOP); });
+  }
+  var TOP;
+  function mkTop() {
+    var id = here();
+    return [
+      ['🧭', 'Show me around', 'a guided tour', function () { tourStep(0); }],
+      ['📍', 'What is this part?', "you're in " + NAMEOF[id], ctx],
+      ['🎮', 'Play Tetris', 'inside the terminal', playGame],
+      ['🐟', 'Feed Packet', 'fish eaten: ' + (parseInt(get('pk-fish'), 10) || 0), feed],
+      ['💼', 'Who is Ajas?', 'the quick version', function () { reply(AJAS).then(function () { setActs(TOP); }); }],
+      ['😂', 'Tell a joke', 'network humour', function () { reply(pick(JOKES)).then(function () { setActs(TOP); }); }]
+    ];
+  }
+  function refresh() { TOP = mkTop(); setActs(TOP); }
   function think(t) {
     t = t.toLowerCase();
     if (/\b(bye|goodbye|see you|later)\b/.test(t)) { if (closeFn) closeFn(); return null; }
+    if (/tour|around|show me/.test(t)) { tourStep(0); return null; }
+    if (/tetris|game|play/.test(t)) { playGame(); return null; }
+    if (/fish|feed|food|hungry/.test(t)) { feed(); return null; }
+    if (/where am i|this part|this section/.test(t)) { ctx(); return null; }
     if (/\b(hi|hello|hey|yo)\b/.test(t)) return pick(HELLO);
     if (/joke|funny|laugh/.test(t)) return pick(JOKES);
     if (/who are you|your name|packet|penguin/.test(t)) return ME;
     if (/ajas|ajaz|owner|who made|work|job|skill|does he/.test(t)) return AJAS;
     if (/hire|contact|email|mail|reach/.test(t)) return 'Hiring? Smart move. The Contact button up top goes straight to him.';
     if (/resume|cv/.test(t)) return 'The resume is coming soon. Ajas is still polishing it. 📄';
-    if (/fish|food|hungry/.test(t)) return 'Fish. Always fish. 🐟';
-    if (/thank|thanks|cool|nice|great|love/.test(t)) return 'Aw, thanks! 🐧';
-    return pick(['I only speak packet. Ask about Ajas, a joke, or where to go.', "Hmm, that's above my bandwidth. Try the buttons!"]);
+    if (/thank|thanks|cool|nice|great|love/.test(t)) { setMood('love'); setTimeout(function () { if (on && !busy) setMood('normal'); }, 1500); return 'Aw, thanks! 🐧'; }
+    return pick(['I only speak packet. Try the buttons below!', "Hmm, that's above my bandwidth. Tap one of the tiles!"]);
   }
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var t = field.value.trim(); field.value = '';
     if (!t || chatBusy) return;
+    bubble('me').textContent = t;
     var r = think(t);
-    if (r) reply(r);
+    if (r) reply(r).then(function () { setActs(TOP); });
   });
+  chat.querySelector('.pk-x').addEventListener('click', function () { if (closeFn && !chatBusy) closeFn(); });
   function hideChat() {
     chat.hidden = true; chat.classList.remove('busy', 'show');
     say.classList.remove('chat');
-    chatBusy = false; closeFn = null;
+    chatBusy = false; closeFn = null; chatMy = 0;
     callBtn.classList.remove('away');
+  }
+  function greeting() {
+    var h = new Date().getHours(), part = h < 5 ? 'Up late' : h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : h < 22 ? 'Good evening' : 'Up late';
+    var v = parseInt(get('pk-visits'), 10) || 0;
+    if (!visitNoted) { visitNoted = true; v++; put('pk-visits', String(v)); }
+    return part + '! ' + (v > 1 ? "Welcome back, this is visit #" + v + ". I missed you. 🐧" : "First time here? Ask me anything, or take the tour.");
   }
   async function summon(my) {
     busy = true; chatMy = my;
     setMood('happy');
+    log.textContent = '';
     chat.hidden = false; callBtn.classList.add('away');
-    setChips(TOP); chat.classList.add('busy');
+    refresh(); chat.classList.add('busy');
     requestAnimationFrame(function () { chat.classList.add('show'); });
     say.classList.add('chat');
     var spot = function () {
@@ -888,8 +999,10 @@
     await Promise.all([hop, hi]);
     S.hy = S.wave = 0;
     setMood('normal');
+    await reply(greeting());
+    if (!alive(my)) return;
     chat.classList.remove('busy');
-    chat.querySelector('.chip').focus({ preventScroll: true });
+    var first = chat.querySelector('.pk-act'); if (first) first.focus({ preventScroll: true });
     await new Promise(function (res) { closeFn = res; });
     chat.classList.add('busy');
     setMood('happy');
