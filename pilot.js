@@ -779,8 +779,120 @@
     mouse.x = e.clientX; mouse.y = e.clientY; mouse.t = performance.now();
   }, { passive: true });
 
+  /* ---- call button and chat ---- */
+  var ME = "I'm Packet, a penguin who lives in this network. I carry data around and keep Ajas's site tidy. 🐧";
+  var AJAS = "Ajas is an IT specialist in Kochi: networks, servers, devices and accounts, on Windows, Linux and macOS.";
+  var JOKES = ["Why did the router go to therapy? Too many connection issues.", "There are 10 kinds of people: those who know binary and those who don't.", "It's not DNS. There's no way it's DNS. ...It was DNS.", "A SQL query walks into a bar, sees two tables and asks: can I join you?", "I would tell you a UDP joke, but you might not get it."];
+  var BYE = ['See you around! 🐧', 'Back to my rounds. ping me anytime!', 'Bye! Mind the cables.'];
+  var callBtn = document.createElement('button');
+  callBtn.type = 'button'; callBtn.className = 'pk-call';
+  callBtn.setAttribute('aria-label', 'Call Packet the penguin to chat');
+  callBtn.innerHTML = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><ellipse cx="12" cy="13" rx="8" ry="9" fill="#0b1a12" stroke="currentColor" stroke-width="1.4"/><ellipse cx="12" cy="15" rx="5" ry="6" fill="#e9fff2"/><circle cx="9.6" cy="10.2" r="1.3" fill="#0b1a12"/><circle cx="14.4" cy="10.2" r="1.3" fill="#0b1a12"/><path d="M10.4 12.4h3.2L12 14.2z" fill="#ffb347"/></svg><span>talk to Packet</span>';
+  var chat = document.createElement('div');
+  chat.className = 'pk-chat'; chat.hidden = true;
+  chat.setAttribute('role', 'dialog'); chat.setAttribute('aria-label', 'Chat with Packet');
+  chat.innerHTML = '<div class="pk-chips"></div><form class="pk-form"><input type="text" maxlength="60" placeholder="say something to Packet" aria-label="Message to Packet" autocomplete="off"><button type="submit" class="chip">send</button></form>';
+  document.body.appendChild(callBtn);
+  document.body.appendChild(chat);
+  var chips = chat.querySelector('.pk-chips'), form = chat.querySelector('.pk-form'), field = form.querySelector('input');
+  var chatMy = 0, chatBusy = false, closeFn = null;
+  function setChips(list) {
+    chips.textContent = '';
+    list.forEach(function (it) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'chip'; b.textContent = it[0];
+      b.addEventListener('click', it[1]);
+      chips.appendChild(b);
+    });
+  }
+  async function reply(text) {
+    if (chatBusy) return;
+    chatBusy = true; chat.classList.add('busy');
+    setMood('happy');
+    await typeSay(chatMy, text, 0, 22);
+    chatBusy = false; chat.classList.remove('busy');
+    if (on) setMood('normal');
+  }
+  function go(id) {
+    var t = document.getElementById(id);
+    if (t) t.scrollIntoView({ behavior: 'smooth' });
+    reply('Off we go! 🚀');
+    setChips(TOP);
+  }
+  var TOP = [
+    ['Who are you?', function () { reply(ME); }],
+    ['What does Ajas do?', function () { reply(AJAS); }],
+    ['Tell me a joke', function () { reply(pick(JOKES)); }],
+    ['Take me somewhere', function () { setChips(PLACES); }],
+    ['Bye', function () { if (closeFn && !chatBusy) closeFn(); }]
+  ];
+  var PLACES = [['Fix it', 'fixit'], ['Network lab', 'lab'], ['Docs', 'docs'], ['Roadmap', 'roadmap'], ['Contact', 'contact']].map(function (p) {
+    return [p[0], function () { go(p[1]); }];
+  }).concat([['« back', function () { setChips(TOP); }]]);
+  function think(t) {
+    t = t.toLowerCase();
+    if (/\b(bye|goodbye|see you|later)\b/.test(t)) { if (closeFn) closeFn(); return null; }
+    if (/\b(hi|hello|hey|yo)\b/.test(t)) return pick(HELLO);
+    if (/joke|funny|laugh/.test(t)) return pick(JOKES);
+    if (/who are you|your name|packet|penguin/.test(t)) return ME;
+    if (/ajas|ajaz|owner|who made|work|job|skill|does he/.test(t)) return AJAS;
+    if (/hire|contact|email|mail|reach/.test(t)) return 'Hiring? Smart move. The Contact button up top goes straight to him.';
+    if (/resume|cv/.test(t)) return 'The resume is coming soon. Ajas is still polishing it. 📄';
+    if (/fish|food|hungry/.test(t)) return 'Fish. Always fish. 🐟';
+    if (/thank|thanks|cool|nice|great|love/.test(t)) return 'Aw, thanks! 🐧';
+    return pick(['I only speak packet. Ask about Ajas, a joke, or where to go.', "Hmm, that's above my bandwidth. Try the buttons!"]);
+  }
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var t = field.value.trim(); field.value = '';
+    if (!t || chatBusy) return;
+    var r = think(t);
+    if (r) reply(r);
+  });
+  function hideChat() {
+    chat.hidden = true; chat.classList.remove('busy', 'show');
+    say.classList.remove('chat');
+    chatBusy = false; closeFn = null;
+    callBtn.classList.remove('away');
+  }
+  async function summon(my) {
+    busy = true; chatMy = my;
+    setMood('happy');
+    chat.hidden = false; callBtn.classList.add('away');
+    setChips(TOP); chat.classList.add('busy');
+    requestAnimationFrame(function () { chat.classList.add('show'); });
+    say.classList.add('chat');
+    var spot = function () {
+      var right = chat.offsetLeft + chat.offsetWidth, top = chat.offsetTop;
+      return { x: clamp(right - W - 14, 6, window.innerWidth - W - 6), y: clamp(top - H - 8, 70, window.innerHeight - H - 6) };
+    };
+    var ok = await flyTo(my, spot, 1, { swoop: true, dur: 0.9 });
+    if (!ok) { hideChat(); return; }
+    var hop = tween(my, 900, function (p) {
+      S.hy = -(14 * Math.exp(-3 * p) * Math.abs(Math.sin(p * Math.PI * 3)));
+      S.wave = Math.sin(p * 15) * 38 * (1 - p);
+    });
+    var hi = typeSay(my, "You called? What's up? 🐧", 0, 26);
+    await Promise.all([hop, hi]);
+    S.hy = S.wave = 0;
+    setMood('normal');
+    chat.classList.remove('busy');
+    chat.querySelector('.chip').focus({ preventScroll: true });
+    await new Promise(function (res) { closeFn = res; });
+    chat.classList.add('busy');
+    setMood('happy');
+    await typeSay(my, pick(BYE), 1000, 26);
+    hideChat();
+    callBtn.focus({ preventScroll: true });
+  }
+  callBtn.addEventListener('click', function () { interrupt(summon); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !chat.hidden && closeFn && !chatBusy) closeFn();
+  });
+
   function stopVisuals() {
     resetPose();
+    hideChat();
     pilot.classList.remove('on');
     clearTimeout(single);
     anims.length = 0;
@@ -799,6 +911,7 @@
       b.textContent = 'packet: ' + (v ? 'on' : 'off');
       b.setAttribute('aria-pressed', v ? 'true' : 'false');
     });
+    callBtn.hidden = !v;
     if (remember) put('pilot', v ? 'on' : 'off');
     if (v) { run(gen).catch(function () {}); } else { stopVisuals(); }
   }

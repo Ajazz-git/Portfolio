@@ -805,3 +805,19 @@ html.modal-open { overflow: hidden; }
 .nav a.cta:hover, .nav a.cta[aria-current="page"] { background: var(--accent-dim); }
 @media (min-width: 761px) and (max-width: 1400px) { .dd-b { padding-inline: 7px; font-size: 12.5px; } }
 @media (max-width: 760px) { .nav { overflow: visible; flex-wrap: wrap; } .dd-b { font-size: 12px; padding: 6px 8px; } .dd-m { left: auto; right: auto; } }
+
+.pk-call { position: fixed; right: 16px; bottom: 16px; z-index: 12; display: flex; align-items: center; gap: 8px; padding: 8px 14px 8px 10px; font: 12px var(--font-mono); color: var(--accent); background: color-mix(in srgb, var(--panel) 70%, transparent); border: 1px solid var(--line); border-radius: 999px; cursor: pointer; opacity: 0.5; backdrop-filter: blur(4px); transition: opacity 0.25s, transform 0.25s, box-shadow 0.25s, border-color 0.25s; }
+.pk-call:hover, .pk-call:focus-visible { opacity: 1; transform: translateY(-2px); border-color: var(--accent); box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 45%, transparent); }
+.pk-call svg { transition: transform 0.3s; }
+.pk-call:hover svg { transform: rotate(-8deg) scale(1.12); }
+.pk-call.away, .pk-call[hidden] { display: none; }
+.pk-chat { position: fixed; right: 16px; bottom: 16px; z-index: 15; width: min(300px, calc(100vw - 32px)); display: grid; gap: 10px; padding: 12px; background: var(--panel); border: 1px solid var(--accent); border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), 0 0 18px color-mix(in srgb, var(--accent) 25%, transparent); opacity: 0; transform: translateY(12px); transition: opacity 0.25s, transform 0.25s; }
+.pk-chat[hidden] { display: none; }
+.pk-chat.show { opacity: 1; transform: none; }
+.pk-chat.busy .pk-chips, .pk-chat.busy .pk-form { opacity: 0.55; pointer-events: none; }
+.pk-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.pk-form { display: flex; gap: 6px; }
+.pk-form input { flex: 1; min-width: 0; font: 16px var(--font-mono); padding: 6px 10px; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; }
+.pk-form input:focus { outline: none; border-color: var(--accent); }
+.say.chat { white-space: normal; width: 230px; }
+@media (min-width: 761px) { .pk-form input { font-size: 13px; } }
