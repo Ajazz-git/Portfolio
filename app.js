@@ -1094,3 +1094,11 @@
   dlg.addEventListener('close', function () { if (lastCard) lastCard.focus(); });
   open(0);
 })();
+
+/* roadmap: tap an item to open it */
+document.querySelectorAll('.rm-col li').forEach(function (li) {
+  li.tabIndex = 0;
+  function tog() { li.classList.toggle('open'); }
+  li.addEventListener('click', tog);
+  li.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tog(); } });
+});
