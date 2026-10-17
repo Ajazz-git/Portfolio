@@ -791,3 +791,17 @@ html.modal-open { overflow: hidden; }
 @media (max-width: 900px) { .rm { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .rm-col[data-s="learn"] .rm-h i { animation: none; } .rm-col li span { transition: none; } }
 @media (min-width: 761px) and (max-width: 1400px) { .nav a { padding-inline: 7px; font-size: 12.5px; } .nav { flex-wrap: nowrap; } }
+
+.dd { position: relative; }
+.dd-b { font: 13px var(--font-mono); padding: 6px 12px; border: 1px solid transparent; border-radius: 6px; background: none; color: var(--muted); cursor: pointer; }
+.dd-b:hover, .dd.open .dd-b { color: var(--fg); }
+.dd-b[aria-current="page"] { color: var(--accent); border-color: var(--line); background: var(--accent-dim); }
+.dd-m { display: none; position: absolute; top: calc(100% + 6px); left: 0; min-width: 160px; z-index: 60; flex-direction: column; gap: 2px; padding: 6px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+.dd.open .dd-m { display: flex; }
+.dd:hover .dd-m { display: flex; }
+@media (hover: none) { .dd:hover:not(.open) .dd-m { display: none; } }
+.dd-m a { padding: 8px 10px; }
+.nav a.cta { color: var(--accent); border-color: var(--accent); }
+.nav a.cta:hover, .nav a.cta[aria-current="page"] { background: var(--accent-dim); }
+@media (min-width: 761px) and (max-width: 1400px) { .dd-b { padding-inline: 7px; font-size: 12.5px; } }
+@media (max-width: 760px) { .nav { overflow: visible; flex-wrap: wrap; } .dd-b { font-size: 12px; padding: 6px 8px; } .dd-m { left: auto; right: auto; } }

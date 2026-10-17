@@ -580,6 +580,12 @@
       if (secOf(l.getAttribute('href')) === id) l.setAttribute('aria-current', 'page');
       else l.removeAttribute('aria-current');
     });
+    var ddb = document.querySelector('.dd-b');
+    if (ddb) {
+      if (/^(fixit|lab|docs)$/.test(id)) ddb.setAttribute('aria-current', 'page'); else ddb.removeAttribute('aria-current');
+    }
+    var cta = document.querySelector('.nav .cta');
+    if (cta && id === 'resume') cta.setAttribute('aria-current', 'page');
     var on = document.querySelector('.nav a[aria-current]');
     var nv = on && on.parentNode;
     if (nv && nv.scrollWidth > nv.clientWidth + 1) nv.scrollLeft = on.offsetLeft - (nv.clientWidth - on.offsetWidth) / 2;
@@ -1102,3 +1108,13 @@ document.querySelectorAll('.rm-col li').forEach(function (li) {
   li.addEventListener('click', tog);
   li.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tog(); } });
 });
+
+(function () {
+  var dd = document.querySelector('.dd'); if (!dd) return;
+  var b = dd.querySelector('.dd-b');
+  function set(o) { dd.classList.toggle('open', o); b.setAttribute('aria-expanded', o ? 'true' : 'false'); }
+  b.addEventListener('click', function (e) { e.stopPropagation(); set(!dd.classList.contains('open')); });
+  document.addEventListener('click', function (e) { if (!dd.contains(e.target)) set(false); });
+  dd.addEventListener('click', function (e) { if (e.target.closest('.dd-m a')) set(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && dd.classList.contains('open')) { set(false); b.focus(); } });
+})();
