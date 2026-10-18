@@ -236,11 +236,11 @@ p { margin: 0; }
 #pilot .sl { filter: none; }
 #pilot .pbody { }
 #pilot .pg { transform-origin: 54% 66%; }
-#pilot .phead { position: absolute; inset: 0; transform-style: preserve-3d; transform-origin: 48% 38%; }
+#pilot .phead { position: absolute; inset: 0; transform-style: preserve-3d; transform-origin: 49% 27%; }
 #pilot .phead .sl { }
 #pilot .pheadf { }
-#pilot .pflip { transform-origin: 59% 36%; }
-#pilot .pfar { transform-origin: 59% 36%; }
+#pilot .pflip { transform-origin: 65% 32%; }
+#pilot .pfar { transform-origin: 32% 32%; }
 #pilot .spec { transition: none; }
 #pilot .ft { transform-box: fill-box; }
 #pilot .plap { }
@@ -843,11 +843,8 @@ html.modal-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) { .pk-call *, .pk-call { animation: none !important; } }
 
 /* Packet avatar (porthole + chat header) */
-.pk-svg { position: absolute; left: -9%; top: 8%; width: 118%; height: auto; overflow: visible; }
-.pk-hav .pk-svg { left: -6%; top: 6%; width: 112%; }
-.pkav [data-m], .pkav .smile { display: none; }
-.pkav[data-mood="normal"] [data-m="normal"], .pkav[data-mood="happy"] [data-m="happy"], .pkav[data-mood="wink"] [data-m="wink"], .pkav[data-mood="surprised"] [data-m="surprised"], .pkav[data-mood="love"] [data-m="love"], .pkav[data-mood="sleepy"] [data-m="sleepy"] { display: inline; }
-.pkav[data-mood="happy"] .smile, .pkav[data-mood="wink"] .smile, .pkav[data-mood="love"] .smile { display: inline; }
+.pk-svg { position: absolute; left: -4%; top: 3%; width: 108%; height: auto; overflow: visible; }
+.pk-hav .pk-svg { left: -4%; top: 3%; width: 108%; }
 .pkav .pp { transform: translate(calc(var(--lx, 0) * 1px), calc(var(--ly, 0) * 1px)); transition: transform 0.12s; }
 .pkav .blk { transform-box: fill-box; transform-origin: 50% 55%; animation: blink 4.8s infinite; }
 .pkav .av-body { transform-origin: 50% 90%; animation: pkbreathe 3.4s ease-in-out infinite; }
@@ -898,3 +895,15 @@ html.modal-open { overflow: hidden; }
 @media (min-width: 761px) { .pk-form input { font-size: 13px; } }
 @media (max-width: 760px) { .pk-chat { right: 12px; bottom: 12px; } .pk-log { max-height: 20vh; } }
 @media (prefers-reduced-motion: reduce) { .pkav *, .pk-chat *, .pk-chat { animation: none !important; } }
+
+/* unified Packet: eye moods for the avatar and the sprite */
+.pkav .eyes .blinker > g { display: none; }
+.pkav[data-mood="normal"] .eyes .blinker > [data-m="normal"], .pkav[data-mood="happy"] .eyes .blinker > [data-m="happy"], .pkav[data-mood="angry"] .eyes .blinker > [data-m="angry"], .pkav[data-mood="annoyed"] .eyes .blinker > [data-m="annoyed"], .pkav[data-mood="wink"] .eyes .blinker > [data-m="wink"], .pkav[data-mood="focus"] .eyes .blinker > [data-m="focus"], .pkav[data-mood="dead"] .eyes .blinker > [data-m="dead"], .pkav[data-mood="surprised"] .eyes .blinker > [data-m="surprised"], .pkav[data-mood="curious"] .eyes .blinker > [data-m="curious"], .pkav[data-mood="smug"] .eyes .blinker > [data-m="smug"], .pkav[data-mood="sleepy"] .eyes .blinker > [data-m="sleepy"], .pkav[data-mood="sad"] .eyes .blinker > [data-m="sad"], .pkav[data-mood="love"] .eyes .blinker > [data-m="love"], .pkav[data-mood="dizzy"] .eyes .blinker > [data-m="dizzy"] { display: inline; }
+.pkav .smile, #pilot .smile { display: none; }
+.pkav[data-mood="happy"] .smile, .pkav[data-mood="wink"] .smile, .pkav[data-mood="love"] .smile, .pkav[data-mood="smug"] .smile, .pkav[data-mood="curious"] .smile, #pilot[data-mood="happy"] .smile, #pilot[data-mood="wink"] .smile, #pilot[data-mood="love"] .smile, #pilot[data-mood="smug"] .smile, #pilot[data-mood="curious"] .smile { display: inline; }
+.pkav .eyes { transform: translate(calc(var(--lx, 0) * 1px), calc(var(--ly, 0) * 1px)); transition: transform 0.12s; }
+.pkav .scarf { transform-box: fill-box; transform-origin: 100% 50%; animation: pkflut 1.8s ease-in-out infinite alternate; }
+@keyframes pkflut { to { transform: rotate(-9deg) skewY(-6deg); } }
+.pk-hav.giggle .pk-svg { animation: pkgig 0.11s ease-in-out 9 alternate; }
+@keyframes pkgig { from { transform: rotate(-5deg) translateY(1px); } to { transform: rotate(5deg) translateY(-2px); } }
+.pkav .blinker { transform-box: fill-box; transform-origin: 50% 55%; animation: blink 4.8s infinite; }

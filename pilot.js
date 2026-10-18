@@ -51,63 +51,69 @@
     + '<path d="M54 60 H92" stroke="' + ACC + '" stroke-width="1.2" stroke-linecap="round" opacity="0.9"/>'
     + '</svg>';
 
-  var BACK = '<svg class="lyr pback" viewBox="0 0 140 100" focusable="false">'
-    + '<ellipse cx="47" cy="40" rx="6" ry="13" transform="rotate(18 47 40)" fill="#16293a"' + st() + '/>'
-    + '<rect x="45" y="27" width="11" height="22" rx="3.5" fill="url(#pk-dark)"' + st(1.4) + '/>'
-    + '<path d="M47 27 L44 19" stroke="#2c3b35" stroke-width="1.6" stroke-linecap="round"/><circle cx="44" cy="18.5" r="1.7" fill="' + ACC + '"/>'
-    + '<circle cx="50.5" cy="33" r="1.4" fill="' + ACC + '"/><circle cx="50.5" cy="38" r="1.4" fill="#ffb020"/><circle cx="50.5" cy="43" r="1.4" fill="' + ACC + '"/>'
-    + '</svg>';
-
-  var BODY = '<svg class="lyr pbody" viewBox="0 0 140 100" focusable="false">'
-    + '<ellipse class="pad" cx="70" cy="67" rx="27" ry="3.8" fill="' + ACC + '" fill-opacity="0.35" stroke="' + ACC + '" stroke-width="1.4"/>'
-    + '<ellipse cx="66" cy="38" rx="20" ry="25" fill="url(#pk-body)"' + st() + '/>'
-    + '<ellipse cx="72" cy="43" rx="12.5" ry="16.5" fill="url(#pk-belly)"/>'
-    + '<ellipse class="spec" cx="57" cy="29" rx="5" ry="10" transform="rotate(14 57 29)" fill="#fff" opacity="0.2"/>'
-    + '<g class="scarf"><path d="M52 36 Q38 34 28 44 Q42 43 52 42 Z" fill="#ff5d4a"' + st() + '/></g>'
-    + '<path d="M50 32 Q67 41 85 33 L86 38 Q67 47 50 38 Z" fill="#ff5d4a"' + st() + '/>'
-    + '<path d="M55 36 Q67 41 80 35" stroke="#fff" stroke-opacity="0.35" stroke-width="1.2" fill="none"/>'
-    + '<path class="rim" d="M83 20 Q92 38 82 56" stroke="' + ACC + '" stroke-width="1.6" fill="none" stroke-linecap="round" opacity="0"/>'
-    + '<g class="ft ft1"><ellipse cx="60" cy="62" rx="8.5" ry="3.4" fill="url(#pk-beak)"' + st() + '/></g>'
-    + '<g class="ft ft2"><ellipse cx="80" cy="62" rx="8.5" ry="3.4" fill="url(#pk-beak)"' + st() + '/></g>'
-    + '</svg>';
-
-  var EYES = '<g class="eyes"><g class="blinker">'
-    + '<g data-m="normal"><rect x="68" y="17" width="4.6" height="8" rx="2.3" fill="' + ACC + '"/><rect x="78" y="17" width="4.6" height="8" rx="2.3" fill="' + ACC + '"/></g>'
-    + '<g data-m="happy"><path d="M67.5 23 Q70.3 16.5 73 23" stroke="' + ACC + '" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M77.5 23 Q80.3 16.5 83 23" stroke="' + ACC + '" stroke-width="2.2" fill="none" stroke-linecap="round"/></g>'
-    + '<g data-m="angry"><path d="M66.5 17.5 L74 21 L74 25 L66.5 25 Z" fill="#ff5d4a"/><path d="M84 17.5 L76.5 21 L76.5 25 L84 25 Z" fill="#ff5d4a"/></g>'
-    + '<g data-m="annoyed"><rect x="67.5" y="21" width="6" height="3.2" rx="1.2" fill="' + ACC + '"/><rect x="77.5" y="21" width="6" height="3.2" rx="1.2" fill="' + ACC + '"/><path d="M67 20.4 H74 M77 20.4 H84" stroke="' + INK + '" stroke-width="1.8" stroke-linecap="round"/></g>'
-    + '<g data-m="wink"><rect x="68" y="17" width="4.6" height="8" rx="2.3" fill="' + ACC + '"/><path d="M77.5 23 Q80.3 16.5 83 23" stroke="' + ACC + '" stroke-width="2.2" fill="none" stroke-linecap="round"/></g>'
-    + '<g data-m="focus"><rect x="68" y="20" width="4.6" height="5" rx="2" fill="' + ACC + '"/><rect x="78" y="20" width="4.6" height="5" rx="2" fill="' + ACC + '"/></g>'
-    + '<g data-m="dead"><path d="M67.5 18 L72.5 24 M72.5 18 L67.5 24 M77.5 18 L82.5 24 M82.5 18 L77.5 24" stroke="#ff5d4a" stroke-width="1.8" stroke-linecap="round"/></g>'
-    + '<g data-m="surprised"><circle cx="70.3" cy="21.5" r="3.5" fill="' + ACC + '"/><circle cx="80.3" cy="21.5" r="3.5" fill="' + ACC + '"/><path d="M66.5 14.8 Q70.3 12.6 74 14.8 M76.6 14.8 Q80.3 12.6 84 14.8" stroke="' + ACC + '" stroke-width="1.3" fill="none" stroke-linecap="round"/></g>'
-    + '<g data-m="curious"><rect x="68" y="16" width="4.8" height="9.5" rx="2.4" fill="' + ACC + '"/><rect x="78" y="16" width="4.8" height="9.5" rx="2.4" fill="' + ACC + '"/><path d="M77 13.4 Q80.5 11.6 84 13.6" stroke="' + ACC + '" stroke-width="1.3" fill="none" stroke-linecap="round"/></g>'
-    + '<g data-m="smug"><rect x="67.5" y="20.5" width="6" height="4.2" rx="1.6" fill="' + ACC + '"/><rect x="77.5" y="20.5" width="6" height="4.2" rx="1.6" fill="' + ACC + '"/><path d="M66.5 20.2 H74 M76.5 20.2 H84" stroke="' + INK + '" stroke-width="2" stroke-linecap="round"/><path d="M77 16 Q81 14 84.5 16.6" stroke="' + ACC + '" stroke-width="1.3" fill="none" stroke-linecap="round"/></g>'
-    + '<g data-m="sleepy"><path d="M67.5 22.4 H73 M77.5 22.4 H83" stroke="' + ACC + '" stroke-width="2.2" stroke-linecap="round"/><text x="85" y="15" font-size="6" font-family="monospace" fill="' + ACC + '">z</text></g>'
-    + '<g data-m="sad"><rect x="68" y="20" width="4.6" height="5" rx="2" fill="' + ACC + '"/><rect x="78" y="20" width="4.6" height="5" rx="2" fill="' + ACC + '"/><path d="M66.5 17.8 L73.5 14.8 M84 17.8 L77 14.8" stroke="' + ACC + '" stroke-width="1.3" fill="none" stroke-linecap="round"/></g>'
-    + '<g data-m="love"><path d="M70.3 25 C65.5 21.6 66.2 17 70.3 19.2 C74.4 17 75.1 21.6 70.3 25Z" fill="#ff6fa8"/><path d="M80.3 25 C75.5 21.6 76.2 17 80.3 19.2 C84.4 17 85.1 21.6 80.3 25Z" fill="#ff6fa8"/></g>'
-    + '<g data-m="dizzy"><path d="M70.3 21 a0.9 0.9 0 1 1 1.8 0 a1.9 1.9 0 1 1 -3.8 0 a2.9 2.9 0 1 1 5.8 0" stroke="' + ACC + '" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M80.3 21 a0.9 0.9 0 1 1 1.8 0 a1.9 1.9 0 1 1 -3.8 0 a2.9 2.9 0 1 1 5.8 0" stroke="' + ACC + '" stroke-width="1" fill="none" stroke-linecap="round"/></g>'
-    + '</g></g>';
-
-  var HEAD = '<svg class="lyr pheadf" viewBox="0 0 140 100" focusable="false">'
-    + '<ellipse cx="67" cy="22" rx="17" ry="15" fill="url(#pk-body)"' + st() + '/>'
-    + '<ellipse class="spec" cx="60" cy="14" rx="6" ry="3.4" transform="rotate(-18 60 14)" fill="#fff" opacity="0.22"/>'
-    + '<path d="M50.5 19 C49 3 81 1.5 83 19 Z" fill="url(#pk-acc)"' + st() + '/>'
-    + '<path d="M53 17.5 L35 22 L37.5 25.5 L55 22.5 Z" fill="url(#pk-acc)"' + st() + '/>'
-    + '<path d="M58 8 Q66 4 74 8" stroke="#fff" stroke-opacity="0.5" stroke-width="1.6" fill="none" stroke-linecap="round"/>'
-    + '<circle cx="66" cy="4.6" r="1.6" fill="' + INK + '"/>'
-    + '<path d="M49 24 Q58 28 63 24" stroke="#16222b" stroke-width="3.4" fill="none" stroke-linecap="round"/>'
-    + '<rect class="lens" x="62" y="14" width="28" height="14" rx="7" fill="url(#pk-screen)" stroke="' + ACC + '" stroke-width="1.8"/>'
-    + EYES
-    + '<path d="M66 15.6 L74 15.6 L69.5 27.2 L63.5 27.2 Z" fill="#fff" opacity="0.2"/>'
-    + '<path d="M80 15.5 Q86 16 88 21" stroke="#fff" stroke-opacity="0.55" stroke-width="1.2" fill="none" stroke-linecap="round"/>'
-    + '<path d="M85 28 L100 31.5 L85 34 Z" fill="url(#pk-beak)"' + st(1.4) + '/>'
-    + '<path class="beakLow" d="M85 34 L97 34.3 L86 37.6 Z" fill="url(#pk-beak)"' + st(1.4) + '/>'
-    + '</svg>';
-
-  var FLIP = '<svg class="lyr pflip" viewBox="0 0 140 100" focusable="false">'
-    + '<ellipse cx="90" cy="48" rx="5.6" ry="12.5" transform="rotate(-30 90 48)" fill="url(#pk-body)"' + st() + '/>'
-    + '<ellipse cx="88" cy="43" rx="1.8" ry="6" transform="rotate(-30 88 43)" fill="#fff" opacity="0.18"/>'
-    + '</svg>';
+  /* ---- Packet, one design for the flying sprite and the chat avatar: a round chibi penguin with goggles, a scarf and flippers.
+     Drawn once in a 100 x 100 box; the sprite places the same parts into its 140 x 100 box. ---- */
+  var IK = '#0f1d2b';
+  var TF = 'translate(37 -4) scale(0.62)';
+  var E = function (cx, rx, ry, hl) { return '<ellipse cx="' + cx + '" cy="48" rx="' + rx + '" ry="' + ry + '" fill="' + IK + '"/><circle cx="' + (cx + 2.4) + '" cy="' + (48 - ry * 0.42) + '" r="' + hl + '" fill="#fff"/><circle cx="' + (cx - 2.2) + '" cy="' + (48 + ry * 0.48) + '" r="1.2" fill="#fff" opacity="0.9"/>'; };
+  var BR = function (d, w, c) { return '<path d="' + d + '" stroke="' + (c || IK) + '" stroke-width="' + (w || 3) + '" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'; };
+  var HT = function (x) { return '<path d="M' + x + ' 55 C' + (x - 8.5) + ' 49 ' + (x - 7) + ' 40.5 ' + x + ' 44.5 C' + (x + 7) + ' 40.5 ' + (x + 8.5) + ' 49 ' + x + ' 55Z" fill="#ff6fa8" stroke="#c23a78" stroke-width="1"/>'; };
+  var SP = function (x) { return '<path d="M' + x + ' 48 a1.4 1.4 0 1 1 2.8 0 a3 3 0 1 1 -6 0 a4.6 4.6 0 1 1 9.2 0" stroke="' + IK + '" stroke-width="1.8" fill="none" stroke-linecap="round"/>'; };
+  var MOODS = {
+    normal: E(38, 6, 7.6, 2.5) + E(62, 6, 7.6, 2.5),
+    happy: BR('M31.5 50.5 Q38 41 44.5 50.5 M55.5 50.5 Q62 41 68.5 50.5'),
+    angry: E(38, 5.4, 6, 2) + E(62, 5.4, 6, 2) + BR('M29 37.5 L46 44 M71 37.5 L54 44', 3.6),
+    annoyed: BR('M32 49.5 H44 M56 49.5 H68', 3.6) + BR('M31 43.5 H45 M55 43.5 H69', 2),
+    wink: E(38, 6, 7.6, 2.5) + BR('M55.5 50.5 Q62 41 68.5 50.5'),
+    focus: E(38, 4.6, 4.6, 1.7) + E(62, 4.6, 4.6, 1.7) + BR('M32 41.5 H44 M56 41.5 H68', 2.2),
+    dead: BR('M33 43 L43 53 M43 43 L33 53 M57 43 L67 53 M67 43 L57 53', 3, '#ff5d4a'),
+    surprised: E(38, 7.4, 9, 3) + E(62, 7.4, 9, 3),
+    curious: E(38, 5.6, 7, 2.2) + E(62, 6.6, 8.8, 2.7) + BR('M55 36.5 Q62 31.5 69 36.5', 2.4),
+    smug: '<path d="M31 48 H45 A7 7 0 0 1 31 48Z" fill="' + IK + '"/><path d="M55 48 H69 A7 7 0 0 1 55 48Z" fill="' + IK + '"/>' + BR('M30 47.5 H46 M54 47.5 H70', 2.2),
+    sleepy: BR('M32 50 H44 M56 50 H68') + '<text x="73" y="38" font-size="11" font-family="monospace" font-weight="700" fill="' + IK + '" class="zz">z</text>',
+    sad: E(38, 5.6, 6.8, 2.2) + E(62, 5.6, 6.8, 2.2) + BR('M30 44.5 L45 38.5 M70 44.5 L55 38.5', 2.6),
+    love: HT(38) + HT(62),
+    dizzy: SP(38) + SP(62)
+  };
+  var EYES = '<g class="eyes"><g class="blinker">' + Object.keys(MOODS).map(function (k) { return '<g data-m="' + k + '">' + MOODS[k] + '</g>'; }).join('') + '</g></g>';
+  var FLP = function (cx, rot, cls) {
+    return '<g class="fl ' + cls + '"><ellipse cx="' + cx + '" cy="68" rx="7.4" ry="15.5" transform="rotate(' + rot + ' ' + cx + ' 68)" fill="url(#pk-body)" stroke="' + IK + '" stroke-width="2.2"/>'
+      + '<ellipse cx="' + (cx + (rot > 0 ? -1.6 : 1.6)) + '" cy="62" rx="1.9" ry="6.5" transform="rotate(' + rot + ' ' + cx + ' 68)" fill="#fff" opacity="0.18"/></g>';
+  };
+  var PARTS = {
+    flipL: FLP(13, 16, 'fl1'),
+    flipR: FLP(87, -16, 'fl2'),
+    body: '<ellipse class="pad" cx="50" cy="104" rx="40" ry="5" fill="' + ACC + '" fill-opacity="0.35" stroke="' + ACC + '" stroke-width="2"/>'
+      + '<g class="ft ft1"><ellipse cx="37" cy="100" rx="11.5" ry="4.8" fill="url(#pk-beak)" stroke="' + IK + '" stroke-width="2"/></g>'
+      + '<g class="ft ft2"><ellipse cx="63" cy="100" rx="11.5" ry="4.8" fill="url(#pk-beak)" stroke="' + IK + '" stroke-width="2"/></g>'
+      + '<ellipse cx="50" cy="86" rx="27" ry="17.5" fill="url(#pk-body)" stroke="' + IK + '" stroke-width="2.2"/>'
+      + '<ellipse cx="50" cy="89" rx="18" ry="12.5" fill="url(#pk-belly)"/>'
+      + '<ellipse class="spec" cx="33" cy="80" rx="3.6" ry="7" transform="rotate(16 33 80)" fill="#fff" opacity="0.2"/>'
+      + '<path class="rim" d="M74 72 Q82 87 72 99" stroke="' + ACC + '" stroke-width="2.4" fill="none" stroke-linecap="round" opacity="0"/>'
+      + '<g class="scarf"><path d="M27 80 Q10 74 -2 86 Q12 86 25 91Z" fill="#ff5d4a" stroke="' + IK + '" stroke-width="2" stroke-linejoin="round"/></g>'
+      + '<path d="M22 79 Q50 99 78 79 L82 89 Q50 109 18 89Z" fill="#ff5d4a" stroke="' + IK + '" stroke-width="2.2" stroke-linejoin="round"/>'
+      + '<path d="M28 88 Q50 100 72 88" stroke="#fff" stroke-opacity="0.4" stroke-width="2" fill="none" stroke-linecap="round"/>',
+    head: '<circle cx="50" cy="48" r="35" fill="url(#pk-body)" stroke="' + IK + '" stroke-width="2.2"/>'
+      + '<ellipse class="spec" cx="31" cy="34" rx="7" ry="3.8" transform="rotate(-30 31 34)" fill="#fff" opacity="0.22"/>'
+      + '<path d="M50 39 C44 28 24 30 24 50 C24 67 40 75 50 75 C60 75 76 67 76 50 C76 30 56 28 50 39Z" fill="url(#pk-belly)"/>'
+      + '<ellipse cx="29" cy="60" rx="5.6" ry="3.5" fill="#ff8fab" opacity="0.65"/><ellipse cx="71" cy="60" rx="5.6" ry="3.5" fill="#ff8fab" opacity="0.65"/>'
+      + EYES
+      + '<path d="M43.5 57 Q50 51.5 56.5 57 Q55.5 65.5 50 67 Q44.5 65.5 43.5 57Z" fill="url(#pk-beak)" stroke="' + IK + '" stroke-width="1.7" stroke-linejoin="round"/>'
+      + '<path d="M46.5 57.5 Q50 55.2 53.5 57.5" stroke="#fff" stroke-opacity="0.7" stroke-width="1.3" fill="none" stroke-linecap="round"/>'
+      + '<path class="smile" d="M44 70.5 Q50 76 56 70.5" stroke="' + IK + '" stroke-width="2.2" fill="none" stroke-linecap="round"/>'
+      + '<path d="M16 36 Q50 -9 84 36 Q50 26 16 36Z" fill="url(#pk-acc)" stroke="' + IK + '" stroke-width="2.2" stroke-linejoin="round"/>'
+      + '<path d="M31 22 Q50 7 69 22" stroke="#fff" stroke-opacity="0.5" stroke-width="2.4" fill="none" stroke-linecap="round"/>'
+      + '<path d="M13.5 35.5 Q50 23 86.5 35.5" stroke="' + IK + '" stroke-width="5.2" fill="none" stroke-linecap="round"/>'
+      + '<path d="M16 34.6 Q50 22.5 84 34.6" stroke="#ffb020" stroke-width="1.4" fill="none" stroke-linecap="round"/>'
+      + '<rect x="44.5" y="28" width="11" height="3.4" rx="1.7" fill="#f2a51d" stroke="' + IK + '" stroke-width="1.2"/>'
+      + '<g><circle cx="37" cy="30.5" r="9.2" fill="url(#pk-glass)" stroke="#f2a51d" stroke-width="3.2"/><circle cx="37" cy="30.5" r="10.8" fill="none" stroke="' + IK + '" stroke-width="1.5"/><path d="M31.5 26.5 Q34 23.6 38.5 24.4" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></g>'
+      + '<g><circle cx="63" cy="30.5" r="9.2" fill="url(#pk-glass)" stroke="#f2a51d" stroke-width="3.2"/><circle cx="63" cy="30.5" r="10.8" fill="none" stroke="' + IK + '" stroke-width="1.5"/><path d="M57.5 26.5 Q60 23.6 64.5 24.4" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></g>'
+  };
+  var lyr = function (cls, inner) { return '<svg class="lyr ' + cls + '" viewBox="0 0 140 100" focusable="false"><g transform="' + TF + '">' + inner + '</g></svg>'; };
+  var BACK = lyr('pfar', PARTS.flipL);
+  var BODY = lyr('pbody', PARTS.body);
+  var HEAD = lyr('pheadf', PARTS.head);
+  var FLIP = lyr('pflip', PARTS.flipR);
 
   var LAP = '<svg class="lyr plap" viewBox="0 0 140 100" focusable="false"><g class="lap">'
     + '<path d="M95 60 H122 L120 64 H93 Z" fill="url(#pk-metal)"' + st() + '/>'
@@ -799,30 +805,7 @@
   var NAMEOF = { home: 'Home', about: 'About', experience: 'Experience', skills: 'Skills', roadmap: 'Roadmap', fixit: 'Fix it', lab: 'Network lab', docs: 'Docs', resume: 'Resume', contact: 'Contact' };
 
   function mkAv() {
-    var I = '#101c2b', BD = '#243b55', W = '#fdfdf5';
-    var eye = function (x, rx, ry, hl) { return '<ellipse cx="' + x + '" cy="48" rx="' + rx + '" ry="' + ry + '" fill="' + I + '"/><circle cx="' + (x + 2.3) + '" cy="' + (48 - ry * 0.45) + '" r="' + hl + '" fill="#fff"/><circle cx="' + (x - 2) + '" cy="' + (48 + ry * 0.5) + '" r="1.1" fill="#fff"/>'; };
-    var arc = function (x) { return '<path d="M' + (x - 6) + ' 50 Q' + x + ' 41.5 ' + (x + 6) + ' 50" stroke="' + I + '" stroke-width="3" fill="none" stroke-linecap="round"/>'; };
-    var heart = function (x) { return '<path d="M' + x + ' 55 C' + (x - 8) + ' 49 ' + (x - 6.5) + ' 41 ' + x + ' 45 C' + (x + 6.5) + ' 41 ' + (x + 8) + ' 49 ' + x + ' 55Z" fill="#ff6fa8"/>'; };
-    return '<svg class="pk-svg" viewBox="0 0 100 100" focusable="false" aria-hidden="true"><g class="av-body">'
-      + '<g class="fl fl1"><ellipse cx="13" cy="70" rx="7" ry="14" transform="rotate(16 13 70)" fill="' + BD + '" stroke="' + I + '" stroke-width="2"/></g>'
-      + '<g class="fl fl2"><ellipse cx="87" cy="70" rx="7" ry="14" transform="rotate(-16 87 70)" fill="' + BD + '" stroke="' + I + '" stroke-width="2"/></g>'
-      + '<ellipse cx="50" cy="86" rx="27" ry="17" fill="' + BD + '" stroke="' + I + '" stroke-width="2"/><ellipse cx="50" cy="88" rx="17" ry="12" fill="' + W + '"/>'
-      + '<circle cx="50" cy="48" r="35" fill="' + BD + '" stroke="' + I + '" stroke-width="2"/>'
-      + '<path d="M50 39 C44 28 24 30 24 50 C24 67 40 75 50 75 C60 75 76 67 76 50 C76 30 56 28 50 39Z" fill="' + W + '"/>'
-      + '<ellipse cx="29" cy="60" rx="5.5" ry="3.4" fill="#ff8fab" opacity=".6"/><ellipse cx="71" cy="60" rx="5.5" ry="3.4" fill="#ff8fab" opacity=".6"/>'
-      + '<g class="pp"><g class="blk" data-m="normal">' + eye(38, 6, 7.6, 2.4) + eye(62, 6, 7.6, 2.4) + '</g>'
-      + '<g data-m="surprised">' + eye(38, 7, 9, 2.8) + eye(62, 7, 9, 2.8) + '</g></g>'
-      + '<g data-m="happy">' + arc(38) + arc(62) + '</g>'
-      + '<g data-m="wink">' + eye(38, 6, 7.6, 2.4) + arc(62) + '</g>'
-      + '<g data-m="love">' + heart(38) + heart(62) + '</g>'
-      + '<g data-m="sleepy"><path d="M32 50 H44 M56 50 H68" stroke="' + I + '" stroke-width="3" stroke-linecap="round"/><text x="74" y="36" font-size="11" font-family="monospace" font-weight="700" fill="' + I + '" class="zz">z</text></g>'
-      + '<path d="M43.5 57 Q50 52 56.5 57 Q55.5 65 50 66.5 Q44.5 65 43.5 57Z" fill="#ffb02e" stroke="' + I + '" stroke-width="1.6" stroke-linejoin="round"/>'
-      + '<path d="M46.5 57.5 Q50 55.3 53.5 57.5" stroke="#fff" stroke-opacity=".65" stroke-width="1.3" fill="none" stroke-linecap="round"/>'
-      + '<path class="smile" d="M44.5 70 Q50 75 55.5 70" stroke="' + I + '" stroke-width="2" fill="none" stroke-linecap="round"/>'
-      + '<path d="M21 77 Q50 94 79 77 L82 86 Q50 103 18 86Z" fill="#ff5d4a" stroke="' + I + '" stroke-width="2" stroke-linejoin="round"/>'
-      + '<path d="M17 37 Q50 -7 83 37 Q50 27 17 37Z" style="fill:var(--accent)" stroke="' + I + '" stroke-width="2" stroke-linejoin="round"/>'
-      + '<path d="M30 24 Q50 9 70 24" stroke="#fff" stroke-opacity=".5" stroke-width="2.4" fill="none" stroke-linecap="round"/><circle cx="50" cy="11.5" r="2.6" fill="#fff" stroke="' + I + '" stroke-width="1.3"/>'
-      + '</g></svg>';
+    return '<svg class="pk-svg" viewBox="0 0 100 100" focusable="false" aria-hidden="true"><g class="av-body">' + PARTS.flipL + PARTS.flipR + PARTS.body.replace(/<ellipse class="pad"[^>]*\/>/, '') + PARTS.head + '</g></svg>';
   }
   var AV = mkAv();
   var callBtn = document.createElement('button');
@@ -875,15 +858,51 @@
 
   function bubble(cls, html) { var b = document.createElement('div'); b.className = 'pk-b ' + cls; if (html) b.innerHTML = html; log.appendChild(b); log.scrollTop = log.scrollHeight; return b; }
   function alive(my) { return my === chatMy && !chat.hidden; }
-  async function reply(text) {
+  /* body language: short, springy things he does while he talks */
+  function doAct(a) {
+    var my = chatMy; if (!my || !on || !a) return;
+    if (a === 'giggle' || a === 'laugh') {
+      hav.classList.remove('giggle'); void hav.offsetWidth; hav.classList.add('giggle');
+      setTimeout(function () { hav.classList.remove('giggle'); }, a === 'laugh' ? 1300 : 1000);
+    }
+    var sn = Math.sin, PI = Math.PI;
+    var D = {
+      giggle: [950, function (p) { S.hy = -3.2 * Math.abs(sn(6 * PI * p)) * (1 - 0.4 * p); S.sq = sn(12 * PI * p) * 0.3 * (1 - p); S.wave = sn(14 * PI * p) * 14 * (1 - p); }],
+      laugh: [1500, function (p) { S.hy = -5 * Math.abs(sn(8 * PI * p)) * (1 - 0.3 * p); S.sq = sn(16 * PI * p) * 0.4 * (1 - p); S.roll = sn(8 * PI * p) * 8 * (1 - p); S.wave = sn(18 * PI * p) * 30 * (1 - p); }],
+      dance: [1900, function (p) { S.hy = -8 * Math.abs(sn(4 * PI * p)); S.roll = sn(4 * PI * p) * 12; S.wave = sn(10 * PI * p) * 45; S.head = sn(4 * PI * p) * 22; }],
+      shy: [1300, function (p) { S.head = -28 * sn(PI * p); S.sq = sn(PI * p) * 0.1; S.wave = sn(PI * p) * 10; }],
+      gasp: [700, function (p) { S.hy = -12 * sn(PI * p) * (1 - p); S.sq = -sn(PI * p) * 0.2; S.pitch = -8 * sn(PI * p); }],
+      sulk: [1400, function (p) { S.pitch = 10 * sn(PI * p); S.head = 18 * sn(PI * p); }],
+      think: [1100, function (p) { S.head = sn(2 * PI * p) * 16; S.roll = sn(2 * PI * p) * 4; }],
+      nod: [700, function (p) { S.pitch = sn(2 * PI * p) * 7; }],
+      hug: [1500, function (p) { S.wave = -50 * sn(PI * p); S.sq = sn(PI * p) * 0.22; }]
+    };
+    var d = D[a]; if (!d) return;
+    tween(my, d[0], d[1]).then(function () { S.hy = S.sq = S.wave = S.head = S.roll = S.pitch = 0; });
+  }
+  async function reply(text, mood, act) {
     var my = chatMy; if (!my) return;
-    chatBusy = true; chat.classList.add('busy'); hav.setAttribute('data-mood', 'happy');
+    chatBusy = true; chat.classList.add('busy'); hav.setAttribute('data-mood', mood || 'happy');
+    setMood(mood || 'happy');
     var b = bubble('pk', '<i class="dots"><i></i><i></i><i></i></i>');
     var chars = Array.from(text);
     await wait(380 + Math.min(650, chars.length * 8)); if (!alive(my)) return;
+    if (act) doAct(act);
     var step = Math.max(1, Math.ceil(chars.length / 50));
     for (var i = 0; i < chars.length; i += step) { b.textContent = chars.slice(0, i + step).join(''); log.scrollTop = log.scrollHeight; await wait(18); if (!alive(my)) return; }
     chatBusy = false; chat.classList.remove('busy'); hav.setAttribute('data-mood', 'normal');
+    setTimeout(function () { if (on && alive(my) && !busy) return; if (on && alive(my)) setMood('normal'); }, 1400);
+    nudge();
+  }
+  var idleT = 0, nudged = 0;
+  function nudge() {
+    clearTimeout(idleT);
+    if (nudged >= 2) return;
+    idleT = setTimeout(function () {
+      if (chat.hidden || chatBusy) return;
+      nudged++;
+      reply(pick(['Psst... still there? I know a fish fact.', "I'm here if you want to chat. Or feed me. 🐟", 'Say "tour" if you want me to show you around!']), 'curious', 'think');
+    }, 32000);
   }
   function setActs(list) {
     acts.textContent = '';
@@ -904,7 +923,7 @@
   }
   async function feed() {
     var n = fishUp();
-    await reply(n === 5 ? "I'm full! ...okay, one more. 🐟" : n === 10 ? "You're my favourite human. 💙 That's " + n + " fish!" : FISHL[(n - 1) % FISHL.length] + (n > 1 ? '  (fish eaten: ' + n + ')' : ''));
+    await reply(n === 5 ? "I'm full! ...okay, one more. 🐟" : n === 10 ? "You're my favourite human. 💙 That's " + n + " fish!" : FISHL[(n - 1) % FISHL.length] + (n > 1 ? '  (fish eaten: ' + n + ')' : ''), 'love', 'giggle');
     setActs(TOP);
   }
   async function tourStep(i) {
@@ -935,34 +954,42 @@
       ['📍', 'What is this part?', "you're in " + NAMEOF[id], ctx],
       ['🎮', 'Play Tetris', 'inside the terminal', playGame],
       ['🐟', 'Feed Packet', 'fish eaten: ' + (parseInt(get('pk-fish'), 10) || 0), feed],
-      ['💼', 'Who is Ajas?', 'the quick version', function () { reply(AJAS).then(function () { setActs(TOP); }); }],
-      ['😂', 'Tell a joke', 'network humour', function () { reply(pick(JOKES)).then(function () { setActs(TOP); }); }]
+      ['💼', 'Who is Ajas?', 'the quick version', function () { reply(AJAS, 'happy', 'nod').then(function () { setActs(TOP); }); }],
+      ['😂', 'Tell a joke', 'network humour', function () { reply(pick(JOKES) + '  Hehe!', 'happy', 'laugh').then(function () { setActs(TOP); }); }]
     ];
   }
   function refresh() { TOP = mkTop(); setActs(TOP); }
-  function think(t) {
-    t = t.toLowerCase();
-    if (/\b(bye|goodbye|see you|later)\b/.test(t)) { if (closeFn) closeFn(); return null; }
-    if (/tour|around|show me/.test(t)) { tourStep(0); return null; }
-    if (/tetris|game|play/.test(t)) { playGame(); return null; }
-    if (/fish|feed|food|hungry/.test(t)) { feed(); return null; }
-    if (/where am i|this part|this section/.test(t)) { ctx(); return null; }
-    if (/\b(hi|hello|hey|yo)\b/.test(t)) return pick(HELLO);
-    if (/joke|funny|laugh/.test(t)) return pick(JOKES);
-    if (/who are you|your name|packet|penguin/.test(t)) return ME;
-    if (/ajas|ajaz|owner|who made|work|job|skill|does he/.test(t)) return AJAS;
-    if (/hire|contact|email|mail|reach/.test(t)) return 'Hiring? Smart move. The Contact button up top goes straight to him.';
-    if (/resume|cv/.test(t)) return 'The resume is coming soon. Ajas is still polishing it. 📄';
-    if (/thank|thanks|cool|nice|great|love/.test(t)) { setMood('love'); setTimeout(function () { if (on && !busy) setMood('normal'); }, 1500); return 'Aw, thanks! 🐧'; }
-    return pick(['I only speak packet. Try the buttons below!', "Hmm, that's above my bandwidth. Tap one of the tiles!"]);
+  function goSec(id) { var t = document.getElementById(id); if (t) t.scrollIntoView({ behavior: 'smooth' }); }
+  function mail() {
+    var q = (window.PacketBrain && PacketBrain.mailq()) || '';
+    window.location.href = 'mailto:ajasm397@gmail.com?subject=' + encodeURIComponent('A question from your portfolio') + '&body=' + encodeURIComponent('Hi Ajas,\n\nPacket passed me this one:\n\n' + q + '\n\n');
+  }
+  async function talk(t) {
+    nudge();
+    bubble('me').textContent = t;
+    var r = window.PacketBrain ? PacketBrain.think(t, { here: here() }) : { t: pick(HELLO), m: 'happy' };
+    if (r.d === 'close') { if (closeFn) closeFn(); return; }
+    if (r.d === 'where') { ctx(); return; }
+    if (r.t) await reply(r.t, r.m, r.a);
+    if (!alive(chatMy)) return;
+    var d = r.d || '';
+    if (d === 'tour') { tourStep(0); return; }
+    if (d === 'game') { playGame(); return; }
+    if (d === 'feed') { feed(); return; }
+    if (d === 'theme') { var tb = document.getElementById('theme'); if (tb) tb.click(); }
+    if (d.indexOf('goto:') === 0) goSec(d.slice(5));
+    if (d === 'mail') { mail(); }
+    var extra = [];
+    if (r.offer === 'mail') extra = [['✉️', 'Ask Ajas', 'opens an email', function () { reply('Opening an email for you. 📧', 'happy', 'nod'); setTimeout(mail, 900); }]];
+    else if (r.o && r.o.indexOf('goto:') === 0) { var id = r.o.slice(5); extra = [['➡️', 'Take me there', NAMEOF[id] || id, function () { goSec(id); reply('Off we go! 🚀', 'happy', 'nod'); setActs(TOP); }]]; }
+    else if (r.o === 'game') extra = [['🎮', 'Play Tetris', 'inside the terminal', playGame]];
+    setActs(extra.concat(TOP).slice(0, 6));
   }
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var t = field.value.trim(); field.value = '';
     if (!t || chatBusy) return;
-    bubble('me').textContent = t;
-    var r = think(t);
-    if (r) reply(r).then(function () { setActs(TOP); });
+    talk(t);
   });
   chat.querySelector('.pk-x').addEventListener('click', function () { if (closeFn && !chatBusy) closeFn(); });
   function hideChat() {
@@ -999,7 +1026,7 @@
     await Promise.all([hop, hi]);
     S.hy = S.wave = 0;
     setMood('normal');
-    await reply(greeting());
+    await reply(greeting(), 'happy', 'giggle');
     if (!alive(my)) return;
     chat.classList.remove('busy');
     var first = chat.querySelector('.pk-act'); if (first) first.focus({ preventScroll: true });
