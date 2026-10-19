@@ -90,21 +90,21 @@
     ['setname', /\b(?:my name is|call me|i am called|name'?s|(?:i'?m|im|i am)) ([a-z]{2,15})\b/, function (env, m) {
       var n = m[1]; if (BADN.test(n) || /(ing|ed|ly)$/.test(n)) return null;
       n = n.charAt(0).toUpperCase() + n.slice(1); put('pk-name', n); env.name = n;
-      return R(pick(['Nice to meet you, ' + n + '! Hehe, I like that name. 🐧', n + '! Got it. I never forget a name, only fish. 🐟', 'Hi ' + n + '! Packet, at your service.']), 'happy', 'giggle');
+      return R(pick(['Nice to meet you, ' + n + '! Good name. Very trustworthy. 🐧', n + '! Got it. I never forget a name, only fish. 🐟', 'Hi ' + n + '! Packet, at your service.']), 'smug', 'smirk');
     }],
     ['myname', /what'?s my name|do you know me|who am i|remember me|do you remember/, function (env) {
       var v = parseInt(get('pk-visits'), 10) || 1;
-      return env.name ? R('You are ' + env.name + '! And this is visit #' + v + '. I remember. 🐧', 'love', 'giggle') : R("Hmm, you haven't told me yet! What should I call you? (Say \"my name is ...\")", 'curious', 'think');
+      return env.name ? R('You are ' + env.name + '! And this is visit #' + v + '. I remember. 🐧', 'love', 'smirk') : R("Hmm, you haven't told me yet! What should I call you? (Say \"my name is ...\")", 'curious', 'think');
     }],
     ['greet', /^(hi+|hello+|hey+|yo|hola|namaste|sup|howdy|good (morning|afternoon|evening|night))\b/, function (env) {
       var h = new Date().getHours(), p = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
-      return R(pick([p + nm(env) + '! 🐧', 'Hi' + nm(env) + '! Packet here. 👋', 'Hey' + nm(env) + '! You came back to the penguin. I love it.', 'Ping received! Hello' + nm(env) + '.']), 'happy', 'giggle');
+      return R(pick(['Well, well. A visitor' + nm(env) + '. 🐧', p + nm(env) + '. Please don\'t touch the red cables.', 'Oh, you\'re here. I was just about to do something naughty.', 'Ping received. State your business' + nm(env) + '.']), 'smug', 'smirk');
     }],
     ['howru', /how are you|how r u|how'?s it going|how do you do|you ok|what'?s up|wassup|how'?s life/, function () {
-      return R(pick(["Pretty great! Zero packet loss today. 🐧", "Hungry, but happy. Always hungry, always happy.", "Warm circuits, cold flippers. How about you?", "Living the dream in a data centre. You?"]), 'happy', 'giggle');
+      return R(pick(["Living rent-free in your browser. You?", "Zero packet loss, maximum attitude. You?", "Great. I just rerouted somebody's lunch break. Don't ask.", "Hungry, but dangerous. How are you?"]), 'smug', 'smirk');
     }],
     ['whoami', /who are you|your name|what are you|are you (a )?(penguin|bird)|tell me about (yourself|you)\b|introduce yourself/, function () {
-      return R("I'm Packet, a penguin who lives in this network. I carry data around, supervise the site and judge people's cable management. 🐧", 'happy', 'giggle', { more: "I wear goggles because the rocket is fast, and a scarf because the data centre is cold." });
+      return R("I'm Packet, a penguin who lives in this network. I carry data around, supervise the site and judge people's cable management. 🐧", 'happy', 'smirk', { more: "I wear goggles because the rocket is fast, and a scarf because the data centre is cold." });
     }],
     ['real', /are you (real|human|ai|a bot|a robot|alive|chatgpt|claude|a person)|real person|are you smart|are you intelligent/, function () {
       return R("I'm a small program living in this page. No cloud AI here: just Ajas's code, a nose for keywords and a deep love of fish. I try to understand, and I'm honest when I don't. 🐟", 'wink', 'nod', { more: "If I can't answer, I'll pass your question to Ajas himself. He's the real person." });
@@ -113,15 +113,15 @@
       return R("Ajas made me! He's the IT specialist behind this whole site. I just fly around and do the supervising. 🐧", 'happy', 'nod', { o: 'about' });
     }],
     ['age', /how old are you|your age|when were you (born|made|hatched)/, function () {
-      return R("I hatched in a data centre not long ago. In penguin years? Very young. In router years? Ancient.", 'wink', 'giggle');
+      return R("I hatched in a data centre not long ago. In penguin years? Very young. In router years? Ancient.", 'wink', 'smirk');
     }],
     ['likes', /favou?rite (food|color|colour|animal|song|movie|game|protocol|language|thing)|what do you (eat|like|love|do for fun)|do you like/, function (env, m, n) {
-      if (/color|colour/.test(n)) return R("Green! Obviously. It's right there on my cap. And on every terminal ever.", 'happy', 'giggle');
-      if (/food|eat/.test(n)) return R("Fish. Always fish. Salmon on Sundays. 🐟", 'love', 'giggle');
-      if (/protocol/.test(n)) return R("UDP. It never waits for anyone, which is relatable.", 'smug', 'giggle');
+      if (/color|colour/.test(n)) return R("Green! Obviously. It's right there on my cap. And on every terminal ever.", 'happy', 'smirk');
+      if (/food|eat/.test(n)) return R("Fish. Always fish. Salmon on Sundays. 🐟", 'love', 'smirk');
+      if (/protocol/.test(n)) return R("UDP. It never waits for anyone, which is relatable.", 'smug', 'smirk');
       if (/language/.test(n)) return R("Python for scripting, but I mostly speak fluent waddle.", 'wink', '');
       if (/game/.test(n)) return R("Tetris. I'm a packet. Falling blocks are my love language. Try it!", 'happy', 'dance', { o: 'game' });
-      return R("Fish, rockets, tidy cables and people who say thank you. 🐟", 'happy', 'giggle');
+      return R("Fish, rockets, tidy cables and people who say thank you. 🐟", 'happy', 'smirk');
     }],
     ['fly', /can you fly|rocket|jet ?pack|goggles|scarf|how do you fly/, function () {
       return R("Penguins can't fly, so I borrowed a rocket. The goggles are for speed, the scarf is for style. Don't tell the other penguins. 🚀", 'happy', 'dance');
@@ -133,7 +133,7 @@
       return R(pick(["Aww. That sounds heavy. I'm right here. Want a joke, a fish fact, or just to tell me about it?", "Sorry you're having a rough time. A tiny penguin hug is on the way. 🤗 Want to talk, or want a distraction?"]), 'sad', 'hug', { acts: 'cheer' });
     }],
     ['feelhappy', /\b(i'?m|im|i am|i feel|feeling) (so |really |very )?(happy|great|good|awesome|excited|amazing|fantastic|wonderful|fine|better)\b/, function () {
-      return R(pick(["Yay! Happy human, happy penguin! 🎉", "That's wonderful to hear! Hehe, now I'm happy too.", "Love that. Want to celebrate with a Tetris round?"]), 'happy', 'dance');
+      return R(pick(["Yay! Happy human, happy penguin! 🎉", "That's wonderful to hear! now I'm happy too.", "Love that. Want to celebrate with a Tetris round?"]), 'happy', 'dance');
     }],
     ['bored', /\b(i'?m|im|i am) bored|so bored|nothing to do|entertain me/, function () {
       return R("Bored? Not on my watch! Try the tour, a round of Tetris in the terminal, the Network lab, or just feed me. 🐟", 'happy', 'dance', { acts: 'fun' });
@@ -142,25 +142,31 @@
       return R("Rest is a legit fix. Even servers get maintenance windows. 💤 Drink some water and take a break?", 'sleepy', 'nod');
     }],
     ['hungryU', /\b(i'?m|im|i am) (so |really |very )?(hungry|starving)|i want food|i need food/, function () {
-      return R("Go eat something! I'd recommend fish, but I'm biased. 🐟 Come back when you're full.", 'happy', 'giggle');
+      return R("Go eat something! I'd recommend fish, but I'm biased. 🐟 Come back when you're full.", 'happy', 'smirk');
     }],
     ['angryU', /\b(i'?m|im|i am) (so |really |very )?(angry|mad|furious|annoyed|frustrated)|i hate (this|my|it)/, function () {
       return R("Deep breath. In... out. Tech does that to everyone. Want to tell me what broke? I know a few tricks.", 'sad', 'nod');
     }],
     ['love', /i love you|love you|i like you|you(?:'re| are| r|r the| the)? (so |very )?(cute|adorable|sweet|the best|awesome|cool|amazing|smart|clever|funny|great)|cutie|good (boy|penguin|job|bird)|marry me|be my (friend|bff)/, function (env) {
-      return R(pick(["Eep! You're making my cheeks go pink. 😳", "Aww, stop it, I'll blush right off my flippers. Hehe!", "Best. Human. Ever. 💙 (Don't tell the other humans.)", "Hehehe! You're sweet" + nm(env) + ". 🥰"]), 'love', 'shy');
+      return R(pick(["I know, I know. I'm very likeable. 😎", "Smooth talker. Keep going, I'm taking notes.", "Flattery works. Fish works better. 🐟", "Aw— I mean. Obviously. 😏"]), 'smug', 'smirk');
     }],
     ['insult', /\b(stupid|dumb|ugly|idiot|useless|worst|shut up|annoying|you suck|hate you|trash|boring)\b/, function () {
-      return R(pick(["Ouch. My feelings.exe has stopped responding. 🥺", "That hurt my flippers. ...But I forgive you.", "Rude! I'm telling the router."]), 'sad', 'sulk', { forgive: 1 });
+      return R(pick(["Bold words from someone who talks to a penguin. 😏", "Ouch. Noted. I've added that to your file.", "Wow. I'm telling the router. It has your IP."]), 'sly', 'smirk');
     }],
     ['thanks', /thank|thx|appreciate|cheers/, function () {
-      return R(pick(["Anytime! Hehe. 🐧", "You're welcome! That's what penguins are for.", "My pleasure! Come back soon."]), 'happy', 'giggle');
+      return R(pick(["Don't mention it. Seriously. My ego is full.", "Anytime. I'm very helpful when I feel like it. 😏", "You're welcome. Fish donations accepted. 🐟"]), 'smug', 'nod');
     }],
     ['laugh', /\b(lol|lmao|haha+|hehe+|hihi+|rofl)\b|^(😂|🤣)/, function () {
-      return R(pick(["Hehe! You laughed! That's my best work.", "Hahaha! Okay, I'm cracking up too!", "Teehee. 😆"]), 'happy', 'laugh');
+      return R(pick(["Ha! Knew I was funny.", "That's right, laugh. I'm here all week.", "Nailed it. 😎"]), 'smug', 'smirk');
+    }],
+    ['naughty', /naughty|prank|mischief|be bad|do something (bad|evil|crazy|wild)|cause trouble|troublemaker/, function () {
+      return R(pick(["Okay... but you didn't see this. *unplugs one random cable* ...kidding. Or am I? 😈", "I once renamed every printer to 'Why-Fi'. Nobody noticed for a week.", "My favourite prank: telling Ajas 'the server is fine'. Then watching his eye twitch. 😇", "I hid one fish in the firewall rules. Good luck finding it."]), 'sly', 'smirk');
+    }],
+    ['sudo', /\bsudo\b|root access|hack (you|the site|this)|rm -rf/, function () {
+      return R("Nice try. 'ajas is not in the sudoers file. This incident will be reported.' 📝 (I am the one reporting it.)", 'smug', 'smirk');
     }],
     ['joke', /\bjoke|make me laugh|something funny|funny story|cheer me up/, function () {
-      return R(pick(JOKES) + '  Hehe!', 'happy', 'laugh', { more: pick(JOKES) });
+      return R(pick(JOKES) + '  *ba-dum-tss*', 'smug', 'smirk', { more: pick(JOKES) });
     }],
     ['fact', /fun fact|tell me something|did you know|random fact|interesting|\bfact\b/, function () {
       return R(pick(FACTS), 'curious', 'nod', { more: pick(FACTS) });
@@ -169,14 +175,14 @@
       var i = Math.floor(Math.random() * RIDDLES.length); st.mode = 'riddle'; st.data = i;
       return R(RIDDLES[i][0] + ' (or say "give up")', 'curious', 'think');
     }],
-    ['sing', /\bsing\b|song/, function () { return R("🎵 Ping, ping, ping... pong! My packets loss is zero, zero, zero... 🎵 Hehe, how was that?", 'happy', 'dance'); }],
+    ['sing', /\bsing\b|song/, function () { return R("🎵 Ping, ping, ping... pong! My packets loss is zero, zero, zero... 🎵 How was that?", 'happy', 'dance'); }],
     ['dance', /\bdance\b|boogie|groove/, function () { return R("Watch this! 💃🐧", 'happy', 'dance'); }],
-    ['hug', /\bhug\b|cuddle|high ?five/, function () { return R(pick(["*hug* 🤗 Flipper-squeeze delivered!", "High flipper! ✋🐧 Hehe."]), 'love', 'hug'); }],
+    ['hug', /\bhug\b|cuddle|high ?five/, function () { return R(pick(["*hug* 🤗 Flipper-squeeze delivered!", "High flipper! ✋🐧"]), 'love', 'hug'); }],
     ['story', /tell me a story|\bstory\b|tale/, function () {
       return R("Once upon a time, a little packet got lost on the way to a server. It asked a router for help, got passed along 11 hops, and arrived 3 milliseconds late. The server said 'you're late'. The packet said 'you wouldn't believe my journey'. The end. 🐧", 'happy', 'nod');
     }],
     ['knock', /knock knock/, function () { st.mode = 'knock'; return R("Who's there?", 'curious', 'nod'); }],
-    ['rps', /rock paper|rps|play.*rock/, function () { st.mode = 'rps'; return R("Rock, paper, scissors! Type your pick.", 'happy', 'giggle'); }],
+    ['rps', /rock paper|rps|play.*rock/, function () { st.mode = 'rps'; return R("Rock, paper, scissors! Type your pick.", 'happy', 'smirk'); }],
     ['calc', /^(?:what'?s|what is|calc(?:ulate)?|how much is|=)?\s*(-?\d+(?:\.\d+)?)\s*([+\-*/x×])\s*(-?\d+(?:\.\d+)?)\s*\??$/, function (env, m) {
       var a = parseFloat(m[1]), b = parseFloat(m[3]), o = m[2], r;
       r = o === '+' ? a + b : o === '-' ? a - b : o === '/' ? (b === 0 ? NaN : a / b) : a * b;
@@ -187,11 +193,11 @@
       var d = new Date();
       return R("It's " + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' on ' + d.toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long' }) + ' where you are. 🕒', 'happy', 'nod');
     }],
-    ['weather', /weather|rain|temperature|hot today|cold today/, function () { return R("I live in a router. No windows! Look outside and tell me. 🌦️", 'curious', 'giggle'); }],
+    ['weather', /weather|rain|temperature|hot today|cold today/, function () { return R("I live in a router. No windows! Look outside and tell me. 🌦️", 'curious', 'smirk'); }],
     ['theme', /dark mode|light mode|change theme|switch theme|too bright|too dark/, function () { return R("Switching the lights! 💡", 'happy', 'nod', { d: 'theme' }); }],
     ['tour', /\btour\b|show me around|guide me|walk me through|give me a tour/, function () { return R("Yay, a tour! Hold on to your goggles. 🧭", 'happy', 'dance', { d: 'tour' }); }],
     ['game', /tetris|play (a )?game|let'?s play|\bgame\b|arcade/, function () { return R("Game time! 🎮", 'happy', 'dance', { d: 'game' }); }],
-    ['feed', /\bfish\b|\bfeed\b|\bsnack\b|\bhungry\b|\bfood\b/, function () { return R("Fish?! Yes please! 🐟", 'love', 'giggle', { d: 'feed' }); }],
+    ['feed', /\bfish\b|\bfeed\b|\bsnack\b|\bhungry\b|\bfood\b/, function () { return R("Fish?! Yes please! 🐟", 'love', 'smirk', { d: 'feed' }); }],
     ['where', /where am i|this (part|section|page)|what'?s here|what is here|what am i looking at/, function () { return R('', 'curious', 'nod', { d: 'where' }); }],
     ['goto', /\b(?:show|take|go|open|scroll|jump|bring|navigate)\b.*?\b(about|experience|skills|roadmap|fix ?it|network lab|lab|docs|documentation|resume|contact|home|top|packet park)\b/, function (env, m) {
       var k = m[1].replace(/fix ?it/, 'fix it'), id = PAGES[k] || PAGES[m[1]];
@@ -263,20 +269,20 @@
     if (st.mode === 'riddle') {
       if (n.split(' ').length > 4 && !/give up|don'?t know/.test(n)) { st.mode = ''; return null; }
       var ri = RIDDLES[st.data];
-      if (/give up|idk|don'?t know|tell me|no idea/.test(n)) { st.mode = ''; return R("It's... " + ri[1].source.replace(/[^a-z]/g, '') + "! Hehe, got you. Want another?", 'smug', 'giggle'); }
+      if (/give up|idk|don'?t know|tell me|no idea/.test(n)) { st.mode = ''; return R("It's... " + ri[1].source.replace(/[^a-z]/g, '') + "! Got you. Want another?", 'smug', 'smirk'); }
       if (ri[1].test(n)) { st.mode = ''; return R("YES! You got it! 🎉 Big brain human.", 'happy', 'dance'); }
-      st.tries = (st.tries || 0) + 1; if (st.tries > 3) { st.mode = ''; st.tries = 0; return R("Let's call it a draw! It was '" + ri[1].source.replace(/[^a-z]/g, '') + "'. Want another riddle?", 'smug', 'giggle'); }
-      return R(pick(["Not quite! Try again, or say 'give up'.", "Close... or not. Hehe. Another guess?"]), 'curious', 'think');
+      st.tries = (st.tries || 0) + 1; if (st.tries > 3) { st.mode = ''; st.tries = 0; return R("Let's call it a draw! It was '" + ri[1].source.replace(/[^a-z]/g, '') + "'. Want another riddle?", 'smug', 'smirk'); }
+      return R(pick(["Not quite! Try again, or say 'give up'.", "Close... or not. Another guess?"]), 'curious', 'think');
     }
     if (st.mode === 'knock') {
-      if (st.data === 'w') { st.mode = ''; return R("Hehehe! Okay that was funny. 😆", 'happy', 'laugh'); }
-      st.data = 'w'; return R(raw.replace(/\bwho'?s there\??/i, '').trim() ? raw.trim() + ' who? ...Okay I don\'t have the punchline, you win. Hehe!' : "Penguin who? Penguin-ish! 🐧", 'happy', 'giggle', { reset: 1 });
+      if (st.data === 'w') { st.mode = ''; return R("Okay that was funny. 😆", 'happy', 'laugh'); }
+      st.data = 'w'; return R(raw.replace(/\bwho'?s there\??/i, '').trim() ? raw.trim() + ' who? ...Okay I don\'t have the punchline, you win.' : "Penguin who? Penguin-ish! 🐧", 'happy', 'smirk', { reset: 1 });
     }
     if (st.mode === 'rps') {
       var c = /rock/.test(n) ? 0 : /paper/.test(n) ? 1 : /scissor/.test(n) ? 2 : -1;
       if (c < 0) { st.mode = ''; return /stop|quit|enough|exit|no more/.test(n) ? R('Okay, that was fun! 🐧', 'happy', 'nod') : null; }
       var p = Math.floor(Math.random() * 3), nmz = ['rock', 'paper', 'scissors'];
-      var res = p === c ? "Tie! We both picked " + nmz[p] + '.' : (c - p + 3) % 3 === 1 ? 'I picked ' + nmz[p] + '. You win! 🎉' : 'I picked ' + nmz[p] + '. I win! Hehe! 😎';
+      var res = p === c ? "Tie! We both picked " + nmz[p] + '.' : (c - p + 3) % 3 === 1 ? 'I picked ' + nmz[p] + '. You win! 🎉' : 'I picked ' + nmz[p] + '. I win! 😎';
       return R(res + ' Again?', p === c ? 'curious' : (c - p + 3) % 3 === 1 ? 'sad' : 'smug', p === c ? 'nod' : (c - p + 3) % 3 === 1 ? 'gasp' : 'laugh');
     }
     return null;
@@ -288,7 +294,7 @@
     var n = norm(raw); st.turns++;
     if (!n || !/[a-z0-9]/.test(n)) return R(pick(['Hm?', 'Psst... use words, my translator is tiny.']), 'curious', 'think');
     var r = null, id = '';
-    if (n === st.lastIn && !/^(yes|no|more)/.test(n)) { st.lastIn = n; return R(pick(["You said that already! Hehe. Try something new?", "Déjà vu! Okay, say it a third time and I'll start charging fish. 🐟"]), 'smug', 'giggle'); }
+    if (n === st.lastIn && !/^(yes|no|more)/.test(n)) { st.lastIn = n; return R(pick(["You said that already. Try something new?", "Déjà vu! Okay, say it a third time and I'll start charging fish. 🐟"]), 'smug', 'smirk'); }
     st.lastIn = n;
     var md = modeReply(n, raw);
     if (md && !/^(bye|goodbye)/.test(n)) { if (md.reset) st.mode = ''; r = md; id = 'mode'; }
@@ -308,8 +314,8 @@
       st.fb++;
       var q = /\?/.test(raw) || /^(what|why|how|who|when|where|can|do|does|is|are)\b/.test(n);
       id = 'fallback';
-      if (q) r = R(pick(["Good question! I don't have that in my head. Want me to pass it to Ajas? He's the real expert.", "Hmm, that one's above my bandwidth. I can send it to Ajas for you, if you like. 📧", "I'm not sure I know. I'd rather ask Ajas than make something up."]), 'curious', 'think', { offer: 'mail', mailq: raw });
-      else r = R(pick(["Hmm, I didn't quite catch that. Try asking about Ajas, networking, or say 'tour'!", "Interesting! I only half understood that. Ask me about Ajas, tech words, or play a game?", "My translator is tiny. Say it another way?"]), 'curious', 'think');
+      if (q) r = R(pick(["Good question. I'd answer, but I'm paid in fish and this is above my pay grade. Want me to pass it to Ajas?", "Hmm, above my bandwidth. I can forward it to Ajas, the real expert. 📧", "I could bluff. I'd rather ask Ajas than make something up."]), 'sly', 'shrug', { offer: 'mail', mailq: raw });
+      else r = R(pick(["Hmm, didn't catch that. Try asking about Ajas, networking, or say 'tour'.", "Interesting. I understood about half of that. Rephrase, or ask me something techy?", "My translator is tiny and my patience is smaller. Say it another way? 😏"]), 'curious', 'shrug');
       if (st.fb >= 2 && !q) r.acts = 'fun';
     } else st.fb = 0;
     if (r.offer) st.offer = r.offer; else if (id !== 'yesno' && id !== 'no') st.offer = r.o && /^goto/.test(r.o) ? '' : st.offer;

@@ -236,11 +236,11 @@ p { margin: 0; }
 #pilot .sl { filter: none; }
 #pilot .pbody { }
 #pilot .pg { transform-origin: 54% 66%; }
-#pilot .phead { position: absolute; inset: 0; transform-style: preserve-3d; transform-origin: 49% 27%; }
+#pilot .phead { position: absolute; inset: 0; transform-style: preserve-3d; transform-origin: 52% 14%; }
 #pilot .phead .sl { }
 #pilot .pheadf { }
-#pilot .pflip { transform-origin: 65% 32%; }
-#pilot .pfar { transform-origin: 32% 32%; }
+#pilot .pflip { transform-origin: 54% 34%; }
+#pilot .pfar { transform-origin: 40% 34%; }
 #pilot .spec { transition: none; }
 #pilot .ft { transform-box: fill-box; }
 #pilot .plap { }
@@ -865,7 +865,7 @@ html.modal-open { overflow: hidden; }
 .pk-hav { position: relative; flex: none; width: 42px; height: 42px; border-radius: 50%; overflow: hidden; border: 1.6px solid var(--accent); background: radial-gradient(circle at 34% 28%, color-mix(in srgb, var(--accent) 32%, var(--panel)), var(--panel) 72%); }
 .pk-who { display: grid; line-height: 1.25; min-width: 0; flex: 1; }
 .pk-who b { font: 700 14px var(--font-mono); color: var(--fg); }
-.pk-who small { font: 11px var(--font-mono); color: var(--muted); display: flex; align-items: center; gap: 6px; }
+.pk-who small { white-space: nowrap; font: 11px var(--font-mono); color: var(--muted); display: flex; align-items: center; gap: 6px; }
 .pk-who small i { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 6px var(--accent); }
 .pk-x { font: 14px var(--font-mono); color: var(--muted); background: none; border: 1px solid transparent; border-radius: 8px; width: 30px; height: 30px; cursor: pointer; }
 .pk-x:hover { color: var(--fg); border-color: var(--line); }
@@ -907,3 +907,16 @@ html.modal-open { overflow: hidden; }
 .pk-hav.giggle .pk-svg { animation: pkgig 0.11s ease-in-out 9 alternate; }
 @keyframes pkgig { from { transform: rotate(-5deg) translateY(1px); } to { transform: rotate(5deg) translateY(-2px); } }
 .pkav .blinker { transform-box: fill-box; transform-origin: 50% 55%; animation: blink 4.8s infinite; }
+
+/* Packet v3 */
+.pkav .eyes .blinker > g { display: none; }
+.pkav[data-mood="normal"] .eyes .blinker > [data-m="normal"], .pkav[data-mood="smug"] .eyes .blinker > [data-m="smug"], .pkav[data-mood="sly"] .eyes .blinker > [data-m="sly"], .pkav[data-mood="happy"] .eyes .blinker > [data-m="happy"], .pkav[data-mood="wink"] .eyes .blinker > [data-m="wink"], .pkav[data-mood="angry"] .eyes .blinker > [data-m="angry"], .pkav[data-mood="annoyed"] .eyes .blinker > [data-m="annoyed"], .pkav[data-mood="focus"] .eyes .blinker > [data-m="focus"], .pkav[data-mood="dead"] .eyes .blinker > [data-m="dead"], .pkav[data-mood="surprised"] .eyes .blinker > [data-m="surprised"], .pkav[data-mood="curious"] .eyes .blinker > [data-m="curious"], .pkav[data-mood="sleepy"] .eyes .blinker > [data-m="sleepy"], .pkav[data-mood="sad"] .eyes .blinker > [data-m="sad"], .pkav[data-mood="love"] .eyes .blinker > [data-m="love"], .pkav[data-mood="dizzy"] .eyes .blinker > [data-m="dizzy"] { display: inline; }
+#pilot[data-mood="sly"] .eyes [data-m="sly"], #pilot[data-mood="smug"] .eyes [data-m="smug"] { display: inline; }
+.pkav[data-mood="happy"] .smile, .pkav[data-mood="wink"] .smile, .pkav[data-mood="sly"] .smile, .pkav[data-mood="smug"] .smile, .pkav[data-mood="curious"] .smile, .pkav[data-mood="love"] .smile, #pilot[data-mood="happy"] .smile, #pilot[data-mood="wink"] .smile, #pilot[data-mood="sly"] .smile, #pilot[data-mood="smug"] .smile, #pilot[data-mood="curious"] .smile, #pilot[data-mood="love"] .smile { display: inline; }
+.pkav .led { animation: pkled 1.6s ease-in-out infinite; }
+@keyframes pkled { 50% { opacity: 0.25; } }
+.pkav .cab { transform-box: fill-box; transform-origin: 90% 10%; animation: pkcab 2.6s ease-in-out infinite alternate; }
+@keyframes pkcab { to { transform: rotate(7deg); } }
+#pilot .cab { transform-box: fill-box; transform-origin: 90% 10%; animation: pkcab 2.6s ease-in-out infinite alternate; }
+#pilot .led { animation: pkled 1.6s ease-in-out infinite; }
+.pk-svg { left: -6% !important; top: 2% !important; width: 112% !important; }
