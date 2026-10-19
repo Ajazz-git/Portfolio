@@ -301,11 +301,12 @@
     var breath = Math.sin(t * 2.2) * 0.014;
     var sy = 1 + breath - stretch * 0.7 - S.sq * 0.12, sx = 1 - breath * 0.5 + stretch + S.sq * 0.08;
     pilot.style.transform = 'translate3d(' + pos.x.toFixed(1) + 'px,' + (pos.y + bob).toFixed(1) + 'px,0)';
-    rig.style.transform = 'translateZ(' + z.toFixed(1) + 'px) rotateX(' + (pitch + S.rx).toFixed(1) + 'deg) rotateY(' + yaw.toFixed(1) + 'deg) rotateZ(' + roll.toFixed(1) + 'deg)';
-    flip.style.transform = 'rotateY(' + turn.toFixed(1) + 'deg)';
+    rig.style.transform = 'translateZ(' + z.toFixed(1) + 'px) rotateX(' + (pitch * 0.35 + S.rx).toFixed(1) + 'deg) rotateY(' + (yaw * 0.25).toFixed(1) + 'deg) rotateZ(' + roll.toFixed(1) + 'deg)';
+    var tcs = Math.cos(turn * Math.PI / 180), tm = 1 - Math.abs(tcs); if (Math.abs(tcs) < 0.74) tcs = tcs < 0 ? -0.74 : 0.74;
+    flip.style.transform = 'rotate(' + (tm * -7).toFixed(1) + 'deg) scaleX(' + tcs.toFixed(3) + ')';
     pg.style.transform = 'translate3d(' + S.hx.toFixed(1) + 'px,' + S.hy.toFixed(1) + 'px,' + S.hz.toFixed(1) + 'px) rotateY(' + S.hry.toFixed(1) + 'deg) scale3d(' + sx.toFixed(3) + ',' + sy.toFixed(3) + ',1)';
     var hyaw = look.x * 24 + S.head, hpit = -look.y * 14;
-    head.style.transform = 'rotateY(' + hyaw.toFixed(1) + 'deg) rotateX(' + hpit.toFixed(1) + 'deg) rotateZ(' + (look.x * -3 + Math.sin(t * 1.4) * 0.8).toFixed(1) + 'deg)';
+    head.style.transform = 'rotateY(' + (hyaw * 0.32).toFixed(1) + 'deg) rotateX(' + (hpit * 0.3).toFixed(1) + 'deg) rotateZ(' + (look.x * -5 + Math.sin(t * 1.4) * 0.8).toFixed(1) + 'deg)';
     eyes.style.transform = 'translate(' + (look.x * 5.5).toFixed(2) + 'px,' + (look.y * 2.6).toFixed(2) + 'px)';
     var flap = flying ? -speedNow * 1.8 : 0;
     var fa = S.wave + Math.sin(t * 1.6) * 3 + S.tap * Math.sin(t * 38) * 4;
