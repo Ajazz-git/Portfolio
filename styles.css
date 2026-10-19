@@ -116,11 +116,24 @@ p { margin: 0; }
 .term-bar i { width: 10px; height: 10px; border-radius: 50%; background: var(--line); display: inline-block; }
 .term-bar span { margin-left: 8px; }
 .term-body { padding: 16px 18px; font: 14px/1.7 var(--font-mono); max-height: 340px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
-.term-body .res { color: var(--muted); }
+.term-body .res { display: block; grid-template-columns: none; gap: 0; align-items: normal; justify-items: start; padding: 0; color: var(--muted); }
+.term-body .res { border-left: 2px solid var(--line); padding-left: 12px; margin-left: 2px; }
+.term-body .res.hd { color: var(--fg); margin-top: 8px; padding-top: 2px; font-size: 0.86em; letter-spacing: 0.08em; text-transform: uppercase; border-left-color: var(--accent); }
+.term-body .res.row { display: grid; grid-template-columns: 11ch minmax(0, 1fr); column-gap: 12px; white-space: normal; justify-items: start; }
+.term-body .res .cm { color: var(--accent); }
+.term-body .line { display: flex; gap: 0; }
+.term-body .line .ps { flex: none; }
+.term-body .res.hd:first-child { margin-top: 0; }
+.term-body .line { margin-top: 12px; color: var(--fg); }
+.term-body > .line:first-child { margin-top: 0; }
+.term-body .res a { color: var(--accent); text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent); text-underline-offset: 3px; }
+.term-body .res a:hover { text-decoration-color: var(--accent); }
+.term-body { scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
 .ps { color: var(--accent); }
 .prompt { display: flex; align-items: center; gap: 8px; padding: 12px 18px; border-top: 1px solid var(--line); font: 14px var(--font-mono); }
 .prompt input { flex: 1; min-width: 0; background: transparent; border: 0; color: var(--fg); font: inherit; caret-color: var(--accent); outline: none; }
-.prompt:focus-within { background: var(--accent-dim); }
+.prompt:focus-within { background: var(--accent-dim); border-top-color: var(--accent); }
+.prompt { transition: border-color .2s, background .2s; }
 .hint { display: flex; flex-wrap: wrap; gap: 8px; }
 .type { display: inline-block; vertical-align: bottom; overflow: hidden; white-space: nowrap; }
 
@@ -195,7 +208,7 @@ p { margin: 0; }
   .dev .go { padding-top: 0; }
   .kv > div { grid-template-columns: minmax(0, 1fr); }
   .nav { margin-left: 0; }
-  .term-body { max-height: 300px; }
+  .term-body { max-height: 300px; font-size: 13px; padding: 14px; }
 }
 
 @media (prefers-reduced-motion: no-preference) {

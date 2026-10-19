@@ -653,7 +653,13 @@
 
   function add(cls, parts) {
     var d = document.createElement('div');
-    d.className = cls;
+    d.className = cls + (cls === 'res' && parts.length === 1 && typeof parts[0] === 'string' && /^[A-Z][A-Za-z ]*:$/.test(parts[0]) ? ' hd' : '');
+    var row = cls === 'res' && parts.length === 1 && typeof parts[0] === 'string' && /^  ([a-z][^ ]*(?: <[a-z]+>)?) {2,}(\S.*)$/.exec(parts[0]);
+    if (row) {
+      var cm = document.createElement('span'); cm.className = 'cm'; cm.textContent = row[1];
+      d.appendChild(cm); d.appendChild(document.createTextNode(row[2])); d.classList.add('row');
+      out.appendChild(d); out.scrollTop = out.scrollHeight; return;
+    }
     parts.forEach(function (p) {
       if (typeof p === 'string') {
         d.appendChild(document.createTextNode(p));
@@ -677,15 +683,25 @@
     help: function () {
       return [
         'About me:',
-        '  whoami  skills  experience  resume  contact  location',
+        '  whoami      who I am',
+        '  skills      what I work with',
+        '  experience  where I have worked',
+        '  resume      the PDF',
+        '  contact     reach me',
         'Look around:',
-        '  ls  pwd  cd <place>  cat <file>  open <place>',
+        '  ls          list the sections',
+        '  cd <place>  jump to a section',
+        '  cat <file>  read a file',
         'System:',
-        '  date  uname  uptime  ping  ifconfig  neofetch  history  echo',
+        '  neofetch    system info',
+        '  ping        check the network',
+        '  date        also uname, uptime, ifconfig',
         'Fun:',
-        '  tetris  fortune  packet  theme',
-        'Other:',
-        '  clear  (Tab completes, arrows recall)'
+        '  tetris      play Tetris',
+        '  packet      call Packet',
+        '  theme       dark or light',
+        '  fortune     random wisdom',
+        '  clear       wipe the screen (Tab completes)'
       ];
     },
     whoami: function () { return ['Ajas Muhammed, IT Specialist and Systems Administrator.']; },
@@ -735,10 +751,9 @@
       return ['eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500', '      inet 192.168.1.10  netmask 255.255.255.0  broadcast 192.168.1.255', '      status: connected, firewall: on, VPN: ready'];
     },
     neofetch: function () {
-      return [
-        '   .--.      ajas@kochi', '  |o_o |     ---------', '  |:_/ |     OS: Windows, Linux, macOS (all three)', ' //   \\ \\    Role: IT Specialist', '(|     | )   Shell: bash, PowerShell, patience',
-        "/'\\_   _/`\\   Uptime: since 2023", '\\___)=(___/   Mascot: Packet the penguin'
-      ];
+      var art = ['   .--.', '  |o_o |', '  |:_/ |', ' //   \\ \\', '(|     | )', "/'\\_   _/'\\", '\\___)=(___/'];
+      var info = ['ajas@kochi', '---------', 'OS: Windows, Linux, macOS', 'Role: IT Specialist', 'Shell: bash, PowerShell', 'Uptime: since 2023', 'Mascot: Packet the penguin'];
+      return art.map(function (a, n) { return (a + '            ').slice(0, 13) + info[n]; });
     },
     fortune: function () {
       return [pick(['Have you tried turning it off and on again?', 'It is always DNS. Except when it is the cable.', 'Back up before you fix it. Always.', 'The best outage is the one users never notice.', 'Document it now, thank yourself at 2 a.m.', 'A reboot fixes everything except understanding.'])];
