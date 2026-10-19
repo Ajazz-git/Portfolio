@@ -306,7 +306,7 @@
     pg.style.transform = 'translate3d(' + S.hx.toFixed(1) + 'px,' + S.hy.toFixed(1) + 'px,' + S.hz.toFixed(1) + 'px) rotateY(' + S.hry.toFixed(1) + 'deg) scale3d(' + sx.toFixed(3) + ',' + sy.toFixed(3) + ',1)';
     var hyaw = look.x * 24 + S.head, hpit = -look.y * 14;
     head.style.transform = 'rotateY(' + hyaw.toFixed(1) + 'deg) rotateX(' + hpit.toFixed(1) + 'deg) rotateZ(' + (look.x * -3 + Math.sin(t * 1.4) * 0.8).toFixed(1) + 'deg)';
-    eyes.style.transform = 'translate(' + (look.x * 1.6).toFixed(2) + 'px,' + (look.y * 1.1).toFixed(2) + 'px)';
+    eyes.style.transform = 'translate(' + (look.x * 5.5).toFixed(2) + 'px,' + (look.y * 2.6).toFixed(2) + 'px)';
     var flap = flying ? -speedNow * 1.8 : 0;
     var fa = S.wave + Math.sin(t * 1.6) * 3 + S.tap * Math.sin(t * 38) * 4;
     fl.style.transform = 'rotate(' + (fa + flap).toFixed(1) + 'deg)';
@@ -831,8 +831,8 @@
     var targets = [callBtn, hav];
     targets.forEach(function (el) {
       var r = el.getBoundingClientRect(); if (!r.width) return;
-      var dx = mouse.x - (r.left + r.width / 2), dy = mouse.y - (r.top + r.height / 2), d = Math.sqrt(dx * dx + dy * dy) || 1, k = Math.min(1, d / 160) * 3;
-      el.style.setProperty('--lx', (dx / d * k).toFixed(2)); el.style.setProperty('--ly', (dy / d * k * 0.8).toFixed(2));
+      var dx = mouse.x - (r.left + r.width / 2), dy = mouse.y - (r.top + r.height / 2), d = Math.sqrt(dx * dx + dy * dy) || 1, k = Math.min(1, d / 140) * 6;
+      el.style.setProperty('--lx', (dx / d * k).toFixed(2)); el.style.setProperty('--ly', (dy / d * k * 0.5).toFixed(2));
     });
   }
   function poke() {
