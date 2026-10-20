@@ -575,7 +575,9 @@
     var m = /^index\.html#([\w-]+)/.exec(href || '');
     return m ? m[1] : '';
   }
+  var lastMark = '';
   function mark(id) {
+    if (id && id !== lastMark) { lastMark = id; document.dispatchEvent(new CustomEvent('sec', { detail: id })); }
     Array.prototype.forEach.call(navLinks, function (l) {
       if (secOf(l.getAttribute('href')) === id) l.setAttribute('aria-current', 'page');
       else l.removeAttribute('aria-current');
