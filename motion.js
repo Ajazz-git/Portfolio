@@ -38,3 +38,48 @@
     }, 320);
   });
 })();
+
+/* site map and patch panel behaviour */
+(function () {
+  var wrap = document.querySelector('.mapwrap'); if (!wrap) return;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var maps = wrap.querySelectorAll('svg.map');
+  var con = document.getElementById('pp-con'), ports = document.querySelectorAll('.pp .port');
+  function pad(s, n) { s = String(s); while (s.length < n) s += ' '; return s; }
+  function show(p) {
+    if (!con) return;
+    var d = p ? p.dataset : null;
+    con.innerHTML = '<span class="h">' + pad('Port', 8) + pad('Name', 13) + pad('Status', 12) + 'Speed</span>\n'
+      + (d ? '<b>' + pad(d.if, 8) + '</b>' + pad(d.n, 13) + pad(d.st, 12) + d.sp + '\n<span class="h">' + d.d + '</span>' : '<span class="h">hover or focus a port to inspect it</span>\n');
+  }
+  show(null);
+  Array.prototype.forEach.call(ports, function (p) {
+    p.addEventListener('mouseenter', function () { show(p); }); p.addEventListener('focus', function () { show(p); });
+    p.addEventListener('mouseleave', function () { show(null); }); p.addEventListener('blur', function () { show(null); });
+  });
+  function pauseAll(on) { Array.prototype.forEach.call(maps, function (m) { try { if (on) m.pauseAnimations(); else m.unpauseAnimations(); } catch (e) {} }); }
+  function done() { Array.prototype.forEach.call(maps, function (m) { m.classList.remove('pre'); }); }
+  if (reduce || !('IntersectionObserver' in window)) { done(); } else {
+    var booted = false;
+    new IntersectionObserver(function (es) {
+      var v = es[0].isIntersecting;
+      if (v && !booted) { booted = true; Array.prototype.forEach.call(maps, function (m) { m.classList.remove('pre'); m.classList.add('boot'); }); }
+      pauseAll(!v);
+    }, { threshold: 0.25 }).observe(wrap);
+  }
+  /* click: a packet races down the cable, then the page goes there */
+  wrap.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a.dv');
+    if (!a || a._go || a._busy || reduce || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault(); e.stopPropagation(); a._busy = true;
+    var path = a.querySelector('.cab'), svg = a.ownerSVGElement, len = path.getTotalLength();
+    var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle'); c.setAttribute('r', 5); c.setAttribute('class', 'rpk'); svg.appendChild(c);
+    var t0 = performance.now();
+    (function step(now) {
+      var k = Math.min(1, (now - t0) / 420), pt = path.getPointAtLength(len * k);
+      c.setAttribute('cx', pt.x); c.setAttribute('cy', pt.y);
+      if (k < 1) requestAnimationFrame(step);
+      else { c.remove(); a._busy = false; a._go = true; a.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, button: 0 })); a._go = false; }
+    })(t0);
+  }, true);
+})();
