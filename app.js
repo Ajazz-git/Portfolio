@@ -738,7 +738,7 @@
     ls: function () {
       return [
         [{ text: 'about/', href: 'index.html#about' }, '  ', { text: 'experience/', href: 'index.html#experience' }, '  ', { text: 'skills/', href: 'index.html#skills' }, '  ', { text: 'resume/', href: 'index.html#resume' }, '  ', { text: 'contact/', href: 'index.html#contact' }],
-        'case-studies/  (in progress)'
+        [{ text: 'fixit/', href: 'index.html#fixit' }, '  ', { text: 'lab/', href: 'index.html#lab' }, '  ', { text: 'docs/', href: 'index.html#docs' }]
       ];
     },
     pwd: function () { return ['/home/ajas']; },

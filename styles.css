@@ -164,6 +164,7 @@ p { margin: 0; }
 .port.live .jack { border-color: var(--accent); }
 .port.live:hover { background: var(--accent-dim); }
 .port.off { opacity: 0.7; }
+@media (min-width: 720px) { .ports { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 
 /* experience cards */
 .devs { display: flex; flex-direction: column; gap: 14px; padding-bottom: 40px; }
