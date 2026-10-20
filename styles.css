@@ -1060,3 +1060,23 @@ html.mo .rv.in .sec-title { animation: ttype .8s steps(24) .12s both; }
 .pp-con .h { color: var(--muted); }
 .pp-con b { color: var(--accent); font-weight: 500; }
 @media (max-width: 430px) { .pp-con { font-size: 11px; } .pp .ports { gap: 7px; } .pp .port .nm { font-size: 11px; } .pp-bar { padding-inline: 14px; letter-spacing: .08em; } }
+
+/* experience polish */
+.devs { position: relative; --p: 0; --rb: 100px; }
+.devs::before { content: ""; position: absolute; left: -1px; top: 36px; bottom: var(--rb); width: 2px; pointer-events: none; background: linear-gradient(to bottom, var(--accent) calc(var(--p) * 100%), var(--line) calc(var(--p) * 100%)); box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 35%, transparent); }
+.dev { position: relative; }
+.dev::before { content: ""; position: absolute; left: -5px; top: 31px; width: 10px; height: 10px; border-radius: 50%; background: var(--line); box-shadow: 0 0 0 4px var(--bg); transition: background .3s, box-shadow .3s; }
+.dev.lit::before { background: var(--accent); box-shadow: 0 0 0 4px var(--bg), 0 0 12px var(--accent); }
+.dev:hover { border-left-color: var(--accent); }
+.story.open .story-in > * { animation: rise2 .4s backwards; }
+.story.open .story-in > :nth-child(2) { animation-delay: .07s; }
+.story.open .story-in > :nth-child(3) { animation-delay: .14s; }
+.story.open .story-in > :nth-child(4) { animation-delay: .21s; }
+@keyframes rise2 { from { opacity: 0; transform: translateY(8px); } }
+@keyframes devin { from { opacity: 0; transform: translateX(-22px); } }
+@media (prefers-reduced-motion: no-preference) {
+  html.mo .devs.in .dev { animation: devin .6s cubic-bezier(.2, .7, .2, 1) calc(var(--i) * .13s) backwards; }
+  .dev.lit:first-child::before { animation: devpulse 2.4s ease-in-out infinite; }
+}
+@keyframes devpulse { 50% { box-shadow: 0 0 0 4px var(--bg), 0 0 0 9px color-mix(in srgb, var(--accent) 28%, transparent), 0 0 14px var(--accent); } }
+@media (max-width: 680px) { .dev::before { top: 25px; } .devs::before { top: 30px; } }

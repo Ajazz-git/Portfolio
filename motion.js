@@ -83,3 +83,42 @@
     })(t0);
   }, true);
 })();
+
+/* experience: timeline rail that fills as you scroll, cards that arrive in turn, figures that count up */
+(function () {
+  var devs = document.querySelector('.devs'); if (!devs) return;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cards = devs.querySelectorAll('.dev');
+  Array.prototype.forEach.call(cards, function (c, i) { c.style.setProperty('--i', i); });
+  function size() { var l = cards[cards.length - 1]; if (l) devs.style.setProperty('--rb', Math.max(0, l.offsetHeight - 36) + 'px'); }
+  size(); window.addEventListener('resize', size); window.addEventListener('load', size);
+  if (reduce) { devs.style.setProperty('--p', 1); Array.prototype.forEach.call(cards, function (c) { c.classList.add('lit'); }); }
+  else {
+    var tk = false;
+    var upd = function () {
+      tk = false;
+      var r = devs.getBoundingClientRect(), line = window.innerHeight * 0.62;
+      devs.style.setProperty('--p', Math.max(0, Math.min(1, (line - r.top - 36) / Math.max(1, r.height - 72))).toFixed(3));
+      Array.prototype.forEach.call(cards, function (c) { c.classList.toggle('lit', c.getBoundingClientRect().top + 30 < line); });
+    };
+    window.addEventListener('scroll', function () { if (!tk) { tk = true; requestAnimationFrame(upd); } }, { passive: true });
+    window.addEventListener('resize', upd); upd();
+  }
+  /* count-up for the numbers in the story figures */
+  var figs = document.querySelectorAll('.story .fig'), st = document.querySelector('.stories');
+  if (reduce || !st || !('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function (es) {
+    if (!es[0].isIntersecting) return; io.disconnect();
+    Array.prototype.forEach.call(figs, function (f) {
+      var txt = f.textContent, nums = txt.match(/\d+/g); if (!nums) return;
+      var t0 = performance.now(), dur = 900;
+      (function step(now) {
+        var k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3), n = 0;
+        f.textContent = txt.replace(/\d+/g, function (m) { return Math.round(parseInt(m, 10) * e); });
+        if (k < 1) requestAnimationFrame(step); else f.textContent = txt;
+      })(t0);
+      setTimeout(function () { f.textContent = txt; }, 1300);
+    });
+  }, { threshold: 0.3 });
+  io.observe(st);
+})();
