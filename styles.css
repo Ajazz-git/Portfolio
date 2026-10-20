@@ -1080,3 +1080,20 @@ html.mo .rv.in .sec-title { animation: ttype .8s steps(24) .12s both; }
 }
 @keyframes devpulse { 50% { box-shadow: 0 0 0 4px var(--bg), 0 0 0 9px color-mix(in srgb, var(--accent) 28%, transparent), 0 0 14px var(--accent); } }
 @media (max-width: 680px) { .dev::before { top: 25px; } .devs::before { top: 30px; } }
+
+/* skills polish */
+.lvl-tag .mt { display: inline-flex; gap: 2px; align-items: flex-end; height: 11px; }
+.lvl-tag .mt i { width: 4px; height: 100%; border-radius: 1px; background: var(--line); transform-origin: bottom; }
+.lvl-tag .mt i:nth-child(1) { height: 5px; } .lvl-tag .mt i:nth-child(2) { height: 8px; }
+.lvl-tag .mt i.f { background: var(--accent); }
+.pcard[data-level="learning"] .mt i.f { background: var(--warn); }
+.pcard::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .25s; background: radial-gradient(200px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--accent) 15%, transparent), transparent 70%); }
+.pcard:hover::after { opacity: 1; }
+.pcard .ico { transition: transform .3s cubic-bezier(.2, .7, .2, 1), background .2s; }
+.pcard:hover .ico { transform: translateY(-2px) rotate(-5deg) scale(1.06); background: var(--accent-dim); }
+@keyframes pcin { from { opacity: 0; transform: translateY(26px) scale(.96); } }
+@keyframes mtin { from { transform: scaleY(0); } }
+@media (prefers-reduced-motion: no-preference) {
+  html.mo .skills.in .pcard { animation: pcin .6s cubic-bezier(.2, .7, .2, 1) calc(var(--i) * .09s) backwards; }
+  html.mo .skills.in .mt i.f { animation: mtin .4s cubic-bezier(.2, .7, .2, 1) calc(var(--i) * .09s + .5s + var(--k) * .1s) backwards; }
+}

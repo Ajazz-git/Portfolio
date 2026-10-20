@@ -122,3 +122,21 @@
   }, { threshold: 0.3 });
   io.observe(st);
 })();
+
+/* skills: cards rise in turn, level meters fill, a soft spotlight follows the pointer */
+(function () {
+  var cards = document.querySelectorAll('.pcard'); if (!cards.length) return;
+  var fine = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
+  Array.prototype.forEach.call(cards, function (c, i) {
+    c.style.setProperty('--i', i);
+    var lv = { daily: 3, working: 2, learning: 1 }[c.getAttribute('data-level')] || 1, tag = c.querySelector('.lvl-tag');
+    if (tag && !tag.querySelector('.mt')) {
+      var m = document.createElement('span'); m.className = 'mt'; m.setAttribute('aria-hidden', 'true');
+      for (var k = 0; k < 3; k++) { var b = document.createElement('i'); if (k < lv) b.className = 'f'; b.style.setProperty('--k', k); m.appendChild(b); }
+      tag.insertBefore(m, tag.firstChild);
+    }
+    if (fine) c.addEventListener('pointermove', function (e) {
+      var r = c.getBoundingClientRect(); c.style.setProperty('--mx', (e.clientX - r.left) + 'px'); c.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    }, { passive: true });
+  });
+})();
