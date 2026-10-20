@@ -140,3 +140,40 @@
     }, { passive: true });
   });
 })();
+
+/* fix it: a streak counter and packet bursts on right answers and on "service restored" */
+(function () {
+  var root = document.getElementById('fx'); if (!root) return;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var con = root.querySelector('.fx-con'), stat = root.querySelector('.fx-stat'), body = root.querySelector('.fx-body');
+  if (!con || !stat || !body) return;
+  var streak = 0, missed = false, best = 0, sEl = document.createElement('span');
+  sEl.innerHTML = 'streak <b>0</b>'; stat.appendChild(sEl);
+  con.style.position = 'relative';
+  function burst(x, y, n) {
+    if (reduce || !con.animate) return;
+    for (var i = 0; i < n; i++) {
+      var p = document.createElement('i'), a = Math.random() * 6.283, d = 40 + Math.random() * 90, s = 3 + Math.random() * 3;
+      p.style.cssText = 'position:absolute;z-index:5;pointer-events:none;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);left:' + x + 'px;top:' + y + 'px;width:' + s + 'px;height:' + s + 'px';
+      con.appendChild(p);
+      var an = p.animate([{ transform: 'translate(0,0) scale(1)', opacity: 1 }, { transform: 'translate(' + Math.cos(a) * d + 'px,' + Math.sin(a) * d + 'px) scale(.3)', opacity: 0 }], { duration: 650 + Math.random() * 350, easing: 'cubic-bezier(.2,.7,.2,1)' });
+      an.onfinish = (function (el) { return function () { el.remove(); }; })(p);
+    }
+  }
+  function at(el) { var c = con.getBoundingClientRect(), r = el.getBoundingClientRect(); return [r.left - c.left + r.width / 2, r.top - c.top + r.height / 2]; }
+  function show() { sEl.querySelector('b').textContent = streak; sEl.style.color = streak > 1 ? 'var(--accent)' : ''; }
+  root.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('.fx-opt'); if (!b || b.disabled) return;
+    setTimeout(function () {
+      if (b.classList.contains('good')) { if (!missed) streak++; missed = false; best = Math.max(best, streak); var p = at(b); burst(p[0], p[1], 16); }
+      else if (b.classList.contains('bad')) { streak = 0; missed = true; }
+      show();
+    }, 0);
+  }, true);
+  if ('MutationObserver' in window) new MutationObserver(function (ms) {
+    ms.forEach(function (m) { Array.prototype.forEach.call(m.addedNodes, function (n) {
+      if (n.classList && n.classList.contains('fx-end')) { var p = at(n.querySelector('h3') || n); burst(p[0] + 60, p[1], 34); }
+    }); });
+  }).observe(body, { childList: true });
+  root.querySelector('.fx-pick').addEventListener('click', function () { streak = 0; missed = false; show(); });
+})();

@@ -1097,3 +1097,24 @@ html.mo .rv.in .sec-title { animation: ttype .8s steps(24) .12s both; }
   html.mo .skills.in .pcard { animation: pcin .6s cubic-bezier(.2, .7, .2, 1) calc(var(--i) * .09s) backwards; }
   html.mo .skills.in .mt i.f { animation: mtin .4s cubic-bezier(.2, .7, .2, 1) calc(var(--i) * .09s + .5s + var(--k) * .1s) backwards; }
 }
+
+/* roadmap polish */
+.rm-col:not(:last-child) .rm-h::after { content: "\2192"; margin-left: auto; color: var(--accent); font: 700 18px var(--font-mono); }
+@keyframes rmin { from { opacity: 0; transform: translateY(28px); } }
+@keyframes rmdot { 0% { transform: scale(0); } 60% { transform: scale(1.7); } }
+@keyframes rmnudge { 50% { transform: translateX(5px); } }
+@media (prefers-reduced-motion: no-preference) {
+  html.mo .rm-col { animation: rmin .65s cubic-bezier(.2, .7, .2, 1) backwards; animation-play-state: paused; }
+  html.mo .block.in .rm-col { animation-play-state: running; }
+  html.mo .rm-col[data-s="work"] { animation-delay: .2s; } html.mo .rm-col[data-s="daily"] { animation-delay: .4s; }
+  html.mo .block.in .rm-col .rm-h i { animation: rmdot .6s .35s backwards; }
+  html.mo .block.in .rm-col[data-s="learn"] .rm-h i { animation: rmdot .6s .35s backwards, lnpulse 1.6s 1s ease-in-out infinite; }
+  html.mo .block.in .rm-col[data-s="work"] .rm-h i { animation-delay: .55s; } html.mo .block.in .rm-col[data-s="daily"] .rm-h i { animation-delay: .75s; }
+  html.mo .block.in .rm-col li { animation: rise2 .45s backwards; }
+  html.mo .block.in .rm-col li:nth-child(1) { animation-delay: .5s; } html.mo .block.in .rm-col li:nth-child(2) { animation-delay: .6s; } html.mo .block.in .rm-col li:nth-child(3) { animation-delay: .7s; }
+  html.mo .block.in .rm-col li:nth-child(4) { animation-delay: .8s; } html.mo .block.in .rm-col li:nth-child(5) { animation-delay: .9s; } html.mo .block.in .rm-col li:nth-child(n+6) { animation-delay: 1s; }
+  html.mo .block.in .rm-col:not(:last-child) .rm-h::after { animation: rmnudge 2.2s 1.4s ease-in-out infinite; }
+}
+/* fix it polish */
+.fx-stat span:last-child b { transition: color .2s; }
+@keyframes fxwin { from { text-shadow: 0 0 0 transparent; } }
