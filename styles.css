@@ -1118,3 +1118,25 @@ html.mo .rv.in .sec-title { animation: ttype .8s steps(24) .12s both; }
 /* fix it polish */
 .fx-stat span:last-child b { transition: color .2s; }
 @keyframes fxwin { from { text-shadow: 0 0 0 transparent; } }
+
+/* lab, docs and contact polish */
+@keyframes ndin { from { opacity: 0; transform: scale(.55); } }
+@keyframes lkin { from { opacity: 0; } }
+@keyframes dcin { from { opacity: 0; transform: translateY(24px) rotate(-1.2deg); } }
+@media (prefers-reduced-motion: no-preference) {
+  html.mo .block.in .lab-svg .lk { animation: lkin .8s .1s backwards; }
+  html.mo .block.in .lab-svg .nd .in { animation: ndin .55s cubic-bezier(.2, .9, .2, 1.2) calc(var(--i) * .07s + .2s) backwards; }
+  html.mo .block.in .dx-card { animation: dcin .6s cubic-bezier(.2, .7, .2, 1) calc(var(--i) * .08s) backwards; }
+  html.mo .rv.in .kv > div { animation: rise2 .5s backwards; }
+  html.mo .rv.in .kv > div:nth-child(1) { animation-delay: .1s; } html.mo .rv.in .kv > div:nth-child(2) { animation-delay: .2s; } html.mo .rv.in .kv > div:nth-child(3) { animation-delay: .3s; }
+  html.mo .rv.in .kv > div:nth-child(4) { animation-delay: .4s; } html.mo .rv.in .kv > div:nth-child(5) { animation-delay: .5s; }
+}
+.dx { position: relative; }
+.dx::after { content: ""; position: absolute; top: 0; right: 0; left: 270px; height: 2px; pointer-events: none; transform-origin: left; transform: scaleX(var(--p, 0)); background: var(--accent); box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 50%, transparent); z-index: 4; }
+@media (max-width: 820px) { .dx::after { display: none; } }
+.kv > div { transition: background .2s; }
+.kv > div:hover { background: color-mix(in srgb, var(--accent) 5%, transparent); }
+.cptag { position: fixed; left: 50%; bottom: 22px; z-index: 40; transform: translate(-50%, 12px); padding: 8px 14px; font: 12px var(--font-mono); color: var(--accent); background: var(--panel); border: 1px solid var(--accent); border-radius: 8px; box-shadow: 0 10px 30px -12px var(--accent); opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; max-width: calc(100vw - 32px); }
+.cptag.on { opacity: 1; transform: translate(-50%, 0); }
+
+.dx-copy.cpr { animation: nping .8s ease-out; }

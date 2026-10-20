@@ -177,3 +177,50 @@
   }).observe(body, { childList: true });
   root.querySelector('.fx-pick').addEventListener('click', function () { streak = 0; missed = false; show(); });
 })();
+
+/* network lab: devices boot in turn, sparks when the main line is cut */
+(function () {
+  var svg = document.querySelector('.lab-svg'); if (!svg) return;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  Array.prototype.forEach.call(svg.querySelectorAll('.nd'), function (n, i) { n.style.setProperty('--i', i); });
+  var cut = document.getElementById('lab-cut'); if (!cut || reduce || !svg.querySelector) return;
+  cut.addEventListener('click', function () {
+    if (cut.getAttribute('aria-pressed') !== 'true') return;
+    var path = svg.querySelector('#l1 .cab'); if (!path || !path.animate) return;
+    var pt = path.getPointAtLength(path.getTotalLength() * 0.5), NS = 'http://www.w3.org/2000/svg';
+    for (var i = 0; i < 14; i++) {
+      var c = document.createElementNS(NS, 'circle'), a = Math.random() * 6.283, d = 20 + Math.random() * 55;
+      c.setAttribute('cx', pt.x); c.setAttribute('cy', pt.y); c.setAttribute('r', 2 + Math.random() * 2.5); c.setAttribute('fill', '#ffb020'); c.setAttribute('pointer-events', 'none');
+      svg.appendChild(c);
+      var an = c.animate([{ transform: 'translate(0px,0px)', opacity: 1 }, { transform: 'translate(' + Math.cos(a) * d + 'px,' + (Math.sin(a) * d + 18) + 'px)', opacity: 0 }], { duration: 500 + Math.random() * 400, easing: 'cubic-bezier(.2,.7,.4,1)' });
+      an.onfinish = (function (el) { return function () { el.remove(); }; })(c);
+    }
+  });
+})();
+
+/* docs: cards arrive in turn, a reading line under the doc header, a ripple on "copy as markdown" */
+(function () {
+  var cards = document.querySelectorAll('.dx-card');
+  Array.prototype.forEach.call(cards, function (c, i) { c.style.setProperty('--i', i); });
+  var dx = document.getElementById('dx'); if (!dx) return;
+  dx.addEventListener('scroll', function (e) {
+    var t = e.target; if (!t || !t.classList || !t.classList.contains('dx-doc')) return;
+    var m = t.scrollHeight - t.clientHeight; dx.style.setProperty('--p', m > 0 ? Math.min(1, t.scrollTop / m).toFixed(3) : 0);
+  }, true);
+  dx.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('.dx-copy'); if (!b) return;
+    b.classList.remove('cpr'); void b.offsetWidth; b.classList.add('cpr');
+  });
+})();
+
+/* contact: a ping-style reply when you copy the address */
+(function () {
+  var btns = document.querySelectorAll('[data-copy]'); if (!btns.length) return;
+  var t = document.createElement('div'); t.className = 'cptag'; t.setAttribute('aria-hidden', 'true'); document.body.appendChild(t);
+  var h;
+  Array.prototype.forEach.call(btns, function (b) {
+    b.addEventListener('click', function () {
+      t.textContent = '64 bytes from ajas@kochi: time=' + (3 + Math.floor(Math.random() * 9)) + ' ms · copied'; t.classList.add('on'); clearTimeout(h); h = setTimeout(function () { t.classList.remove('on'); }, 2200);
+    });
+  });
+})();
