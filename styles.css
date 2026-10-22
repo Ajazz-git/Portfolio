@@ -1165,3 +1165,16 @@ html.booting body > :not(.bootscr) * { animation-play-state: paused !important; 
 .pal-l button.on { background: var(--accent-dim); box-shadow: inset 2px 0 0 var(--accent); }
 .pal-n { padding: 14px; color: var(--muted); font: 13px var(--font-mono); }
 @media (prefers-reduced-motion: no-preference) { .pal:not([hidden]) .pal-b { animation: netin .2s ease-out; } }
+
+/* theme wipe and page fades (browsers without view transitions just switch) */
+::view-transition-old(root) { animation: vtout .18s ease both; }
+::view-transition-new(root) { animation: vtin .28s ease both; }
+@keyframes vtout { to { opacity: 0; } }
+@keyframes vtin { from { opacity: 0; } }
+.vt-theme::view-transition-old(root), .vt-theme::view-transition-new(root) { mix-blend-mode: normal; }
+.vt-theme::view-transition-old(root) { animation: none; z-index: 1; }
+.vt-theme::view-transition-new(root) { z-index: 2; animation: vtwipe .65s cubic-bezier(.4, 0, .2, 1) both; }
+@keyframes vtwipe { from { clip-path: circle(0 at var(--wx, 100%) var(--wy, 0)); } to { clip-path: circle(150vmax at var(--wx, 100%) var(--wy, 0)); } }
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+}

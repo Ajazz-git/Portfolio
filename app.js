@@ -8,8 +8,14 @@
   if (tbtn) {
     tbtn.addEventListener('click', function () {
       if (!window.siteTheme) return;
-      window.siteTheme.set(window.siteTheme.get() === 'light' ? 'dark' : 'light');
-      label();
+      function swap() { window.siteTheme.set(window.siteTheme.get() === 'light' ? 'dark' : 'light'); label(); }
+      /* a circular wipe from the button where the browser supports view transitions */
+      if (document.startViewTransition && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+        var r = tbtn.getBoundingClientRect(), st = document.documentElement.style;
+        st.setProperty('--wx', (r.left + r.width / 2) + 'px'); st.setProperty('--wy', (r.top + r.height / 2) + 'px');
+        try { var de = document.documentElement; de.classList.add('vt-theme'); var vt = document.startViewTransition(swap); vt.finished.then(function () { de.classList.remove('vt-theme'); }, function () { de.classList.remove('vt-theme'); }); return; } catch (e) { document.documentElement.classList.remove('vt-theme'); }
+      }
+      swap();
     });
   }
 
