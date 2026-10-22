@@ -824,6 +824,27 @@
 
   var hist = [];
   var hi = 0;
+  /* ghost suggestion: the rest of a matching earlier command or command name, in grey; Right arrow accepts */
+  var gw = document.createElement('div'); gw.className = 'gw'; input.parentNode.insertBefore(gw, input); gw.appendChild(input);
+  var gh = document.createElement('span'); gh.className = 'ghost'; gh.setAttribute('aria-hidden', 'true'); gw.insertBefore(gh, input);
+  function suggest() {
+    var v = input.value, low = v.toLowerCase(), best = '', i;
+    if (v) {
+      for (i = hist.length - 1; i >= 0; i--) if (hist[i].length > v.length && hist[i].toLowerCase().indexOf(low) === 0) { best = hist[i]; break; }
+      if (!best && v.indexOf(' ') < 0) {
+        var names = Object.keys(C).concat(Object.keys(ARGS)).sort();
+        for (i = 0; i < names.length; i++) if (names[i].length > v.length && names[i].indexOf(low) === 0) { best = names[i]; break; }
+      }
+    }
+    gh.textContent = ''; if (best) { var s = document.createElement('i'); s.textContent = v; gh.appendChild(s); gh.appendChild(document.createTextNode(best.slice(v.length))); }
+    return best;
+  }
+  input.addEventListener('input', suggest);
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' && input.selectionStart === input.value.length) { var b = suggest(); if (b) { e.preventDefault(); input.value = b; suggest(); } }
+  });
+  form.addEventListener('submit', function () { setTimeout(suggest, 0); });
+  var cgen = 0, calm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function run(raw) {
     var cmd = raw.trim();
@@ -833,7 +854,7 @@
     add('line', [{ cls: 'ps', text: '$ ' }, cmd]);
     var parts = cmd.split(/\s+/), key = parts[0].toLowerCase(), args = parts.slice(1);
     if (key === 'sudo' && /rm\s+-rf?\s+\//.test(cmd)) { add('res', ['Nice try. Packet is watching.']); return; }
-    if (key === 'clear') { out.innerHTML = ''; return; }
+    if (key === 'clear') { cgen++; out.innerHTML = ''; return; }
     var lines = null;
     if (ARGS.hasOwnProperty(key)) lines = ARGS[key](args);
     else if (key === 'ls' && args.length) lines = C.ls();
@@ -841,6 +862,7 @@
     if (!lines) { add('res', ['command not found: ' + parts[0] + '. Type help to see the commands.']); return; }
     var put = function (ln) { add('res', Array.isArray(ln) ? ln : [ln]); };
     if (lines.slow) { lines.forEach(function (ln, n) { setTimeout(function () { put(ln); }, n * 330); }); }
+    else if (lines.length > 3 && !calm) { var cg = cgen; lines.forEach(function (ln, n) { setTimeout(function () { if (cg === cgen) put(ln); }, n * 34); }); }
     else lines.forEach(put);
   }
 

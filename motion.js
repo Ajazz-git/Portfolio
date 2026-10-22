@@ -1,6 +1,6 @@
 /* motion base for the home page: scroll signal bar, boot-in reveals, link-up tag */
 (function () {
-  if (!document.getElementById('home')) return;
+  var onHome = !!document.getElementById('home');
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var hd = document.querySelector('.top');
   var sig = document.createElement('i'); sig.className = 'sig'; sig.setAttribute('aria-hidden', 'true');
@@ -12,7 +12,7 @@
   if (reduce || !('IntersectionObserver' in window)) return;
 
   /* boot-in reveals: each section fades and rises once; sections above the view show at once */
-  var els = document.querySelectorAll('.part > .wrap:not(.hero):not(.next)');
+  var els = document.querySelectorAll(onHome ? '.part > .wrap:not(.hero):not(.next)' : 'main > .wrap');
   var io = new IntersectionObserver(function (es) {
     es.forEach(function (e) {
       if (e.isIntersecting || e.boundingClientRect.top < 0) { e.target.classList.add('in'); io.unobserve(e.target); }
@@ -23,6 +23,7 @@
   setTimeout(function () { Array.prototype.forEach.call(document.querySelectorAll('.rv:not(.in)'), function (el) { if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('in'); }); }, 1500);
 
   /* link-up tag: when you settle on a new section, its nav link pings and a small tag ticks in */
+  if (!onHome) return;
   var tag = document.createElement('div'); tag.className = 'sigtag'; tag.setAttribute('aria-hidden', 'true');
   document.body.appendChild(tag);
   var t1, t2, t0 = Date.now(), first = true;
@@ -86,9 +87,10 @@
 
 /* experience: timeline rail that fills as you scroll, cards that arrive in turn, figures that count up */
 (function () {
-  var devs = document.querySelector('.devs'); if (!devs) return;
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var cards = devs.querySelectorAll('.dev');
+  var devs = document.querySelector('.devs');
+  var cards = devs ? devs.querySelectorAll('.dev') : [];
+  if (devs) (function () {
   Array.prototype.forEach.call(cards, function (c, i) { c.style.setProperty('--i', i); });
   function size() { var l = cards[cards.length - 1]; if (l) devs.style.setProperty('--rb', Math.max(0, l.offsetHeight - 36) + 'px'); }
   size(); window.addEventListener('resize', size); window.addEventListener('load', size);
@@ -104,6 +106,7 @@
     window.addEventListener('scroll', function () { if (!tk) { tk = true; requestAnimationFrame(upd); } }, { passive: true });
     window.addEventListener('resize', upd); upd();
   }
+  })();
   /* count-up for the numbers in the story figures */
   var figs = document.querySelectorAll('.story .fig'), st = document.querySelector('.stories');
   if (reduce || !st || !('IntersectionObserver' in window)) return;
@@ -255,16 +258,17 @@
 
 /* command palette: press / or Ctrl+K */
 (function () {
-  if (!document.getElementById('home')) return;
+  var hasHome = !!document.getElementById('home');
   var foot = document.querySelector('.foot');
   if (foot) { var hp = document.createElement('span'); hp.className = 'kbhint'; hp.innerHTML = 'press <kbd>/</kbd> to search the site'; foot.insertBefore(hp, foot.children[1] || null); }
   var items = [], base = [
     ['Home', 'go', 'home'], ['About', 'go', 'about'], ['Experience', 'go', 'experience'], ['Skills', 'go', 'skills'], ['Roadmap', 'go', 'roadmap'],
     ['Fix it', 'go', 'fixit', 'game'], ['Network lab', 'go', 'lab'], ['Docs', 'go', 'docs'], ['Resume', 'go', 'resume'], ['Contact', 'go', 'contact'],
-    ['Play Tetris', 'act', 'tetris', 'terminal'], ['Call Packet', 'act', 'packet', 'chat'], ['Switch theme', 'act', 'theme', 'dark / light'],
+    ['Call Packet', 'act', 'packet', 'chat'], ['Switch theme', 'act', 'theme', 'dark / light'],
     ['Turn Packet on or off', 'act', 'pkt', 'penguin'], ['Copy email address', 'act', 'mail', 'ajasm397@gmail.com'],
     ['Open LinkedIn', 'act', 'li', 'new tab'], ['Open Instagram', 'act', 'ig', 'new tab']
   ];
+  if (hasHome) base.splice(10, 0, ['Play Tetris', 'act', 'tetris', 'terminal']);
   var pal, inp, list, sel = 0, shown = [], last = null;
   function esc(s) { return String(s).replace(/[&<>]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; }); }
   function build() {
@@ -305,7 +309,7 @@
     else if (k === 'packet') click('.pk-call');
     else if (k === 'li') window.open('https://www.linkedin.com/in/ajas-muhammed-pa-1413881bb', '_blank', 'noopener');
     else if (k === 'ig') window.open('https://www.instagram.com/_ajs.z_/', '_blank', 'noopener');
-    else if (k === 'mail') { click('[data-copy]'); }
+    else if (k === 'mail') { if (document.querySelector('[data-copy]')) click('[data-copy]'); else { try { navigator.clipboard.writeText('ajasm397@gmail.com'); } catch (e) {} } }
     else if (k === 'tetris') { click('.nav a[href*="#home"]'); setTimeout(function () { var c = document.getElementById('cmd'), f = document.getElementById('form'); if (c && f) { c.value = 'tetris'; f.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true })); } }, 700); }
   }
   document.addEventListener('keydown', function (e) {

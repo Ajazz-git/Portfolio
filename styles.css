@@ -1178,3 +1178,35 @@ html.booting body > :not(.bootscr) * { animation-play-state: paused !important; 
 @media (prefers-reduced-motion: no-preference) {
   @view-transition { navigation: auto; }
 }
+
+/* company pages */
+html.mo .rv .pagehead h1, html.mo .pagehead.rv h1 { clip-path: inset(-10% 100% -25% 0); }
+html.mo .rv.in h1 { animation: ttype .8s steps(22) .12s both; }
+@keyframes cpop { from { opacity: 0; transform: translateY(8px); } }
+@keyframes cslide { from { opacity: 0; transform: translateX(-14px); } }
+@media (prefers-reduced-motion: no-preference) {
+  html.mo .rv.in .meta li { animation: cpop .45s backwards; }
+  html.mo .rv.in .meta li:nth-child(1) { animation-delay: .25s; } html.mo .rv.in .meta li:nth-child(2) { animation-delay: .35s; } html.mo .rv.in .meta li:nth-child(3) { animation-delay: .45s; } html.mo .rv.in .meta li:nth-child(n+4) { animation-delay: .55s; }
+  html.mo .rv.in .handled li { animation: cslide .5s backwards; }
+  html.mo .rv.in .handled li:nth-child(1) { animation-delay: .1s; } html.mo .rv.in .handled li:nth-child(2) { animation-delay: .18s; } html.mo .rv.in .handled li:nth-child(3) { animation-delay: .26s; } html.mo .rv.in .handled li:nth-child(4) { animation-delay: .34s; } html.mo .rv.in .handled li:nth-child(5) { animation-delay: .42s; } html.mo .rv.in .handled li:nth-child(6) { animation-delay: .5s; } html.mo .rv.in .handled li:nth-child(n+7) { animation-delay: .58s; }
+  html.mo .rv.in .card.win { animation: dcin .6s cubic-bezier(.2, .7, .2, 1) backwards; }
+  html.mo .rv.in .card.win:nth-child(2) { animation-delay: .12s; } html.mo .rv.in .card.win:nth-child(3) { animation-delay: .24s; }
+}
+.card.win { transition: transform .25s, box-shadow .25s, border-color .2s; }
+.card.win:hover { transform: translateY(-4px) rotate(-.4deg); box-shadow: 0 18px 36px -22px var(--accent); }
+.card.win .yr { display: inline-block; }
+.back a { display: inline-block; transition: transform .2s, color .2s; }
+.back a:hover { transform: translateX(-5px); }
+.handled li { transition: transform .2s; } .handled li:hover { transform: translateX(4px); }
+/* 404 flashlight */
+.dark404 { position: fixed; inset: 0; z-index: 30; pointer-events: none; background: radial-gradient(circle 170px at var(--bx, 50%) var(--by, 40%), transparent 0, rgba(2, 8, 5, .55) 55%, rgba(2, 8, 5, .86) 100%); transition: opacity .5s; }
+.dark404.off { opacity: 0; }
+:root[data-theme="light"] .dark404 { background: radial-gradient(circle 170px at var(--bx, 50%) var(--by, 40%), transparent 0, rgba(20, 40, 30, .35) 55%, rgba(20, 40, 30, .6) 100%); }
+@media (prefers-reduced-motion: reduce) { .dark404 { display: none; } }
+
+/* terminal touches */
+.gw { position: relative; flex: 1; min-width: 0; display: flex; }
+.gw input { width: 100%; position: relative; z-index: 1; }
+.ghost { position: absolute; left: 0; top: 50%; transform: translateY(-50%); pointer-events: none; white-space: pre; overflow: hidden; max-width: 100%; color: var(--muted); opacity: .55; font: inherit; }
+.ghost i { visibility: hidden; font-style: normal; }
+@media (prefers-reduced-motion: no-preference) { .term-body .res:not(.r1):not(.r2):not(.r3) { animation: rise2 .25s backwards; } }

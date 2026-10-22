@@ -34,12 +34,19 @@
 </div>
 </div>
 </main>
+<div class="dark404" aria-hidden="true"></div>
+<p class="wrap" style="padding-block:0 40px"><button class="chip" id="lights" type="button" aria-pressed="false">turn the lights on</button></p>
+<script>(function(){var d=document.querySelector('.dark404'),b=document.getElementById('lights'),t=0,last=Date.now(),on=true;
+function set(x,y){d.style.setProperty('--bx',x+'px');d.style.setProperty('--by',y+'px');}
+addEventListener('pointermove',function(e){last=Date.now();set(e.clientX,e.clientY);},{passive:true});
+(function sweep(){if(Date.now()-last>1600){t+=0.012;set(innerWidth*(0.5+0.38*Math.sin(t)),innerHeight*(0.42+0.22*Math.sin(t*1.7+1)));}requestAnimationFrame(sweep);})();
+b.addEventListener('click',function(){on=!on;d.classList.toggle('off',!on);b.setAttribute('aria-pressed',!on);b.textContent=on?'turn the lights on':'turn the lights off';});})();</script>
 <script>document.getElementById('p404').textContent='cd '+location.pathname.replace(/\/$/,'')</script>
 <footer class="wrap foot">
 <span><span class="led" aria-hidden="true"></span>link up · Kochi, Kerala, India</span>
 <span>Ajas Muhammed · <a href="https://www.linkedin.com/in/ajas-muhammed-pa-1413881bb" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://www.instagram.com/_ajs.z_/" target="_blank" rel="noopener">Instagram</a></span>
 <button class="chip" id="pilot-toggle" data-packet type="button" aria-pressed="true">packet: on</button>
 </footer>
-<script src="/app.js"></script><script src="/brain.js"></script><script src="/pilot.js"></script>
+<script src="/app.js"></script><script src="/motion.js"></script><script src="/brain.js"></script><script src="/pilot.js"></script>
 </body>
 </html>
