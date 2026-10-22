@@ -1072,6 +1072,48 @@
     if (document.hidden) { fxl.textContent = ''; particles = 0; }
   });
 
+  /* ---- reactions: cheers a right answer, glances at the section, perches by a hovered map device ---- */
+  var QUIP = { about: 'that is the guy who built me', experience: 'real jobs, real networks', skills: 'he runs all of that', lab: 'go on, cut a cable', fixit: 'think like a sysadmin', docs: 'he writes it all down', resume: 'file soon, promise', contact: 'say hello, he replies' };
+  var DVQ = { about: 'who is this guy', experience: 'where he worked', skills: 'the toolbox', lab: 'poke the network', fixit: 'break it, fix it', docs: 'write-ups', resume: 'PDF coming soon', contact: 'say hello' };
+  var reactAt = 0, seenSec = {}, dvT = 0;
+  function calmNow() { return busy || !on || document.hidden || chat.classList.contains('open') || Date.now() - reactAt < 12000; }
+  async function cheer(my) {
+    setMood('love');
+    var hop = tween(my, 900, function (p) { S.hy = -(15 * Math.exp(-3 * p) * Math.abs(Math.sin(p * Math.PI * 3))); S.roll = Math.sin(p * Math.PI * 4) * 6 * (1 - p); S.wave = Math.sin(p * 17) * 40 * (1 - p); });
+    var t = typeSay(my, pick(['Nailed it!', 'That is the fix!', 'Ticket closed!', 'Ha, he would approve.']), 800, 28);
+    await Promise.all([hop, t]);
+    S.hy = S.roll = S.wave = 0; setMood('normal');
+  }
+  document.addEventListener('pk:cheer', function () { if (on && !busy) { reactAt = Date.now(); interrupt(cheer); } });
+  document.addEventListener('sec', function (e) {
+    var id = e.detail;
+    if (!on || busy) return;
+    if (mood === 'normal') { setMood('curious'); moodAt = performance.now(); }
+    if (!QUIP[id] || seenSec[id] || calmNow()) return;
+    seenSec[id] = 1; reactAt = Date.now();
+    setTimeout(function () { if (!busy && on) interrupt(async function (my) { setMood('smug'); await typeSay(my, QUIP[id], 900, 28); setMood('normal'); }); }, 700);
+  });
+  async function perch(my, el, id) {
+    var R = el.getBoundingClientRect();
+    var o = [['r', -1], ['l', 1], ['t', 1], ['b', 1]].filter(function (k) { return fits(k[0], k[1], R); })[0];
+    if (!o) return;
+    var ok = await flyTo(my, function () { var g = geo(o[0], o[1], el.getBoundingClientRect()); return { x: g.x, y: g.y }; }, o[1]);
+    if (!ok) return;
+    setMood('curious');
+    await typeSay(my, DVQ[id] || 'ooh', 1100, 28);
+    setMood('normal');
+  }
+  document.addEventListener('pointerover', function (e) {
+    var a = e.target.closest && e.target.closest('a.dv');
+    clearTimeout(dvT);
+    if (!a || e.pointerType === 'touch') return;
+    dvT = setTimeout(function () {
+      if (calmNow() || !a.matches(':hover')) return;
+      reactAt = Date.now();
+      interrupt(function (my) { return perch(my, a.querySelector('.bx') || a, ((a.getAttribute('href') || '').split('#')[1] || '').split('~')[0]); });
+    }, 900);
+  });
+
   requestAnimationFrame(render);
   toggles.forEach(function (b) { b.addEventListener('click', function () { setOn(!on, true); }); });
   setOn(get('pilot') !== 'off', false);

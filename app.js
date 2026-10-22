@@ -991,6 +991,7 @@
         logEl.textContent = (o[1] ? '✓ ' : '✕ ') + o[2];
         if (o[1]) {
           logEl.className = 'fx-log good'; b.classList.add('good');
+          document.dispatchEvent(new CustomEvent('pk:cheer'));
           opts.querySelectorAll('.fx-opt').forEach(function (x) { x.disabled = true; if (x !== b) x.classList.add('dim'); });
           var g = gen; setTimeout(function () { if (g !== gen) return; st++; render(); }, 1700);
         } else {
