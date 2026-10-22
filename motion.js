@@ -224,3 +224,94 @@
     });
   });
 })();
+
+/* first visit: a short boot sequence (skip with any key, click or tap). */
+(function () {
+  var de = document.documentElement; if (!de.classList.contains('booting')) return;
+  var done = false, timers = [];
+  var ov = document.createElement('div'); ov.className = 'bootscr'; ov.setAttribute('role', 'status'); ov.setAttribute('aria-label', 'Loading the portfolio');
+  var pre = document.createElement('pre'); ov.appendChild(pre);
+  var hint = document.createElement('div'); hint.className = 'bootscr-h'; hint.textContent = 'press any key to skip'; ov.appendChild(hint);
+  document.body.appendChild(ov);
+  function end() {
+    if (done) return; done = true; timers.forEach(clearTimeout);
+    try { sessionStorage.setItem('boot', '1'); } catch (e) {}
+    ov.classList.add('out'); de.classList.remove('booting');
+    document.removeEventListener('keydown', end); ov.removeEventListener('pointerdown', end);
+    setTimeout(function () { ov.remove(); }, 500);
+  }
+  document.addEventListener('keydown', end); ov.addEventListener('pointerdown', end);
+  timers.push(setTimeout(end, 5000));
+  var L = ['link negotiated · 1000 Mb/s full', 'firewall rules loaded', 'dns resolver ready · kochi.local', 'packet.service started'], i = 0, acc = '';
+  function at(fn, ms) { timers.push(setTimeout(fn, ms)); }
+  function line() {
+    if (done) return;
+    if (i < L.length) { acc += '<span class="ok">[  ok  ]</span> ' + L[i++] + '\n'; pre.innerHTML = acc; at(line, 230); return; }
+    var u = 'ajas', k = 0;
+    (function type() { if (done) return; k++; pre.innerHTML = acc + '\n<b class="lg">ajas@kochi login: ' + u.slice(0, k) + '</b>'; if (k < u.length) at(type, 90); else at(end, 420); })();
+  }
+  at(line, 250);
+})();
+
+/* command palette: press / or Ctrl+K */
+(function () {
+  if (!document.getElementById('home')) return;
+  var foot = document.querySelector('.foot');
+  if (foot) { var hp = document.createElement('span'); hp.className = 'kbhint'; hp.innerHTML = 'press <kbd>/</kbd> to search the site'; foot.insertBefore(hp, foot.children[1] || null); }
+  var items = [], base = [
+    ['Home', 'go', 'home'], ['About', 'go', 'about'], ['Experience', 'go', 'experience'], ['Skills', 'go', 'skills'], ['Roadmap', 'go', 'roadmap'],
+    ['Fix it', 'go', 'fixit', 'game'], ['Network lab', 'go', 'lab'], ['Docs', 'go', 'docs'], ['Resume', 'go', 'resume'], ['Contact', 'go', 'contact'],
+    ['Play Tetris', 'act', 'tetris', 'terminal'], ['Call Packet', 'act', 'packet', 'chat'], ['Switch theme', 'act', 'theme', 'dark / light'],
+    ['Turn Packet on or off', 'act', 'pkt', 'penguin'], ['Copy email address', 'act', 'mail', 'ajasm397@gmail.com'],
+    ['Open LinkedIn', 'act', 'li', 'new tab'], ['Open Instagram', 'act', 'ig', 'new tab']
+  ];
+  var pal, inp, list, sel = 0, shown = [], last = null;
+  function esc(s) { return String(s).replace(/[&<>]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; }); }
+  function build() {
+    pal = document.createElement('div'); pal.className = 'pal'; pal.hidden = true;
+    pal.innerHTML = '<div class="pal-b" role="dialog" aria-modal="true" aria-label="Command palette"><div class="pal-i"><span aria-hidden="true">$</span><input type="text" autocomplete="off" spellcheck="false" placeholder="type a command or section" aria-label="Search"><kbd>esc</kbd></div><div class="pal-l" role="listbox" aria-label="Results"></div></div>';
+    document.body.appendChild(pal); inp = pal.querySelector('input'); list = pal.querySelector('.pal-l');
+    pal.addEventListener('mousedown', function (e) { if (e.target === pal) close(); });
+    inp.addEventListener('input', function () { sel = 0; draw(); });
+    inp.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown') { e.preventDefault(); sel = Math.min(shown.length - 1, sel + 1); mark(); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); sel = Math.max(0, sel - 1); mark(); }
+      else if (e.key === 'Enter') { e.preventDefault(); run(shown[sel]); }
+      else if (e.key === 'Escape') { e.preventDefault(); close(); }
+      else if (e.key === 'Tab') e.preventDefault();
+    });
+    list.addEventListener('click', function (e) { var b = e.target.closest('[data-k]'); if (b) run(shown[+b.getAttribute('data-k')]); });
+  }
+  function score(q, s) { s = s.toLowerCase(); if (!q) return 1; if (s.indexOf(q) === 0) return 3; if (s.indexOf(q) > -1) return 2; var j = 0; for (var k = 0; k < s.length && j < q.length; k++) if (s[k] === q[j]) j++; return j === q.length ? 1 : 0; }
+  function draw() {
+    var q = inp.value.trim().toLowerCase();
+    shown = base.map(function (b) { return [score(q, b[0] + ' ' + (b[3] || '')), b]; }).filter(function (x) { return x[0]; }).sort(function (a, b) { return b[0] - a[0]; }).map(function (x) { return x[1]; });
+    list.innerHTML = shown.length ? shown.map(function (b, k) { return '<button type="button" role="option" data-k="' + k + '"><b>' + esc(b[0]) + '</b><span>' + esc(b[3] || (b[1] === 'go' ? 'section' : 'action')) + '</span></button>'; }).join('') : '<p class="pal-n">nothing matches. try "fix", "theme" or "tetris".</p>';
+    mark();
+  }
+  function mark() { Array.prototype.forEach.call(list.querySelectorAll('[data-k]'), function (b, k) { b.classList.toggle('on', k === sel); b.setAttribute('aria-selected', k === sel); if (k === sel && b.scrollIntoView) b.scrollIntoView({ block: 'nearest' }); }); }
+  function open() {
+    if (document.querySelector('.tt') || document.querySelector('dialog[open]')) return;
+    if (!pal) build(); last = document.activeElement; pal.hidden = false; inp.value = ''; sel = 0; draw(); inp.focus();
+  }
+  function close() { if (!pal || pal.hidden) return; pal.hidden = true; if (last && last.focus) last.focus(); }
+  function click(s) { var e = document.querySelector(s); if (e) e.click(); }
+  function run(b) {
+    if (!b) return; close();
+    if (b[1] === 'go') { click('.nav a[href*="#' + b[2] + '"]'); return; }
+    var k = b[2];
+    if (k === 'theme') click('#theme');
+    else if (k === 'pkt') click('#pilot-toggle-top');
+    else if (k === 'packet') click('.pk-call');
+    else if (k === 'li') window.open('https://www.linkedin.com/in/ajas-muhammed-pa-1413881bb', '_blank', 'noopener');
+    else if (k === 'ig') window.open('https://www.instagram.com/_ajs.z_/', '_blank', 'noopener');
+    else if (k === 'mail') { click('[data-copy]'); }
+    else if (k === 'tetris') { click('.nav a[href*="#home"]'); setTimeout(function () { var c = document.getElementById('cmd'), f = document.getElementById('form'); if (c && f) { c.value = 'tetris'; f.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true })); } }, 700); }
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.defaultPrevented || e.altKey) return;
+    var t = e.target, typing = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);
+    if ((e.key === 'k' || e.key === 'K') && (e.ctrlKey || e.metaKey)) { e.preventDefault(); if (pal && !pal.hidden) close(); else open(); }
+    else if (e.key === '/' && !typing && !e.ctrlKey && !e.metaKey) { e.preventDefault(); open(); }
+  });
+})();

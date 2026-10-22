@@ -1140,3 +1140,28 @@ html.mo .rv.in .sec-title { animation: ttype .8s steps(24) .12s both; }
 .cptag.on { opacity: 1; transform: translate(-50%, 0); }
 
 .dx-copy.cpr { animation: nping .8s ease-out; }
+
+/* boot screen and command palette */
+html.booting body > *:not(.bootscr) { visibility: hidden; animation: bootfail 0s 5.2s forwards; }
+html.booting body > :not(.bootscr) * { animation-play-state: paused !important; }
+@keyframes bootfail { to { visibility: visible; } }
+.bootscr { position: fixed; inset: 0; z-index: 200; background: var(--bg); color: var(--fg); padding: 9vh 6vw; font: 15px/1.7 var(--font-mono); transition: opacity .45s; cursor: pointer; }
+.bootscr.out { opacity: 0; pointer-events: none; }
+.bootscr pre { margin: 0; font: inherit; white-space: pre-wrap; color: var(--muted); }
+.bootscr .ok { color: var(--accent); }
+.bootscr .lg { color: var(--fg); font-weight: 500; }
+.bootscr .lg::after { content: ""; display: inline-block; width: 9px; height: 1.05em; margin-left: 3px; vertical-align: -3px; background: var(--accent); animation: caret 1s steps(1) infinite; }
+.bootscr-h { position: absolute; right: 6vw; bottom: 6vh; font-size: 12px; color: var(--muted); letter-spacing: .08em; }
+.kbhint { color: var(--muted); } .kbhint kbd, .pal kbd { font: 11px var(--font-mono); padding: 0 6px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; background: var(--bg); color: var(--fg); }
+.pal { position: fixed; inset: 0; z-index: 150; display: flex; justify-content: center; align-items: flex-start; padding: 14vh 14px 0; background: rgba(2, 8, 5, .6); backdrop-filter: blur(4px); }
+.pal[hidden] { display: none; }
+.pal-b { width: min(560px, 100%); border: 1px solid var(--accent); border-radius: 12px; background: var(--panel); box-shadow: 0 30px 80px -30px var(--accent); overflow: hidden; }
+.pal-i { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--line); font: 15px var(--font-mono); }
+.pal-i > span { color: var(--accent); }
+.pal-i input { flex: 1; min-width: 0; background: transparent; border: 0; outline: none; color: var(--fg); font: inherit; caret-color: var(--accent); }
+.pal-l { max-height: min(52vh, 380px); overflow: auto; padding: 6px; display: grid; gap: 2px; }
+.pal-l button { display: flex; justify-content: space-between; gap: 14px; padding: 9px 12px; border: 0; border-radius: 8px; background: none; color: var(--fg); font: 14px var(--font-mono); text-align: left; cursor: pointer; }
+.pal-l button span { color: var(--muted); font-size: 12px; }
+.pal-l button.on { background: var(--accent-dim); box-shadow: inset 2px 0 0 var(--accent); }
+.pal-n { padding: 14px; color: var(--muted); font: 13px var(--font-mono); }
+@media (prefers-reduced-motion: no-preference) { .pal:not([hidden]) .pal-b { animation: netin .2s ease-out; } }

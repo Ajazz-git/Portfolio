@@ -703,6 +703,7 @@
         '  packet      call Packet',
         '  theme       dark or light',
         '  fortune     random wisdom',
+        '  palette     press / or Ctrl+K',
         '  clear       wipe the screen (Tab completes)'
       ];
     },
@@ -763,6 +764,7 @@
     theme: function () { var b = document.getElementById('theme'); if (b) b.click(); return ['Theme switched.']; },
     packet: function () { var b = document.querySelector('.pk-call'); if (b && !b.hidden && b.offsetParent) { setTimeout(function () { b.click(); }, 250); return ['Calling Packet...']; } return ['Packet is off. Turn him on with the packet button up top.']; },
     history: function () { return hist.length ? hist.map(function (h, n) { return '  ' + (n + 1) + '  ' + h; }) : ['(empty)']; },
+    palette: function () { setTimeout(function () { document.dispatchEvent(new KeyboardEvent('keydown', { key: '/', bubbles: true })); }, 60); return ['Opening the command palette. Press / or Ctrl+K any time.']; },
     tetris: function () { return startGame(); },
     play: function () { return startGame(); },
     exit: function () { return ['There is no escape. Try the Contact button instead.']; },
