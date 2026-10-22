@@ -1210,3 +1210,18 @@ html.mo .rv.in h1 { animation: ttype .8s steps(22) .12s both; }
 .ghost { position: absolute; left: 0; top: 50%; transform: translateY(-50%); pointer-events: none; white-space: pre; overflow: hidden; max-width: 100%; color: var(--muted); opacity: .55; font: inherit; }
 .ghost i { visibility: hidden; font-style: normal; }
 @media (prefers-reduced-motion: no-preference) { .term-body .res:not(.r1):not(.r2):not(.r3) { animation: rise2 .25s backwards; } }
+
+/* polish 11: hover physics, living background, tetris light fix */
+:root[data-theme="light"] .tt-bw::after { opacity: 0.3; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .card, .port { position: relative; transition: transform 0.25s cubic-bezier(.2,.8,.2,1), border-color 0.2s, box-shadow 0.25s; }
+  .card:hover, .port:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--accent) 60%, var(--line)); box-shadow: 0 14px 30px -18px color-mix(in srgb, var(--accent) 55%, transparent); }
+  .card::after, .port::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity 0.25s; background: radial-gradient(180px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%); }
+  .card:hover::after, .port:hover::after { opacity: 1; }
+  .btn { transition: transform 0.18s ease-out, box-shadow 0.2s; }
+  .btn:active { transform: scale(0.97) !important; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  body::after { content: ""; position: fixed; z-index: -1; pointer-events: none; width: 60vmax; height: 60vmax; left: -15vmax; top: -20vmax; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--accent) 9%, transparent), transparent 65%); animation: bgdrift 38s ease-in-out infinite alternate; will-change: transform; }
+  @keyframes bgdrift { from { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(55vw, 30vh, 0) scale(1.15); } to { transform: translate3d(20vw, 70vh, 0); } }
+}
