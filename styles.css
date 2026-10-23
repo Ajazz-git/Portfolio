@@ -1225,3 +1225,16 @@ html.mo .rv.in h1 { animation: ttype .8s steps(22) .12s both; }
   body::after { content: ""; position: fixed; z-index: -1; pointer-events: none; width: 60vmax; height: 60vmax; left: -15vmax; top: -20vmax; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--accent) 9%, transparent), transparent 65%); animation: bgdrift 38s ease-in-out infinite alternate; will-change: transform; }
   @keyframes bgdrift { from { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(55vw, 30vh, 0) scale(1.15); } to { transform: translate3d(20vw, 70vh, 0); } }
 }
+
+/* polish 12: lab hop glow, rogue device, skill nodes solid on hover and livelier */
+.lab-svg .nd.hop .bx { stroke: var(--accent); } .lab-svg .nd.hop .in { filter: drop-shadow(0 0 16px var(--accent)); }
+.lab-svg .fxrog circle { fill: color-mix(in srgb, var(--lbad) 18%, var(--lb2)); stroke: var(--lbad); stroke-width: 2; stroke-dasharray: 4 3; }
+.lab-svg .fxrog path { fill: none; stroke: var(--lbad); stroke-width: 2; stroke-linecap: round; }
+.lab-svg .fxrog { transform-box: fill-box; transform-origin: center; }
+.nd:hover, .nd.on { background: color-mix(in srgb, var(--accent) 20%, var(--panel2)); }
+@media (prefers-reduced-motion: no-preference) {
+  .net:not([hidden]) .nd::before { content: ""; position: absolute; inset: -1px; border-radius: 50%; border: 1.5px solid var(--accent); opacity: 0; pointer-events: none; animation: ndring 3.2s ease-out infinite; animation-delay: calc(var(--d, 0) * .45s); }
+  .net:not([hidden]) .nd svg { animation: ndbob 2.6s ease-in-out infinite; animation-delay: calc(var(--d, 0) * -.37s); }
+}
+@keyframes ndring { 0% { opacity: .55; transform: scale(1); } 70%, 100% { opacity: 0; transform: scale(1.9); } }
+@keyframes ndbob { 50% { transform: translateY(-2px) scale(1.12); } }

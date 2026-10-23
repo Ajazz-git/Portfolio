@@ -147,7 +147,7 @@
     var nodes = [], spokes = [], bonds = [], names = [], W = 0, H = 0;
     var tipIdx = -1, tipW = 0, tipH = 0, tipSide = 'up';
     var raf = 0, t0 = 0, px = 0, py = 0, cx = 0, cy = 0;
-    var NR = 23, HUBR = 34, KMIN = 0.8, PULSE = 0.05;
+    var NR = 23, HUBR = 34, KMIN = 0.8, PULSE = 0.12;
     /* layout results, worked out once per size or count change and only read inside the animation loop */
     var P = [], link = [], ringOf = [], ringNext = [], K = 1, AMP = 0, baseH = 0, curH = 0;
 
@@ -166,7 +166,7 @@
         var b = document.createElement('button');
         b.type = 'button';
         b.className = 'nd';
-        b.setAttribute('data-i', j);
+        b.setAttribute('data-i', j); b.style.setProperty('--d', j % 7);
         b.setAttribute('aria-label', li.textContent);
         b.innerHTML = svgFor(li.getAttribute('data-icon'));
         inner.appendChild(b);
@@ -245,7 +245,7 @@
       }
       if (!best) return true;
       K = best.k;
-      AMP = rm ? 0 : Math.max(0, Math.min(6, (best.gap - 5) / 3.1));
+      AMP = rm ? 0 : Math.max(0, Math.min(11, (best.gap - 5) / 2.2));
       /* inner nodes connect to the hub; outer nodes connect to the nearest inner node, so no line runs through another node */
       var ni2 = best.ni, i, j;
       for (i = 0; i < n; i++) {
@@ -1109,7 +1109,7 @@
     var up = 'M200 459 C200 428 480 432 480 402 L480 301 L480 239 ' + r.a.replace(/^M[\d.]+ [\d.]+ /, '');
     var lab = label(200, 436, 'ping…');
     await travel(up, false, 1500);
-    lab.remove(); var ok = label(480, 38, 'reply from the internet ✔'); await wait(250);
+    lab.remove(); nodes.net.classList.add('hop'); var ok = label(765, 62, 'reply from the internet ✔'); await wait(250); nodes.net.classList.remove('hop');
     await travel(reverse(up), false, 1500); ok.remove();
     setState('ping answered. all good'); await wait(900); fxg.textContent = ''; setState(cutOn ? 'main line down: running on backup' : 'all links up'); lock(false);
   });
@@ -1132,6 +1132,54 @@
     }
     setState('3 attacks blocked at the firewall. nothing got in');
     await wait(1600); fxg.textContent = ''; box.classList.remove('atk'); setState(cutOn ? 'main line down: running on backup' : 'all links up'); lock(false);
+  });
+  /* traceroute: the packet visits each hop in turn, and every device lights up with its round-trip time */
+  document.getElementById('lab-trc').addEventListener('click', async function () {
+    if (busy) return; lock(true); setState('traceroute running…');
+    var X = route().x, isp = cutOn ? nodes.isp2 : nodes.isp1, ix = cutOn ? 830 : 130;
+    var hops = [
+      ['M200 459 C200 428 480 432 480 402', nodes.core, 250, 384, '1  core switch  1 ms'],
+      ['M480 402 L480 301', nodes.fw, 250, 278, '2  firewall  2 ms'],
+      ['M480 239 C480 212 ' + X + ' 215 ' + X + ' 187 L' + X + ' 133', isp, ix, 118, '3  ' + (cutOn ? 'backup ISP' : 'main ISP') + '  9 ms'],
+      ['M' + X + ' 133 C' + X + ' 108 480 112 480 84', nodes.net, 765, 62, '4  internet  18 ms']
+    ];
+    var made = [];
+    for (var i = 0; i < hops.length; i++) {
+      var h = hops[i]; await travel(h[0], false, 650);
+      h[1].classList.add('hop'); made.push(label(h[2], h[3], h[4]));
+    }
+    setState('4 hops · 18 ms · path healthy'); await wait(2200);
+    hops.forEach(function (h) { h[1].classList.remove('hop'); }); made.forEach(function (m) { m.remove(); });
+    fxg.textContent = ''; setState(cutOn ? 'main line down: running on backup' : 'all links up'); lock(false);
+  });
+  /* reboot the core switch: everything behind it drops, then comes back one link at a time */
+  document.getElementById('lab-rbt').addEventListener('click', async function () {
+    if (busy) return; lock(true); var ids = ['l5', 'l6', 'l7', 'l8'];
+    setState('core switch rebooting…'); nodes.core.classList.add('down');
+    ids.forEach(function (id) { document.getElementById(id).classList.add('down'); });
+    ['lan', 'wifi', 'srv'].forEach(function (k) { nodes[k].classList.add('down'); });
+    for (var c = 3; c > 0; c--) { var l = label(250, 384, 'rebooting… ' + c, true); await wait(900); l.remove(); }
+    nodes.core.classList.remove('down');
+    var order = [['l5', null], ['l6', 'lan'], ['l7', 'wifi'], ['l8', 'srv']];
+    for (var j = 0; j < order.length; j++) { document.getElementById(order[j][0]).classList.remove('down'); if (order[j][1]) nodes[order[j][1]].classList.remove('down'); await wait(450); }
+    var ok = label(250, 384, 'core back online ✔'); setState('core back online. all links up'); await wait(1600); ok.remove();
+    setState(cutOn ? 'main line down: running on backup' : 'all links up'); lock(false);
+  });
+  /* a stranger plugs into the Wi-Fi: the firewall spots it and quarantines it */
+  document.getElementById('lab-rog').addEventListener('click', async function () {
+    if (busy) return; lock(true); setState('unknown device joined the Wi-Fi…');
+    var g = document.createElementNS(NS, 'g'); g.setAttribute('class', 'fxrog'); g.innerHTML = '<circle cx="340" cy="492" r="17"/><path d="M333 492a10 10 0 0 1 14 0M336 497a5 5 0 0 1 8 0M340 502v.01"/>'; fxg.appendChild(g);
+    g.animate([{ opacity: 0, transform: 'scale(.4)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 300, fill: 'forwards' });
+    var who = label(340, 436, 'unknown device', true); await wait(700);
+    await travel('M340 492 L375 492 L480 459 L480 402', true, 800);
+    await travel('M480 402 L480 301', true, 500);
+    nodes.fw.classList.add('flash');
+    var ring = document.createElementNS(NS, 'circle'); ring.setAttribute('cx', 480); ring.setAttribute('cy', 270); ring.setAttribute('r', 40); ring.setAttribute('class', 'fxr'); fxg.appendChild(ring);
+    ring.animate([{ r: 40, opacity: 1 }, { r: 120, opacity: 0 }], { duration: 600, fill: 'forwards' });
+    var bl = label(250, 278, 'not on the allow-list ✕', true); setState('firewall quarantined the unknown device');
+    await wait(1400); nodes.fw.classList.remove('flash'); bl.remove(); ring.remove();
+    who.textContent = 'quarantined'; g.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 700, fill: 'forwards' }); await wait(1300);
+    fxg.textContent = ''; setState(cutOn ? 'main line down: running on backup' : 'all links up'); lock(false);
   });
   var sc = box.querySelector('.lab-scroll');
   function center() { sc.scrollLeft = (sc.scrollWidth - sc.clientWidth) / 2; }

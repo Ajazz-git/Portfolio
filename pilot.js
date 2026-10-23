@@ -218,7 +218,7 @@
   var lastNow = 0, emitAt = 0, sayAt = 0, particles = 0;
   var sayX = 0, sayY = 0, sayW = 0, sayOn = false, sayTok = 0, sayAnchor = null;
   var annoy = 0, annoyAt = 0, lastClick = 0, single = 0;
-  var blackout = null, crt = null;
+  var blackout = null, crt = null, big = 1, bigT = 1;
 
   function setMood(m) { mood = m; pilot.setAttribute('data-mood', m); }
   /* between actions his face has a life of its own: curious when the cursor is near, a smug glance now and then */
@@ -300,7 +300,8 @@
     var stretch = clamp(speedNow / 16, 0, 1) * 0.07;
     var breath = Math.sin(t * 2.2) * 0.014;
     var sy = 1 + breath - stretch * 0.7 - S.sq * 0.12, sx = 1 - breath * 0.5 + stretch + S.sq * 0.08;
-    pilot.style.transform = 'translate3d(' + pos.x.toFixed(1) + 'px,' + (pos.y + bob).toFixed(1) + 'px,0)';
+    big += (bigT - big) * Math.min(1, dt * 5);
+    pilot.style.transform = 'translate3d(' + pos.x.toFixed(1) + 'px,' + (pos.y + bob).toFixed(1) + 'px,0)' + (Math.abs(big - 1) > 0.002 ? ' scale(' + big.toFixed(3) + ')' : '');
     rig.style.transform = 'translateZ(' + z.toFixed(1) + 'px) rotateX(' + (pitch * 0.35 + S.rx).toFixed(1) + 'deg) rotateY(' + (yaw * 0.25).toFixed(1) + 'deg) rotateZ(' + roll.toFixed(1) + 'deg)';
     var tcs = Math.cos(turn * Math.PI / 180), tm = 1 - Math.abs(tcs); if (Math.abs(tcs) < 0.74) tcs = tcs < 0 ? -0.74 : 0.74;
     flip.style.transform = 'rotate(' + (tm * -7).toFixed(1) + 'deg) scaleX(' + tcs.toFixed(3) + ')';
@@ -996,7 +997,7 @@
     chat.hidden = true; chat.classList.remove('busy', 'show');
     say.classList.remove('chat');
     chatBusy = false; closeFn = null; chatMy = 0;
-    callBtn.classList.remove('away');
+    callBtn.classList.remove('away'); bigT = 1;
   }
   function greeting() {
     var h = new Date().getHours(), part = h < 5 ? 'Up late' : h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : h < 22 ? 'Good evening' : 'Up late';
@@ -1012,9 +1013,14 @@
     refresh(); chat.classList.add('busy');
     requestAnimationFrame(function () { chat.classList.add('show'); });
     say.classList.add('chat');
+    bigT = window.innerWidth < 760 ? 1.3 : 1.5; pilot.style.transformOrigin = '100% 100%';
+    /* he stands beside the box, bottom-aligned, so the box growing upwards never covers him; on a narrow screen he sits above its full height */
     var spot = function () {
-      var right = chat.offsetLeft + chat.offsetWidth, top = chat.offsetTop;
-      return { x: clamp(right - W - 14, 6, window.innerWidth - W - 6), y: clamp(top - H - 8, 70, window.innerHeight - H - 6) };
+      var left = chat.offsetLeft, bottom = chat.offsetTop + chat.offsetHeight;
+      var x = left - W - 12;
+      if (x >= 6) return { x: x, y: clamp(bottom - H, 70, window.innerHeight - H - 6) };
+      var full = chat.offsetHeight - log.offsetHeight + Math.min(170, window.innerHeight * 0.2);
+      return { x: clamp(chat.offsetLeft + chat.offsetWidth - W - 14, 6, window.innerWidth - W - 6), y: clamp(bottom - full - H * bigT - 6, 70, window.innerHeight - H - 6) };
     };
     var ok = await flyTo(my, spot, 1, { swoop: true, dur: 0.9 });
     if (!ok) { hideChat(); return; }
