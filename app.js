@@ -1181,6 +1181,51 @@
     who.textContent = 'quarantined'; g.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 700, fill: 'forwards' }); await wait(1300);
     fxg.textContent = ''; setState(cutOn ? 'main line down: running on backup' : 'all links up'); lock(false);
   });
+  function backToNormal() { fxg.textContent = ''; setState(cutOn ? 'main line down: running on backup' : 'all links up'); lock(false); }
+  /* DHCP: a phone joins the Wi-Fi and goes through discover, offer, request, acknowledge */
+  document.getElementById('lab-dhcp').addEventListener('click', async function () {
+    if (busy) return; lock(true); setState('a phone joins the Wi-Fi…');
+    var g = document.createElementNS(NS, 'g'); g.setAttribute('class', 'fxrog ok'); g.innerHTML = '<circle cx="340" cy="492" r="17"/><path d="M333 492a10 10 0 0 1 14 0M336 497a5 5 0 0 1 8 0M340 502v.01"/>'; fxg.appendChild(g);
+    g.animate([{ opacity: 0, transform: 'scale(.4)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 300, fill: 'forwards' });
+    var up = 'M340 492 L375 492 L480 459 L480 402 L480 301', me = label(340, 436, 'no IP yet');
+    var steps = [['DISCOVER  "anyone there?"', false], ['OFFER  192.168.20.42', true], ['REQUEST  "I will take it"', false], ['ACK  lease 8 hours', true]];
+    var ln = label(250, 278, '');
+    for (var i = 0; i < steps.length; i++) {
+      ln.textContent = steps[i][0]; setState('DHCP ' + steps[i][0].split(' ')[0].toLowerCase());
+      await travel(steps[i][1] ? reverse(up) : up, false, 800); await wait(150);
+    }
+    nodes.wifi.classList.add('hop'); ln.remove(); me.textContent = '192.168.20.42 ✔'; setState('phone online · 192.168.20.42'); await wait(1800);
+    nodes.wifi.classList.remove('hop'); g.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 500, fill: 'forwards' }); await wait(600); backToNormal();
+  });
+  /* VPN: the branch office talks to head office through an encrypted tunnel */
+  document.getElementById('lab-vpn').addEventListener('click', async function () {
+    if (busy) return; lock(true); setState('branch office opening the VPN…');
+    var lb = label(667, 236, ''), ch = '#%@&$X7k9QzW', iv = setInterval(function () { var s = ''; for (var i = 0; i < 12; i++) s += ch[Math.floor(Math.random() * ch.length)]; lb.textContent = s; }, 70);
+    nodes.fw.classList.add('hop'); nodes.br.classList.add('hop');
+    await travel('M595 270 L755 270', false, 1000); await travel('M755 270 L595 270', false, 1000);
+    clearInterval(iv); lb.textContent = 'tunnel up · encrypted ✔'; setState('VPN up · traffic is encrypted end to end');
+    await wait(1800); nodes.fw.classList.remove('hop'); nodes.br.classList.remove('hop'); backToNormal();
+  });
+  /* backup: the servers copy their data to the branch office, with a running percentage */
+  document.getElementById('lab-bkp').addEventListener('click', async function () {
+    if (busy) return; lock(true); setState('nightly backup running…');
+    var path = 'M760 459 C760 428 480 432 480 402 L480 270 L755 270', pc = label(780, 440, 'backup 0%');
+    nodes.srv.classList.add('hop');
+    for (var i = 1; i <= 4; i++) { await travel(path, false, 650); pc.textContent = 'backup ' + (i * 25) + '%'; }
+    nodes.srv.classList.remove('hop'); nodes.br.classList.add('hop'); pc.textContent = 'backup 100% ✔'; var of = label(850, 322, 'offsite copy saved');
+    setState('backup done · copy stored at the branch'); await wait(1900); nodes.br.classList.remove('hop'); backToNormal();
+  });
+  /* speed test: a burst of packets to the internet and a Mbps counter that climbs */
+  document.getElementById('lab-spd').addEventListener('click', async function () {
+    if (busy) return; lock(true); setState('speed test running…'); var r = route();
+    var up = 'M200 459 C200 428 480 432 480 402 L480 301 L480 239 ' + r.a.replace(/^M[\d.]+ [\d.]+ /, ''), top = cutOn ? 18 : 94;
+    var rd = label(765, 62, '0 Mbps'); nodes.net.classList.add('hop');
+    var t0 = performance.now(), ms = 2200, run = true;
+    (function tick(now) { var k = Math.min(1, (now - t0) / ms); rd.textContent = Math.round(top * (1 - Math.pow(1 - k, 3))) + ' Mbps'; if (k < 1) requestAnimationFrame(tick); })(t0);
+    var ps = []; for (var i = 0; i < 6; i++) ps.push(wait(i * 220).then(function () { return travel(up, false, 1100); }));
+    await Promise.all(ps); rd.textContent = top + ' Mbps ↓ ' + (cutOn ? 'backup line' : 'main line'); setState(top + ' Mbps · ' + (cutOn ? 'backup line is slower' : 'full speed'));
+    await wait(1800); nodes.net.classList.remove('hop'); backToNormal();
+  });
   var sc = box.querySelector('.lab-scroll');
   function center() { sc.scrollLeft = (sc.scrollWidth - sc.clientWidth) / 2; }
   center(); window.addEventListener('load', center);

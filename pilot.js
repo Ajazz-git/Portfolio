@@ -362,8 +362,8 @@
 
   /* ---- the speech bubble: a little CRT, typed one key at a time ---- */
   function placeSay() {
-    var ax = sayAnchor ? sayAnchor.x : pos.x + W / 2 + S.hx * face;
-    var ay = sayAnchor ? sayAnchor.y : pos.y - 6 + S.hy - 6;
+    var ax = sayAnchor ? sayAnchor.x : pos.x + W - W * big / 2 + S.hx * face;
+    var ay = sayAnchor ? sayAnchor.y : pos.y + H - H * big - 6 + S.hy - 6 - (big > 1.02 ? 8 : 0);
     var w = sayW || say.offsetWidth;
     var x = clamp(ax - w / 2, 6, window.innerWidth - w - 6);
     var y = Math.max(8, ay - say.offsetHeight);
