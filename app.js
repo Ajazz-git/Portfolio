@@ -706,6 +706,7 @@
         '  date        also uname, uptime, ifconfig',
         'Fun:',
         '  tetris      play Tetris',
+        '  cursor      next cursor style (or: cursor byte)',
         '  packet      call Packet',
         '  theme       dark or light',
         '  fortune     random wisdom',
@@ -808,6 +809,12 @@
       for (var i = 0; i < 4; i++) r.push('64 bytes from ' + h + ': icmp_seq=' + (i + 1) + ' ttl=58 time=' + (8 + Math.random() * 9).toFixed(1) + ' ms');
       r.push('4 packets sent, 4 received, 0% loss');
       r.slow = true; return r;
+    },
+    cursor: function (a) {
+      var w = a[0] || 'next';
+      if (!window.PktCursor) return ['No custom cursor on this device (it needs a mouse).'];
+      var m = PktCursor.set(w);
+      return ['cursor: ' + PktCursor.label(m), 'styles: reticle, rocket, pointer, orb, byte, glitch, off. Try: cursor byte'];
     },
     man: function (a) { return [a.length ? 'No manual entry for ' + a[0] + '. Try help.' : 'What manual page do you want?']; }
   };

@@ -266,7 +266,7 @@
     ['Fix it', 'go', 'fixit', 'game'], ['Network lab', 'go', 'lab'], ['Docs', 'go', 'docs'], ['Resume', 'go', 'resume'], ['Contact', 'go', 'contact'],
     ['Call Packet', 'act', 'packet', 'chat'], ['Switch theme', 'act', 'theme', 'dark / light'],
     ['Turn Packet on or off', 'act', 'pkt', 'penguin'], ['Copy email address', 'act', 'mail', 'ajasm397@gmail.com'],
-    ['Open LinkedIn', 'act', 'li', 'new tab'], ['Open Instagram', 'act', 'ig', 'new tab']
+    ['Cursor: next style', 'act', 'cursor', 'arcade mode'], ['Cursor: turn off', 'act', 'cursoff', 'use the normal cursor'], ['Open LinkedIn', 'act', 'li', 'new tab'], ['Open Instagram', 'act', 'ig', 'new tab']
   ];
   if (hasHome) base.splice(10, 0, ['Play Tetris', 'act', 'tetris', 'terminal']);
   var pal, inp, list, sel = 0, shown = [], last = null;
@@ -306,6 +306,8 @@
     var k = b[2];
     if (k === 'theme') click('#theme');
     else if (k === 'pkt') click('#pilot-toggle-top');
+    else if (k === 'cursor') document.dispatchEvent(new CustomEvent('cursor:set', { detail: 'next' }));
+    else if (k === 'cursoff') document.dispatchEvent(new CustomEvent('cursor:set', { detail: 'off' }));
     else if (k === 'packet') click('.pk-call');
     else if (k === 'li') window.open('https://www.linkedin.com/in/ajas-muhammed-pa-1413881bb', '_blank', 'noopener');
     else if (k === 'ig') window.open('https://www.instagram.com/_ajs.z_/', '_blank', 'noopener');

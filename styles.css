@@ -1354,3 +1354,39 @@ html.mo .rv.in h1 { animation: ttype .8s steps(22) .12s both; }
 @keyframes hudglow { from { box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 5%, transparent), 0 0 14px -4px color-mix(in srgb, var(--accent) 24%, transparent), inset 0 0 20px color-mix(in srgb, var(--accent) 6%, transparent); } to { box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 8%, transparent), 0 0 26px -2px color-mix(in srgb, var(--accent) 40%, transparent), inset 0 0 32px color-mix(in srgb, var(--accent) 11%, transparent); } }
 @keyframes hudaura { from { opacity: .22; transform: scale(1); } to { opacity: .42; transform: scale(1.012); } }
 @media (prefers-reduced-motion: no-preference) { html.mo .about-grid.in .ab-fr.hud .cn { animation-duration: 4.5s; } }
+
+/* custom cursor */
+.cur { position: fixed; left: 0; top: 0; width: 40px; height: 40px; z-index: 100000; pointer-events: none; color: var(--accent); will-change: transform; transition: opacity .15s; filter: drop-shadow(0 0 5px color-mix(in srgb, currentColor 65%, transparent)); }
+.cur[data-m="pointer"] { width: 28px; height: 32px; }
+.cur svg { width: 100%; height: 100%; overflow: visible; display: block; }
+.cur-cv { position: fixed; inset: 0; z-index: 99999; pointer-events: none; }
+html.cur-hide, html.cur-hide * { cursor: none !important; }
+html.cur-hide.cur-native, html.cur-hide.cur-native * { cursor: auto !important; }
+html.cur-hide.cur-native input, html.cur-hide.cur-native textarea { cursor: text !important; }
+.cur .rt { transition: transform .25s cubic-bezier(.2, .7, .2, 1); transform-origin: center; }
+.cur.hv .rt { transform: rotate(45deg) scale(1.1); }
+.cur.dn .rt { transform: scale(.8); }
+.cur .jt, .cur .jb { transform-origin: -12px 0; transition: transform .12s; }
+.cur .fl { transform-origin: 0 11px; }
+@media (prefers-reduced-motion: no-preference) {
+  .cur[data-m="reticle"] .rt { animation: curspin 14s linear infinite; }
+  .cur.hv[data-m="reticle"] .rt { animation: none; }
+  .cur .fl { animation: curfl .18s steps(2) infinite; }
+  .cur.mv .fl { animation-duration: .1s; }
+  .cur[data-m="byte"].mv .jt { animation: curjt .22s steps(2) infinite; }
+  .cur[data-m="byte"].mv .jb { animation: curjb .22s steps(2) infinite; }
+  .cur[data-m="glitch"] .gl { animation: curbob 1.6s ease-in-out infinite; transform-origin: center; }
+  .cur[data-m="glitch"] .ey { animation: curblink 3.6s infinite; transform-box: fill-box; transform-origin: center; }
+  .cur[data-m="glitch"].mv .lg { animation: curleg .16s steps(2) infinite; transform-origin: center; }
+  .cur[data-m="orb"] svg { animation: curorb 2.4s ease-in-out infinite; }
+}
+.cur[data-m="byte"].hv .jt { transform: rotate(-22deg); } .cur[data-m="byte"].hv .jb { transform: rotate(22deg); }
+@keyframes curspin { to { transform: rotate(360deg); } }
+@keyframes curfl { 50% { transform: scaleY(1.45); } }
+@keyframes curjt { 50% { transform: rotate(-24deg); } }
+@keyframes curjb { 50% { transform: rotate(24deg); } }
+@keyframes curbob { 50% { transform: translateY(-2px); } }
+@keyframes curblink { 0%, 94%, 100% { transform: scaleY(1); } 97% { transform: scaleY(.1); } }
+@keyframes curleg { 50% { transform: rotate(8deg); } }
+@keyframes curorb { 50% { transform: scale(1.14); } }
+html.cur-native .cur, .cur.out { opacity: 0; }
