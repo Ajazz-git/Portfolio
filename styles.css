@@ -1327,3 +1327,16 @@ html.mo .rv.in h1 { animation: ttype .8s steps(22) .12s both; }
 }
 @media (max-width: 760px) { .hud-vr { top: 80px; } }
 @media (max-width: 420px) { .hud-vl, .hud-vr { display: none; } .hud-list { font-size: 8.5px; } .hud-id b { font-size: 11px; } }
+
+/* rim glow behind the subject, vignette, and the subject lifted above them */
+.ab-fr.hud > picture img { filter: brightness(.6) saturate(.95) contrast(1.08); }
+.hud-vig { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(70% 62% at 50% 46%, rgba(0, 24, 12, 0) 20%, rgba(0, 16, 8, .62) 70%, rgba(0, 10, 5, .9) 100%); }
+.ab-fr.hud .hud-aura, .ab-fr.hud .hud-cut { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; pointer-events: none; }
+.ab-fr.hud .hud-aura { opacity: .62; mix-blend-mode: screen; transform-origin: 50% 55%; }
+.ab-fr.hud .hud-cut { filter: saturate(1.05) contrast(1.05) drop-shadow(0 0 1.5px rgba(150, 255, 190, .55)); }
+@keyframes hudaura { from { opacity: .45; transform: scale(1); } to { opacity: .85; transform: scale(1.025); } }
+@media (prefers-reduced-motion: no-preference) {
+  html.mo .about-grid:not(.in) .hud-aura, html.mo .about-grid:not(.in) .hud-cut { clip-path: inset(0 0 100% 0); }
+  html.mo .about-grid.in .hud-cut { animation: abscan 1.5s cubic-bezier(.35,.7,.25,1) .3s backwards; }
+  html.mo .about-grid.in .hud-aura { animation: abscan 1.5s cubic-bezier(.35,.7,.25,1) .3s backwards, hudaura 3.2s ease-in-out 1.8s infinite alternate; }
+}
