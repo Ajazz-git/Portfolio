@@ -344,7 +344,7 @@ p { margin: 0; }
 
 /* about, longer version */
 .about-grid .prose { max-width: 62ch; font-size: 1.05rem; }
-.about-grid .prose .sig { font: 500 0.95rem var(--font-mono); color: var(--accent); }
+.about-grid .prose .signoff { font: 500 0.95rem var(--font-mono); color: var(--accent); }
 .about-grid .kv > div { grid-template-columns: 112px minmax(0, 1fr); }
 .about-grid .kv dt { text-transform: uppercase; letter-spacing: 0.1em; font-size: 12px; }
 .philosophy-wrap { padding-bottom: 24px; }
@@ -1253,3 +1253,22 @@ html.mo .rv.in h1 { animation: ttype .8s steps(22) .12s both; }
 :root[data-theme="light"] .lg-l { display: block; }
 .dev .lg { opacity: .9; transition: opacity .2s, transform .3s cubic-bezier(.2,.7,.2,1); transform-origin: left center; }
 .dev:hover .lg { opacity: 1; transform: scale(1.06); }
+
+/* about portrait with a scan reveal */
+.ab-side { display: grid; gap: 18px; min-width: 0; }
+.ab-ph { margin: 0; max-width: 380px; width: 100%; }
+.ab-fr { position: relative; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--panel); line-height: 0; box-shadow: 0 18px 40px -26px color-mix(in srgb, var(--accent) 50%, transparent); }
+.ab-fr img { display: block; width: 100%; height: auto; }
+.ab-ph figcaption { margin-top: 8px; font: 12px var(--font-mono); color: var(--muted); letter-spacing: .04em; }
+.ab-fr .cn { position: absolute; width: 16px; height: 16px; border: 2px solid var(--accent); pointer-events: none; opacity: .85; }
+.ab-fr .tl { top: 8px; left: 8px; border-right: 0; border-bottom: 0; } .ab-fr .tr { top: 8px; right: 8px; border-left: 0; border-bottom: 0; }
+.ab-fr .bl { bottom: 8px; left: 8px; border-right: 0; border-top: 0; } .ab-fr .br { bottom: 8px; right: 8px; border-left: 0; border-top: 0; }
+.scanline { position: absolute; left: 0; right: 0; top: 0; height: 2px; background: var(--accent); box-shadow: 0 0 14px 3px color-mix(in srgb, var(--accent) 70%, transparent); opacity: 0; pointer-events: none; }
+@keyframes abscan { from { clip-path: inset(0 0 100% 0); filter: grayscale(1) contrast(1.3) brightness(.8); } to { clip-path: inset(0); filter: none; } }
+@keyframes abline { 0% { top: 0; opacity: 1; } 92% { opacity: 1; } 100% { top: calc(100% - 2px); opacity: 0; } }
+@media (prefers-reduced-motion: no-preference) {
+  html.mo .about-grid:not(.in) .ab-fr img { clip-path: inset(0 0 100% 0); }
+  html.mo .about-grid.in .ab-fr img { animation: abscan 1.5s cubic-bezier(.35,.7,.25,1) .3s backwards; }
+  html.mo .about-grid.in .scanline { animation: abline 1.5s cubic-bezier(.35,.7,.25,1) .3s backwards; }
+}
+@media (max-width: 760px) { .ab-ph { max-width: 320px; } }
