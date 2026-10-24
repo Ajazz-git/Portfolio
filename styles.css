@@ -1243,3 +1243,13 @@ html.mo .rv.in h1 { animation: ttype .8s steps(22) .12s both; }
 
 .hero-act { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 6px; }
 .hero-act .btn { flex: 1 1 150px; justify-content: center; } @media (min-width: 700px) { .hero-act .btn { flex: 0 0 auto; } }
+
+/* company logos: one file per theme, swapped with the theme */
+.lgw { display: block; margin-top: 12px; line-height: 0; }
+.lgw-pg { margin: 14px 0 10px; }
+.lg { height: auto; max-width: 100%; }
+.lg-l { display: none; }
+:root[data-theme="light"] .lg-d { display: none; }
+:root[data-theme="light"] .lg-l { display: block; }
+.dev .lg { opacity: .9; transition: opacity .2s, transform .3s cubic-bezier(.2,.7,.2,1); transform-origin: left center; }
+.dev:hover .lg { opacity: 1; transform: scale(1.06); }
