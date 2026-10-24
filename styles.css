@@ -1340,3 +1340,17 @@ html.mo .rv.in h1 { animation: ttype .8s steps(22) .12s both; }
   html.mo .about-grid.in .hud-cut { animation: abscan 1.5s cubic-bezier(.35,.7,.25,1) .3s backwards; }
   html.mo .about-grid.in .hud-aura { animation: abscan 1.5s cubic-bezier(.35,.7,.25,1) .3s backwards, hudaura 3.2s ease-in-out 1.8s infinite alternate; }
 }
+
+/* about portrait: calmer pass */
+.ab-fr.hud { border-width: 1px; box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 6%, transparent), 0 0 18px -4px color-mix(in srgb, var(--accent) 32%, transparent), inset 0 0 26px color-mix(in srgb, var(--accent) 8%, transparent); }
+.ab-fr.hud .hud-aura { opacity: .3; }
+.ab-fr.hud .hud-cut { filter: saturate(1.03) contrast(1.03) drop-shadow(0 0 1px rgba(150, 255, 190, .3)); }
+.ab-fr.hud > picture img { filter: brightness(.7) saturate(.95) contrast(1.05); }
+.hud-vig { background: radial-gradient(75% 66% at 50% 46%, rgba(0, 24, 12, 0) 30%, rgba(0, 16, 8, .45) 75%, rgba(0, 10, 5, .72) 100%); }
+.hud-grid { opacity: .1; }
+.hud-beam { background: linear-gradient(180deg, transparent, rgba(61, 255, 139, .07) 60%, rgba(61, 255, 139, .16) 96%, transparent); }
+.ab-fr.hud .cn { width: 22px; height: 22px; border-width: 2px; filter: drop-shadow(0 0 3px var(--accent)); }
+.hud-id b { text-shadow: 0 0 6px rgba(61, 255, 139, .4); }
+@keyframes hudglow { from { box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 5%, transparent), 0 0 14px -4px color-mix(in srgb, var(--accent) 24%, transparent), inset 0 0 20px color-mix(in srgb, var(--accent) 6%, transparent); } to { box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 8%, transparent), 0 0 26px -2px color-mix(in srgb, var(--accent) 40%, transparent), inset 0 0 32px color-mix(in srgb, var(--accent) 11%, transparent); } }
+@keyframes hudaura { from { opacity: .22; transform: scale(1); } to { opacity: .42; transform: scale(1.012); } }
+@media (prefers-reduced-motion: no-preference) { html.mo .about-grid.in .ab-fr.hud .cn { animation-duration: 4.5s; } }
