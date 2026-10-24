@@ -1207,8 +1207,8 @@ html.mo .rv.in h1 { animation: ttype .8s steps(22) .12s both; }
 /* terminal touches */
 .gw { position: relative; flex: 1; min-width: 0; display: flex; }
 .gw input { width: 100%; position: relative; z-index: 1; }
-.ghost { position: absolute; left: 0; top: 50%; transform: translateY(-50%); pointer-events: none; white-space: pre; overflow: hidden; max-width: 100%; color: var(--muted); opacity: .55; font: inherit; }
-.ghost i { visibility: hidden; font-style: normal; }
+.gw .ghost { position: absolute; left: 0; top: 50%; transform: translateY(-50%); pointer-events: none; white-space: pre; overflow: hidden; max-width: 100%; color: var(--muted); opacity: .55; font: inherit; }
+.gw .ghost i { visibility: hidden; font-style: normal; }
 @media (prefers-reduced-motion: no-preference) { .term-body .res:not(.r1):not(.r2):not(.r3) { animation: rise2 .25s backwards; } }
 
 /* polish 11: hover physics, living background, tetris light fix */
@@ -1240,3 +1240,6 @@ html.mo .rv.in h1 { animation: ttype .8s steps(22) .12s both; }
 @keyframes ndbob { 50% { transform: translateY(-2px) scale(1.12); } }
 
 .lab-svg .fxrog.ok circle { fill: color-mix(in srgb, var(--accent) 18%, var(--lb2)); stroke: var(--accent); } .lab-svg .fxrog.ok path { stroke: var(--accent); }
+
+.hero-act { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 6px; }
+.hero-act .btn { flex: 1 1 150px; justify-content: center; } @media (min-width: 700px) { .hero-act .btn { flex: 0 0 auto; } }
