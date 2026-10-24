@@ -1272,3 +1272,16 @@ html.mo .rv.in h1 { animation: ttype .8s steps(22) .12s both; }
   html.mo .about-grid.in .scanline { animation: abline 1.5s cubic-bezier(.35,.7,.25,1) .3s backwards; }
 }
 @media (max-width: 760px) { .ab-ph { max-width: 320px; } }
+
+/* about layout: text and facts on the left, portrait spanning the right */
+.ab-side { display: contents; }
+.about-grid { grid-template-areas: "prose ph" "term ph"; row-gap: 22px; }
+.about-grid .prose { grid-area: prose; }
+.about-grid .ab-ph { grid-area: ph; justify-self: end; align-self: start; max-width: 400px; }
+.about-grid .term { grid-area: term; align-self: start; }
+@media (max-width: 760px) { .about-grid { grid-template-areas: "prose" "ph" "term"; } .about-grid .ab-ph { justify-self: start; } }
+@media (min-width: 761px) {
+  .about-grid .ab-ph { align-self: stretch; display: flex; flex-direction: column; width: 100%; max-width: 400px; }
+  .about-grid .ab-fr { flex: 1; min-height: 0; }
+  .about-grid .ab-fr img { height: 100%; object-fit: cover; object-position: 50% 30%; }
+}
