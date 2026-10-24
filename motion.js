@@ -324,7 +324,7 @@
 (function () {
   if (!matchMedia('(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference)').matches) return;
   document.addEventListener('pointermove', function (e) {
-    var t = e.target.closest && e.target.closest('.card, .port');
+    var t = e.target.closest && e.target.closest('.card, .port, .ab-fr');
     if (t) { var r = t.getBoundingClientRect(); t.style.setProperty('--mx', (e.clientX - r.left) + 'px'); t.style.setProperty('--my', (e.clientY - r.top) + 'px'); }
     var b = e.target.closest && e.target.closest('.btn:not([aria-disabled="true"])');
     if (b) { var q = b.getBoundingClientRect(); b.style.transform = 'translate(' + ((e.clientX - q.left - q.width / 2) * 0.12).toFixed(1) + 'px,' + ((e.clientY - q.top - q.height / 2) * 0.2).toFixed(1) + 'px)'; }
