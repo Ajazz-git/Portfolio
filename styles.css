@@ -1356,20 +1356,38 @@ html.mo .rv.in h1 { animation: ttype .8s steps(22) .12s both; }
 @media (prefers-reduced-motion: no-preference) { html.mo .about-grid.in .ab-fr.hud .cn { animation-duration: 4.5s; } }
 
 /* custom cursor */
-.cur { position: fixed; left: 0; top: 0; width: 40px; height: 40px; z-index: 100000; pointer-events: none; color: var(--accent); will-change: transform; transition: opacity .15s; filter: drop-shadow(0 0 5px color-mix(in srgb, currentColor 65%, transparent)); }
-.cur[data-m="pointer"] { width: 28px; height: 32px; }
+.cur { position: fixed; left: 0; top: 0; width: 46px; height: 46px; z-index: 100000; pointer-events: none; color: var(--accent); will-change: transform; transition: opacity .15s; filter: drop-shadow(0 0 5px color-mix(in srgb, currentColor 65%, transparent)); }
+.cur[data-m="pointer"] { width: 34px; height: 38px; }
 .cur svg { width: 100%; height: 100%; overflow: visible; display: block; }
 .cur-cv { position: fixed; inset: 0; z-index: 99999; pointer-events: none; }
 html.cur-hide, html.cur-hide * { cursor: none !important; }
 html.cur-hide.cur-native, html.cur-hide.cur-native * { cursor: auto !important; }
 html.cur-hide.cur-native input, html.cur-hide.cur-native textarea { cursor: text !important; }
-.cur .rt { transition: transform .25s cubic-bezier(.2, .7, .2, 1); transform-origin: center; }
+.cur .rt { transition: transform .25s cubic-bezier(.2, .7, .2, 1); transform-box: view-box; transform-origin: 50% 50%; }
 .cur.hv .rt { transform: rotate(45deg) scale(1.1); }
 .cur.dn .rt { transform: scale(.8); }
-.cur .jt, .cur .jb { transform-origin: -12px 0; transition: transform .12s; }
-.cur .fl { transform-origin: 0 11px; }
+.cur .jt, .cur .jb { transform-box: view-box; transform-origin: 18.2% 50%; transition: transform .12s; }
+.cur .fl { transform-box: view-box; transform-origin: 50% 70.4%; }
+.cur .rt2 { transform-box: view-box; transform-origin: 50% 50%; }
+.cur .br { opacity: 0; transform-box: view-box; transform-origin: 50% 50%; transform: scale(1.35); transition: opacity .18s, transform .22s cubic-bezier(.2, .8, .3, 1.2); }
+.cur.hv .br { opacity: 1; transform: scale(1); }
+.cur.hv[data-m="reticle"] .rt2 { opacity: 0; }
+.cpk { position: relative; display: inline-block; }
+.cpk-m { position: absolute; right: 0; top: calc(100% + 8px); z-index: 60; width: 232px; padding: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 18px 50px -12px rgba(0, 0, 0, .6), 0 0 0 1px color-mix(in srgb, var(--accent) 12%, transparent); animation: cpkin .18s ease-out; }
+.cpk-m[hidden] { display: none; }
+.cpk-m button { display: flex; align-items: center; gap: 8px; padding: 6px 8px; text-align: left; font: 600 12px var(--font-mono); color: var(--fg); background: var(--panel2); border: 1px solid var(--line); border-radius: 10px; cursor: pointer; transition: border-color .15s, background .15s, transform .15s; }
+.cpk-m button:hover, .cpk-m button:focus-visible { border-color: var(--accent); transform: translateY(-1px); }
+.cpk-m button.on { border-color: var(--accent); background: var(--accent-dim); color: var(--accent); }
+.cpv { flex: none; width: 30px; height: 30px; display: grid; place-items: center; color: var(--accent); }
+.cpv svg { width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 0 3px color-mix(in srgb, currentColor 60%, transparent)); }
+.cpv i { font: 700 13px var(--font-mono); font-style: normal; color: var(--muted); }
+@keyframes cpkin { from { opacity: 0; transform: translateY(-6px) scale(.97); } }
+.cur .gx { opacity: 0; transition: opacity .12s; }
+.cur.mv .gx { opacity: .55; }
+
 @media (prefers-reduced-motion: no-preference) {
   .cur[data-m="reticle"] .rt { animation: curspin 14s linear infinite; }
+  .cur[data-m="reticle"] .rt2 { animation: curspin 9s linear infinite reverse; }
   .cur.hv[data-m="reticle"] .rt { animation: none; }
   .cur .fl { animation: curfl .18s steps(2) infinite; }
   .cur.mv .fl { animation-duration: .1s; }
@@ -1379,8 +1397,13 @@ html.cur-hide.cur-native input, html.cur-hide.cur-native textarea { cursor: text
   .cur[data-m="glitch"] .ey { animation: curblink 3.6s infinite; transform-box: fill-box; transform-origin: center; }
   .cur[data-m="glitch"].mv .lg { animation: curleg .16s steps(2) infinite; transform-origin: center; }
   .cur[data-m="orb"] svg { animation: curorb 2.4s ease-in-out infinite; }
+  .cur[data-m="orb"] .ob2 { animation: curob 3.2s linear infinite; }
+  .cur[data-m="pointer"] .cr { animation: curcr 1s steps(1) infinite; }
+  .cur[data-m="glitch"].mv .gx { animation: curcr .14s steps(1) infinite; }
 }
 .cur[data-m="byte"].hv .jt { transform: rotate(-22deg); } .cur[data-m="byte"].hv .jb { transform: rotate(22deg); }
+@keyframes curob { to { transform: rotate(360deg); } }
+@keyframes curcr { 50% { opacity: 0; } }
 @keyframes curspin { to { transform: rotate(360deg); } }
 @keyframes curfl { 50% { transform: scaleY(1.45); } }
 @keyframes curjt { 50% { transform: rotate(-24deg); } }
