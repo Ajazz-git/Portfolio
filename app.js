@@ -622,13 +622,13 @@
     if (onHome) {
       if (!goTo(id, true)) return;
       e.preventDefault();
-      try { history.replaceState(null, '', '#' + id + '~' + window.siteTheme.get()); } catch (x) {}
+      try { history.replaceState(null, '', location.pathname + location.search); } catch (x) {}
     } else {
       try { sessionStorage.setItem('goto', id); } catch (x) {}
     }
   });
   if (onHome) {
-    var want = (window.siteTheme ? window.siteTheme.parts(location.hash).sec : '');
+    var want = (window.siteTheme ? (window.siteTheme.entry || window.siteTheme.parts(location.hash).sec) : '');
     try { if (!want) want = sessionStorage.getItem('goto') || ''; sessionStorage.removeItem('goto'); } catch (x) {}
     if (want && document.getElementById(want)) {
       goTo(want, false);
