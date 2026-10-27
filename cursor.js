@@ -49,7 +49,7 @@
       + '<g class="ey"><ellipse cx="-4.200" cy="-4" rx="3" ry="3.600" fill="' + D + '"/><ellipse cx="4.200" cy="-4" rx="3" ry="3.600" fill="' + D + '"/><circle cx="-3.200" cy="-5.200" r="1" fill="#fff"/><circle cx="5.200" cy="-5.200" r="1" fill="#fff"/></g></g></svg>'
   };
 
-  var el = document.createElement('div'); el.className = 'cur'; el.setAttribute('aria-hidden', 'true'); el.hidden = true;
+  var el = document.createElement('div'); el.className = 'kcur'; el.setAttribute('aria-hidden', 'true'); el.hidden = true;
   var cv = document.createElement('canvas'); cv.className = 'cur-cv'; cv.setAttribute('aria-hidden', 'true');
   var cx = cv.getContext('2d'), dpr = Math.min(2, window.devicePixelRatio || 1), W = 0, H = 0;
   function size() { W = innerWidth; H = innerHeight; cv.width = W * dpr; cv.height = H * dpr; cv.style.width = W + 'px'; cv.style.height = H + 'px'; cx.setTransform(dpr, 0, 0, dpr, 0, 0); }

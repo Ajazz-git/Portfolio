@@ -1356,22 +1356,22 @@ html.mo .rv.in h1 { animation: ttype .8s steps(22) .12s both; }
 @media (prefers-reduced-motion: no-preference) { html.mo .about-grid.in .ab-fr.hud .cn { animation-duration: 4.5s; } }
 
 /* custom cursor */
-.cur { position: fixed; left: 0; top: 0; width: 46px; height: 46px; z-index: 100000; pointer-events: none; color: var(--accent); will-change: transform; transition: opacity .15s; filter: drop-shadow(0 0 5px color-mix(in srgb, currentColor 65%, transparent)); }
-.cur[data-m="pointer"] { width: 34px; height: 38px; }
-.cur svg { width: 100%; height: 100%; overflow: visible; display: block; }
+.kcur { position: fixed; left: 0; top: 0; width: 46px; height: 46px; z-index: 100000; pointer-events: none; color: var(--accent); will-change: transform; transition: opacity .15s; filter: drop-shadow(0 0 5px color-mix(in srgb, currentColor 65%, transparent)); }
+.kcur[data-m="pointer"] { width: 34px; height: 38px; }
+.kcur svg { width: 100%; height: 100%; overflow: visible; display: block; }
 .cur-cv { position: fixed; inset: 0; z-index: 99999; pointer-events: none; }
 html.cur-hide, html.cur-hide * { cursor: none !important; }
 html.cur-hide.cur-native, html.cur-hide.cur-native * { cursor: auto !important; }
 html.cur-hide.cur-native input, html.cur-hide.cur-native textarea { cursor: text !important; }
-.cur .rt { transition: transform .25s cubic-bezier(.2, .7, .2, 1); transform-box: view-box; transform-origin: 50% 50%; }
-.cur.hv .rt { transform: rotate(45deg) scale(1.1); }
-.cur.dn .rt { transform: scale(.8); }
-.cur .jt, .cur .jb { transform-box: view-box; transform-origin: 18.2% 50%; transition: transform .12s; }
-.cur .fl { transform-box: view-box; transform-origin: 50% 70.4%; }
-.cur .rt2 { transform-box: view-box; transform-origin: 50% 50%; }
-.cur .br { opacity: 0; transform-box: view-box; transform-origin: 50% 50%; transform: scale(1.35); transition: opacity .18s, transform .22s cubic-bezier(.2, .8, .3, 1.2); }
-.cur.hv .br { opacity: 1; transform: scale(1); }
-.cur.hv[data-m="reticle"] .rt2 { opacity: 0; }
+.kcur .rt { transition: transform .25s cubic-bezier(.2, .7, .2, 1); transform-box: view-box; transform-origin: 50% 50%; }
+.kcur.hv .rt { transform: rotate(45deg) scale(1.1); }
+.kcur.dn .rt { transform: scale(.8); }
+.kcur .jt, .kcur .jb { transform-box: view-box; transform-origin: 18.2% 50%; transition: transform .12s; }
+.kcur .fl { transform-box: view-box; transform-origin: 50% 70.4%; }
+.kcur .rt2 { transform-box: view-box; transform-origin: 50% 50%; }
+.kcur .br { opacity: 0; transform-box: view-box; transform-origin: 50% 50%; transform: scale(1.35); transition: opacity .18s, transform .22s cubic-bezier(.2, .8, .3, 1.2); }
+.kcur.hv .br { opacity: 1; transform: scale(1); }
+.kcur.hv[data-m="reticle"] .rt2 { opacity: 0; }
 .cpk { position: relative; display: inline-block; }
 .cpk-m { position: absolute; right: 0; top: calc(100% + 8px); z-index: 60; width: 232px; padding: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 18px 50px -12px rgba(0, 0, 0, .6), 0 0 0 1px color-mix(in srgb, var(--accent) 12%, transparent); animation: cpkin .18s ease-out; }
 .cpk-m[hidden] { display: none; }
@@ -1382,26 +1382,26 @@ html.cur-hide.cur-native input, html.cur-hide.cur-native textarea { cursor: text
 .cpv svg { width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 0 3px color-mix(in srgb, currentColor 60%, transparent)); }
 .cpv i { font: 700 13px var(--font-mono); font-style: normal; color: var(--muted); }
 @keyframes cpkin { from { opacity: 0; transform: translateY(-6px) scale(.97); } }
-.cur .gx { opacity: 0; transition: opacity .12s; }
-.cur.mv .gx { opacity: .55; }
+.kcur .gx { opacity: 0; transition: opacity .12s; }
+.kcur.mv .gx { opacity: .55; }
 
 @media (prefers-reduced-motion: no-preference) {
-  .cur[data-m="reticle"] .rt { animation: curspin 14s linear infinite; }
-  .cur[data-m="reticle"] .rt2 { animation: curspin 9s linear infinite reverse; }
-  .cur.hv[data-m="reticle"] .rt { animation: none; }
-  .cur .fl { animation: curfl .18s steps(2) infinite; }
-  .cur.mv .fl { animation-duration: .1s; }
-  .cur[data-m="byte"].mv .jt { animation: curjt .22s steps(2) infinite; }
-  .cur[data-m="byte"].mv .jb { animation: curjb .22s steps(2) infinite; }
-  .cur[data-m="glitch"] .gl { animation: curbob 1.6s ease-in-out infinite; transform-origin: center; }
-  .cur[data-m="glitch"] .ey { animation: curblink 3.6s infinite; transform-box: fill-box; transform-origin: center; }
-  .cur[data-m="glitch"].mv .lg { animation: curleg .16s steps(2) infinite; transform-origin: center; }
-  .cur[data-m="orb"] svg { animation: curorb 2.4s ease-in-out infinite; }
-  .cur[data-m="orb"] .ob2 { animation: curob 3.2s linear infinite; }
-  .cur[data-m="pointer"] .cr { animation: curcr 1s steps(1) infinite; }
-  .cur[data-m="glitch"].mv .gx { animation: curcr .14s steps(1) infinite; }
+  .kcur[data-m="reticle"] .rt { animation: curspin 14s linear infinite; }
+  .kcur[data-m="reticle"] .rt2 { animation: curspin 9s linear infinite reverse; }
+  .kcur.hv[data-m="reticle"] .rt { animation: none; }
+  .kcur .fl { animation: curfl .18s steps(2) infinite; }
+  .kcur.mv .fl { animation-duration: .1s; }
+  .kcur[data-m="byte"].mv .jt { animation: curjt .22s steps(2) infinite; }
+  .kcur[data-m="byte"].mv .jb { animation: curjb .22s steps(2) infinite; }
+  .kcur[data-m="glitch"] .gl { animation: curbob 1.6s ease-in-out infinite; transform-origin: center; }
+  .kcur[data-m="glitch"] .ey { animation: curblink 3.6s infinite; transform-box: fill-box; transform-origin: center; }
+  .kcur[data-m="glitch"].mv .lg { animation: curleg .16s steps(2) infinite; transform-origin: center; }
+  .kcur[data-m="orb"] svg { animation: curorb 2.4s ease-in-out infinite; }
+  .kcur[data-m="orb"] .ob2 { animation: curob 3.2s linear infinite; }
+  .kcur[data-m="pointer"] .cr { animation: curcr 1s steps(1) infinite; }
+  .kcur[data-m="glitch"].mv .gx { animation: curcr .14s steps(1) infinite; }
 }
-.cur[data-m="byte"].hv .jt { transform: rotate(-22deg); } .cur[data-m="byte"].hv .jb { transform: rotate(22deg); }
+.kcur[data-m="byte"].hv .jt { transform: rotate(-22deg); } .kcur[data-m="byte"].hv .jb { transform: rotate(22deg); }
 @keyframes curob { to { transform: rotate(360deg); } }
 @keyframes curcr { 50% { opacity: 0; } }
 @keyframes curspin { to { transform: rotate(360deg); } }
@@ -1412,7 +1412,7 @@ html.cur-hide.cur-native input, html.cur-hide.cur-native textarea { cursor: text
 @keyframes curblink { 0%, 94%, 100% { transform: scaleY(1); } 97% { transform: scaleY(.1); } }
 @keyframes curleg { 50% { transform: rotate(8deg); } }
 @keyframes curorb { 50% { transform: scale(1.14); } }
-html.cur-native .cur, .cur.out { opacity: 0; }
+html.cur-native .kcur, .kcur.out { opacity: 0; }
 
 /* photo gallery: an archive of frames that "develop" as they scroll in */
 .shots-meta { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: -6px 0 0; font: 12px var(--font-mono); color: var(--muted); }
@@ -1504,3 +1504,19 @@ html.cur-native .cur, .cur.out { opacity: 0; }
 @media (prefers-reduced-motion: no-preference) { .lb.playing .lb-img img.in { animation: lbkb 6.5s ease-out both; } }
 @keyframes lbkb { from { transform: scale(1); } to { transform: scale(1.045); } }
 @media (max-width: 600px) { .lb-play span { display: none; } .lb-play { padding: 0 14px; } .lb-x { top: 14px; } }
+
+/* phones: a compact two-row header. The nav is one swipeable row; the Packet Park menu hangs from the header so the row cannot clip it. */
+@media (max-width: 760px) {
+  .bar { gap: 6px 8px; padding-block: 7px; }
+  .brand { font-size: 13px; }
+  .bar > .chip { padding: 5px 9px; font-size: 11.5px; }
+  .nav { position: static; overflow-x: auto; overflow-y: hidden; flex-wrap: nowrap; scrollbar-width: none; padding-right: 18px; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a, .dd-b { flex: none; white-space: nowrap; font-size: 12px; padding: 5px 8px; }
+  .dd { position: static; flex: none; }
+  .dd-m { position: absolute; top: 100%; left: 12px; right: 12px; margin-top: 4px; min-width: 0; }
+}
+@media (max-width: 760px) {
+  .bar { position: relative; }
+  .bar::after { content: ""; position: absolute; right: 0; bottom: 7px; width: 34px; height: 30px; pointer-events: none; z-index: 1; background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--bg) 92%, transparent)); }
+}

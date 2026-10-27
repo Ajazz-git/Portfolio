@@ -585,7 +585,7 @@
   function mark(id) {
     if (id && id !== lastMark) { lastMark = id; document.dispatchEvent(new CustomEvent('sec', { detail: id })); }
     Array.prototype.forEach.call(navLinks, function (l) {
-      if (secOf(l.getAttribute('href')) === id) l.setAttribute('aria-current', 'page');
+      if (secOf(l.getAttribute('href')) === id) { l.setAttribute('aria-current', 'page'); var nv = l.parentNode; if (nv && nv.scrollWidth > nv.clientWidth + 2) nv.scrollLeft = Math.max(0, l.offsetLeft - 24); }
       else l.removeAttribute('aria-current');
     });
     var ddb = document.querySelector('.dd-b');
