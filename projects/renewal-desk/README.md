@@ -6,7 +6,7 @@
 
 Renewal Desk is an independent software product I initiated and am developing to help teams manage the full lifecycle of software licences and recurring subscriptions. It is designed to move beyond storing renewal dates: the product helps teams identify who must decide, ask them early, follow up when they do not respond, and keep the last day to cancel or change terms visible.
 
-**Product page:** [ajasmhd.in/renewal-desk](https://ajasmhd.in/renewal-desk)  
+**Product page:** [ajasmhd.in/renewal-desk.html](https://ajasmhd.in/renewal-desk.html)  
 **Project status:** Working product · Active development  
 **Application source:** Private
 
