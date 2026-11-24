@@ -49,5 +49,5 @@ This checklist separates publishing the product story from making the working ap
 - Portfolio case-study page: prepared on a feature branch.
 - Product screenshots: selected, marked as fictional demo captures dated 12 November 2026.
 - Public hosted demo: not yet verified.
-- Dedicated `renewal-desk-showcase` repository: not created; the connected GitHub action available for this task cannot create repositories.
+- Dedicated `renewal-desk-showcase` repository: optional follow-on. The current public materials are grouped under the portfolio repository.
 - Application source: remains private.
