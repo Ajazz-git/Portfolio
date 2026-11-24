@@ -14,7 +14,8 @@ Then open http://localhost:8000. Opening `index.html` directly also works, but a
 
 | File | What it is |
 | --- | --- |
-| `index.html` | The whole site as one long page. Sections in order: Home (terminal, site map, port panel), About, Experience, Skills, Resume, Contact |
+| `index.html` | The whole site as one long page. Sections in order: Home (terminal, site map, port panel), About, Projects, Experience, Skills, Resume, Contact |
+| `renewal-desk.html` | Product case-study page for the independent Renewal Desk project. |
 | `experience.html`, `contact.html` | Small redirect pages so old links still work. They send visitors to the matching section of `index.html` |
 | `skolte.html`, `webcastle.html`, `hashroot.html`, `aabasoft.html` | One page per workplace |
 | `styles.css` | All styling. Colours, fonts and spacing are CSS variables at the top. |
@@ -23,6 +24,7 @@ Then open http://localhost:8000. Opening `index.html` directly also works, but a
 | `app.js` | Theme button label, copy buttons, smooth scrolling and active nav link, home page terminal commands |
 | `icons.js`, `icons-license.txt` | Lucide icons used in the Skills section, and their licence |
 | `pilot.js` | The penguin pilot that flies around and inspects widgets |
+| `projects/renewal-desk/` | Public product overview, case study, publication checklist and fictional demo screenshots. Application source is kept private. |
 
 The "Fix it" section (`#fixit`) is a small choose-your-own-outage game; its scenarios live in the `S` array in the fix-it block at the end of `app.js`.
 
@@ -57,7 +59,7 @@ The Skills section is seven cards (`<article class="card pcard">`) in `index.htm
 
 ## Still to build
 
-About, Skills (switch-panel), Case studies, Troubleshooting walkthrough, Network lab diagram, Documentation samples, Learning and roadmap, Resume. Photos for the workplace pages are waiting for material.
+More project case studies and product documentation. Photos for the workplace pages are waiting for material.
 
 ## Hosting
 
