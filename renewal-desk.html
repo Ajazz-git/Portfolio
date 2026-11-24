@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Renewal Desk – Ajas Muhammed</title>
+<meta name="description" content="Renewal Desk is an independently developed subscription renewal management product that helps teams get decisions before cancellation deadlines.">
+<meta name="theme-color" content="#060d09" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#eef4f0" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="canonical" href="https://ajasmhd.in/renewal-desk.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ajas Muhammed">
+<meta property="og:title" content="Renewal Desk – Ajas Muhammed">
+<meta property="og:description" content="A renewal is a decision with a deadline, not a date on a calendar.">
+<meta property="og:url" content="https://ajasmhd.in/renewal-desk.html">
+<meta property="og:image" content="https://ajasmhd.in/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Renewal Desk – Ajas Muhammed">
+<meta name="twitter:description" content="An independently developed subscription renewal management product.">
+<meta name="twitter:image" content="https://ajasmhd.in/og.png">
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="styles.css">
+<script src="theme.js"></script>
+<style>
+.rd-hero { padding-block: 54px 42px; display:grid; grid-template-columns:minmax(0,1.15fr) minmax(250px,.85fr); gap:32px; align-items:center; }
+.rd-hero h1 { font-size:clamp(2.7rem,8vw,5.2rem); line-height:.98; margin:10px 0 18px; }
+.rd-kicker { color:var(--accent); font:500 12px var(--font-mono); letter-spacing:.14em; text-transform:uppercase; }
+.rd-sub { color:var(--muted); font-size:clamp(1.1rem,2.3vw,1.35rem); max-width:54ch; }
+.rd-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; }
+.rd-state { display:inline-flex; align-items:center; gap:9px; border:1px solid var(--line); background:var(--panel); padding:8px 12px; border-radius:6px; font:12px var(--font-mono); color:var(--muted); margin-top:20px; }
+.rd-console { border:1px solid var(--line); background:var(--panel); border-radius:12px; padding:18px; box-shadow:0 24px 60px -36px color-mix(in srgb,var(--accent) 45%,transparent); }
+.rd-console .rd-row { display:flex; justify-content:space-between; gap:14px; padding:12px 0; border-bottom:1px solid var(--line); font:13px var(--font-mono); }
+.rd-console .rd-row:last-child { border-bottom:0; }
+.rd-console .rd-row span:first-child { color:var(--muted); }
+.rd-console b { font-weight:500; }
+.rd-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; }
+.rd-card { border:1px solid var(--line); background:var(--panel); border-radius:10px; padding:20px; display:flex; flex-direction:column; gap:10px; min-width:0; }
+.rd-card .num { color:var(--accent); font:500 12px var(--font-mono); letter-spacing:.12em; }
+.rd-card h3 { font-size:1.15rem; }
+.rd-card p { color:var(--muted); font-size:15px; }
+.rd-flow { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; counter-reset:step; }
+.rd-flow article { border:1px solid var(--line); border-radius:9px; padding:16px; background:var(--panel); min-width:0; }
+.rd-flow article::before { counter-increment:step; content:"0" counter(step); color:var(--accent); font:500 12px var(--font-mono); }
+.rd-flow h3 { margin:10px 0 7px; font-size:1.05rem; }
+.rd-flow p { color:var(--muted); font-size:14px; }
+.rd-shot { margin:0; border:1px solid var(--line); background:var(--panel); border-radius:10px; overflow:hidden; }
+.rd-shot img { display:block; width:100%; height:auto; background:var(--panel2); }
+.rd-shot figcaption { padding:12px 14px; color:var(--muted); font:12px/1.6 var(--font-mono); border-top:1px solid var(--line); }
+.rd-shot figcaption b { color:var(--fg); font-weight:500; }
+.rd-note { color:var(--muted); font:12px/1.7 var(--font-mono); }
+.rd-stack { display:flex; flex-wrap:wrap; gap:8px; }
+.rd-stack span { border:1px solid var(--line); background:var(--panel); border-radius:5px; padding:7px 10px; color:var(--fg); font:12px var(--font-mono); }
+.rd-close { border:1px solid var(--line); border-radius:10px; background:var(--panel2); padding:20px; color:var(--muted); }
+.rd-close b { color:var(--fg); }
+@media (max-width:760px) {
+  .rd-hero { grid-template-columns:1fr; gap:24px; }
+  .rd-flow { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media (max-width:420px) { .rd-flow { grid-template-columns:1fr; } }
+@media (prefers-reduced-motion: reduce) { .rd-hero *, .rd-grid *, .rd-flow * { scroll-behavior:auto !important; transition:none !important; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="linkbar" aria-hidden="true"></div>
+<header class="top"><div class="wrap bar">
+<a class="brand" href="index.html#home"><span class="led" aria-hidden="true"></span>ajas@kochi</a>
+<nav class="nav" aria-label="Main">
+<a href="index.html#home">Home</a><a href="index.html#about">About</a><a href="index.html#experience">Experience</a><a href="index.html#projects" aria-current="page">Projects</a><a href="index.html#skills">Skills</a><div class="dd"><button class="dd-b" type="button" aria-haspopup="true" aria-expanded="false">Packet Park <span aria-hidden="true">▾</span></button><div class="dd-m"><a href="index.html#fixit">Fix it</a><a href="index.html#lab">Network lab</a><a href="index.html#docs">Docs</a></div></div><a class="cta" href="index.html#contact">Contact</a>
+</nav>
+<button class="chip" id="pilot-toggle-top" data-packet type="button" aria-pressed="true" aria-label="Turn Packet the penguin on or off">packet: on</button>
+<button class="chip" id="theme" type="button" aria-label="Switch colour theme">light mode</button>
+</div></header>
+
+<main id="main" tabindex="-1">
+<section class="wrap rd-hero">
+<div>
+<p class="rd-kicker">Independent product · Product design &amp; development</p>
+<h1>Renewal Desk</h1>
+<p class="rd-sub">A renewal is a decision with a deadline, not a date on a calendar.</p>
+<p class="lede" style="margin-top:16px">A subscription renewal workspace designed to help teams ask the right person early, capture a clear decision and act before the last day to cancel.</p>
+<div class="rd-actions">
+<a class="btn" href="#workflow">Explore the workflow</a>
+<a class="btn ghost" href="#screens">View product screens</a>
+</div>
+<div class="rd-state"><span class="led" aria-hidden="true"></span>Working product · Active development</div>
+</div>
+<div class="rd-console" aria-label="Renewal Desk workflow summary">
+<div class="term-bar"><i></i><i></i><i></i><span>renewal-desk / workflow</span></div>
+<div class="rd-row"><span>01 / ASK</span><b>Do we still need this?</b></div>
+<div class="rd-row"><span>02 / FOLLOW UP</span><b>Wait for an answer</b></div>
+<div class="rd-row"><span>03 / DECIDE</span><b>Renew · Change · Cancel</b></div>
+<div class="rd-row"><span>04 / PROTECT</span><b>Decision deadline</b></div>
+</div>
+</section>
+
+<section class="wrap block">
+<p class="eyebrow">The problem</p>
+<h2>Dates are easy to record. Decisions are harder to get.</h2>
+<p class="lead">A spreadsheet can store a renewal date. A calendar can send a reminder. Neither guarantees that the person responsible has confirmed whether the subscription is still needed, or that the organisation has enough time to cancel or change it.</p>
+<div class="rd-grid">
+<article class="rd-card"><span class="num">01 / VISIBILITY</span><h3>Know what needs attention</h3><p>Bring approaching decisions, unanswered requests and overdue items into one working view.</p></article>
+<article class="rd-card"><span class="num">02 / OWNERSHIP</span><h3>Ask the right person</h3><p>Connect each subscription to a named owner and make responding simple.</p></article>
+<article class="rd-card"><span class="num">03 / FOLLOW-THROUGH</span><h3>Keep the loop open</h3><p>Track the response, follow up when needed and make the recorded decision visible.</p></article>
+</div>
+</section>
+
+<section class="wrap block" id="workflow">
+<p class="eyebrow">Core workflow</p>
+<h2>Confirm. Chase. Decide. Protect the deadline.</h2>
+<p class="lead">The product is built around the cancellation or change deadline, not just the renewal date.</p>
+<div class="rd-flow">
+<article><h3>Confirm early</h3><p>Ask the owner whether the subscription is still required, with the key dates and cost in view.</p></article>
+<article><h3>Chase until answered</h3><p>Follow up and escalate unanswered requests. Silence is not treated as approval.</p></article>
+<article><h3>Make the last call</h3><p>Bring the decision back into focus near the deadline, using any earlier confirmation carefully.</p></article>
+<article><h3>Guard the date</h3><p>Keep the last day to cancel or change terms visible so a reminder never becomes the deadline itself.</p></article>
+</div>
+</section>
+
+<section class="wrap block" id="screens">
+<p class="eyebrow">Product tour</p>
+<h2>A look inside Renewal Desk</h2>
+<p class="lead">Screenshots below are from the built-in public demo using fictional Harbourline Studio sample data.</p>
+<div class="rd-grid">
+<figure class="rd-shot"><img src="projects/renewal-desk/screenshots/todays-desk.png" alt="Renewal Desk Today's Desk showing renewal decisions needing attention" loading="lazy"><figcaption><b>Today's Desk</b> · A focused view of what needs a person now and what is coming up.</figcaption></figure>
+<figure class="rd-shot"><img src="projects/renewal-desk/screenshots/runway.png" alt="Renewal Desk Runway 12-month renewal timeline" loading="lazy"><figcaption><b>Runway</b> · See owner prompts, decision dates and renewals across the next twelve months.</figcaption></figure>
+</div>
+<p class="rd-note">Screenshot note: these are illustrative snapshots captured on 12 November 2026. Names and financial figures shown in the interface are fictional demo data, not customer records.</p>
+</section>
+
+<section class="wrap block">
+<p class="eyebrow">Capabilities</p>
+<h2>Beyond a renewal-date register</h2>
+<div class="rd-grid">
+<article class="rd-card"><h3>Renewal registry</h3><p>Keep subscriptions, vendors, owners, terms, costs and renewal details together.</p></article>
+<article class="rd-card"><h3>12-month Runway</h3><p>View the year ahead, including when owners are asked and when decisions are due.</p></article>
+<article class="rd-card"><h3>Owner responses</h3><p>Collect a response through a simple, one-time action without requiring an owner account.</p></article>
+<article class="rd-card"><h3>Approval and history</h3><p>Record approvals, decisions and changes so the renewal cycle remains explainable.</p></article>
+<article class="rd-card"><h3>Calendar and reports</h3><p>See dates in the team's calendar and review renewal exposure through reports and exports.</p></article>
+<article class="rd-card"><h3>Integration foundation</h3><p>Provide API and webhook capabilities for connecting renewal activity with other business systems.</p></article>
+</div>
+</section>
+
+<section class="wrap block" id="build">
+<p class="eyebrow">Product build</p>
+<h2>Designed as a practical, integration-ready product</h2>
+<p class="lead">Renewal Desk is a personal product initiative. I led the product concept, problem definition, requirements, workflow design, architecture decisions, prioritisation and validation. Development uses AI-assisted coding, with hands-on review and testing.</p>
+<div class="rd-stack"><span>Next.js</span><span>TypeScript</span><span>PostgreSQL</span><span>Drizzle ORM</span><span>Docker</span></div>
+<div class="rd-grid">
+<article class="rd-card"><h3>Product direction</h3><p>Defined the problem, target workflow, user roles, product scope and staged roadmap.</p></article>
+<article class="rd-card"><h3>Workflow design</h3><p>Worked through decision dates, owner confirmation, follow-ups, approvals and auditability.</p></article>
+<article class="rd-card"><h3>Build and validation</h3><p>Directed implementation, reviewed changes and tested the product through its working demo environment.</p></article>
+</div>
+</section>
+
+<section class="wrap block">
+<div class="rd-close">
+<p class="eyebrow">Availability</p>
+<h2>Built and evolving</h2>
+<p>Renewal Desk is a working product under active development. The application source code is intentionally private while the product is being developed as a potential commercial offering. A hosted public demo will be linked here after its external-access and safety checks are complete.</p>
+<p style="margin-top:12px"><b>Interested in the product or a walkthrough?</b> <a href="index.html#contact">Get in touch.</a></p>
+</div>
+</section>
+<section class="wrap back"><a href="index.html#projects">← Back to projects</a></section>
+</main>
+
+<footer class="wrap foot">
+<span><span class="led" aria-hidden="true"></span>link up · Kochi, Kerala, India</span>
+<span>Ajas Muhammed PA · <a href="https://www.linkedin.com/in/ajas-muhammed-pa-1413881bb" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://github.com/Ajazz-git" target="_blank" rel="noopener">GitHub</a></span>
+<button class="chip" id="pilot-toggle" data-packet type="button" aria-pressed="true">packet: on</button>
+</footer>
+<script src="app.js"></script><script src="motion.js"></script><script src="cursor.js"></script><script src="brain.js"></script><script src="pilot.js"></script>
+</body>
+</html>
